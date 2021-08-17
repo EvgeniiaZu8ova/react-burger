@@ -1,0 +1,44 @@
+.section {
+  width: 600px;
+  flex-direction: column;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 52px;
+}
+
+.mainContent {
+  width: 600px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+}
+
+.icons__container {
+  padding-top: 96px;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: 32px;
+  grid-auto-rows: 80px;
+  row-gap: 16px;
+  align-items: center;
+}
+
+.cards__container {
+  display: grid;
+  grid-template-columns: 536px;
+  grid-auto-rows: 80px;
+  row-gap: 16px;
+}
+
+.order__container {
+  width: 568px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.order__price {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

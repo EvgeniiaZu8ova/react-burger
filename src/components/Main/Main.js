@@ -8,8 +8,8 @@ import BurgerIngredients from "../BurgerIngredients/BurgerIngredients";
 function Main(props) {
   return (
     <main className={main.content}>
-      <BurgerConstructor />
       <BurgerIngredients />
+      <BurgerConstructor />
     </main>
   );
 }
