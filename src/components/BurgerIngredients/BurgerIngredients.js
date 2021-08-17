@@ -52,33 +52,35 @@ class BurgerIngredients extends Component {
             Начинки
           </Tab>
         </div>
-        <h2 className="text text_type_main-medium pb-6">Булки</h2>
-        <div className={style.cards__container}>
-          {data.map(
-            (el, index) =>
-              el.type === "bun" && (
-                <IngredientCard
-                  key={index}
-                  image={el.image_large}
-                  price={el.price}
-                  name={el.name}
-                />
-              )
-          )}
-        </div>
-        <h2 className="text text_type_main-medium pb-6">Соусы</h2>
-        <div className={style.cards__container}>
-          {data.map(
-            (el, index) =>
-              el.type === "sauce" && (
-                <IngredientCard
-                  key={index}
-                  image={el.image_large}
-                  price={el.price}
-                  name={el.name}
-                />
-              )
-          )}
+        <div className={style.scrollArea}>
+          <h2 className="text text_type_main-medium pb-6">Булки</h2>
+          <div className={style.cards__container}>
+            {data.map(
+              (el, index) =>
+                el.type === "bun" && (
+                  <IngredientCard
+                    key={index}
+                    image={el.image_large}
+                    price={el.price}
+                    name={el.name}
+                  />
+                )
+            )}
+          </div>
+          <h2 className="text text_type_main-medium pb-6">Соусы</h2>
+          <div className={style.cards__container}>
+            {data.map(
+              (el, index) =>
+                el.type === "sauce" && (
+                  <IngredientCard
+                    key={index}
+                    image={el.image_large}
+                    price={el.price}
+                    name={el.name}
+                  />
+                )
+            )}
+          </div>
         </div>
       </section>
     );

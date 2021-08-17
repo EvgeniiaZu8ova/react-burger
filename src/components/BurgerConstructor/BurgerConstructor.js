@@ -15,8 +15,8 @@ import {
 class BurgerConstructor extends Component {
   render() {
     return (
-      <section className={`${style.section} pl-4 pr-4 pt-25`}>
-        <div className={style.mainContent}>
+      <section className={`${style.section} pl-4 pr-2 pt-25`}>
+        <div className={`${style.mainContent} pr-2`}>
           <div className={style.icons__container}>
             {data.map(
               (el, index) =>

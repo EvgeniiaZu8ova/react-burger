@@ -4,7 +4,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-bottom: 52px;
 }
 
 .mainContent {
@@ -12,6 +11,21 @@
   display: flex;
   justify-content: flex-end;
   align-items: flex-start;
+  max-height: calc(100vh - 256px - 88px);
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.mainContent::-webkit-scrollbar-track {
+  background-color: #2f2f37;
+}
+
+.mainContent::-webkit-scrollbar {
+  width: 8px;
+}
+
+.mainContent::-webkit-scrollbar-thumb {
+  background-color: #8585ad;
 }
 
 .icons__container {
