@@ -1,0 +1,11 @@
+.section {
+  width: 600px;
+}
+
+.cards__container {
+  display: grid;
+  column-gap: 24px;
+  row-gap: 32px;
+  grid-template-columns: repeat(2, 272px);
+  grid-auto-rows: 208px;
+}

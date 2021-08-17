@@ -23,18 +23,18 @@ function AppHeader() {
               className={`${header.navBar__link} pl-5 pr-5 pb-4 pt-4`}
             >
               <BurgerIcon type="primary" />
-              <caption className={`${header.navBar__caption_active} pl-2`}>
+              <span className={`${header.navBar__caption_active} pl-2`}>
                 Конструктор
-              </caption>
+              </span>
             </a>
             <a
               href="http://localhost:3000"
               className={`${header.navBar__link} pl-5 pr-5 pb-4 pt-4 ml-2`}
             >
               <ListIcon type="secondary" />
-              <caption className="text text_type_main-default text_color_inactive pl-2">
+              <span className="text text_type_main-default text_color_inactive pl-2">
                 Лента заказов
-              </caption>
+              </span>
             </a>
           </div>
 
@@ -43,9 +43,9 @@ function AppHeader() {
             className={`${header.navBar__link} pl-5 pr-5 pb-4 pt-4`}
           >
             <ProfileIcon type="secondary" />
-            <caption className="text text_type_main-default text_color_inactive pl-2">
+            <span className="text text_type_main-default text_color_inactive pl-2">
               Личный кабинет
-            </caption>
+            </span>
           </a>
         </nav>
       </div>
