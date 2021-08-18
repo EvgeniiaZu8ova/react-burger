@@ -1,0 +1,12 @@
+.content {
+  min-width: 320px;
+  max-width: 1240px;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  box-sizing: border-box;
+  padding-bottom: 52px;
+  max-height: calc(100vh - 88px);
+  overflow-y: hidden;
+}

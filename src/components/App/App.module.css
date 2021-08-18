@@ -1,0 +1,7 @@
+.page {
+  background-color: #131316;
+  font-family: "JetBrains Mono", "Arial", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+}

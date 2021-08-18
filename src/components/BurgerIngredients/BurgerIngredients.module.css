@@ -1,0 +1,29 @@
+.section {
+  width: 600px;
+}
+
+.scrollArea {
+  max-height: calc(100vh - 256px - 88px);
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.scrollArea::-webkit-scrollbar-track {
+  background-color: #2f2f37;
+}
+
+.scrollArea::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollArea::-webkit-scrollbar-thumb {
+  background-color: #8585ad;
+}
+
+.cards__container {
+  display: grid;
+  column-gap: 24px;
+  row-gap: 32px;
+  grid-template-columns: repeat(2, 272px);
+  grid-auto-rows: 208px;
+}
