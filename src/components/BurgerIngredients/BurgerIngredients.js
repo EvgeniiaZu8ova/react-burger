@@ -4,19 +4,37 @@ import style from "./BurgerIngredients.module.css";
 
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 
-import IngredientCard from "./IngredientCard/IngredientCard";
+import { handleItemSearch } from "../../utils/findItem";
 
-function BurgerIngredients({ data, forModalClick }) {
+import IngredientCard from "./IngredientCard/IngredientCard";
+import Modal from "../Modal/Modal";
+import IngredientDetails from "../Modal/IngredientDetails/IngredientDetails";
+
+function BurgerIngredients({ data }) {
   const [current, setCurrent] = useState("Булки");
+  const [isIngredientsModalOpen, setIsIngredientsModalOpen] = useState(false);
+  const [selectedIngredient, setSelectedIngredient] = useState({});
 
   const handleTabClick = (e) => setCurrent(e);
 
-  const handleIngredientClick = (e) => {
+  function handleIngredientClick(e) {
     const target =
       e.target.parentElement.querySelector(".text_type_main-default")
         .textContent || null;
-    forModalClick(target);
-  };
+
+    const item = handleItemSearch(data, target);
+
+    if (item) {
+      setSelectedIngredient(item);
+    }
+
+    setIsIngredientsModalOpen(true);
+  }
+
+  function closeModal() {
+    setIsIngredientsModalOpen(false);
+    setSelectedIngredient({});
+  }
 
   return (
     <section className={`${style.section} pt-10 pb-10`}>
@@ -88,6 +106,15 @@ function BurgerIngredients({ data, forModalClick }) {
             )}
         </div>
       </div>
+      <Modal
+        isModalOpen={isIngredientsModalOpen}
+        title="Детали ингредиента"
+        onClose={closeModal}
+      >
+        {isIngredientsModalOpen && (
+          <IngredientDetails item={selectedIngredient} />
+        )}
+      </Modal>
     </section>
   );
 }

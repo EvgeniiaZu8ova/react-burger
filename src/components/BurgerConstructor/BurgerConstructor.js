@@ -1,19 +1,28 @@
-import React from "react";
+import React, { useState } from "react";
 
 import style from "./BurgerConstructor.module.css";
 
 import bigCurrency from "../../images/big-currency-icon.svg";
+
+import OrderDetails from "../Modal/OrderDetails/OrderDetails";
 
 import {
   DragIcon,
   ConstructorElement,
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
+import Modal from "../Modal/Modal";
 
-function BurgerConstructor({ data, forModalClick }) {
-  const handleOrderClick = (e) => {
-    forModalClick(e.target.parentElement);
-  };
+function BurgerConstructor({ data }) {
+  const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
+
+  function handleOrderModalCall() {
+    setIsOrderModalOpen(true);
+  }
+
+  function closeModal() {
+    setIsOrderModalOpen(false);
+  }
 
   return (
     <section className={`${style.section} pl-4 pr-2 pt-25`}>
@@ -63,12 +72,15 @@ function BurgerConstructor({ data, forModalClick }) {
               </p>
               <img src={bigCurrency} alt="Иконка стоимости" />
             </div>
-            <Button type="primary" size="large" onClick={handleOrderClick}>
+            <Button type="primary" size="large" onClick={handleOrderModalCall}>
               Оформить заказ
             </Button>
           </div>
         </>
       )}
+      <Modal isModalOpen={isOrderModalOpen} title="" onClose={closeModal}>
+        <OrderDetails />
+      </Modal>
     </section>
   );
 }
