@@ -2,12 +2,11 @@ import React, { useState } from "react";
 
 import style from "./BurgerIngredients.module.css";
 
-import data from "../../utils/data";
-
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 
 import IngredientCard from "./IngredientCard/IngredientCard";
-function BurgerIngredients() {
+
+function BurgerIngredients({ data }) {
   const [current, setCurrent] = useState("Булки");
 
   const handleTabClick = (e) => setCurrent(e);
@@ -43,31 +42,33 @@ function BurgerIngredients() {
       <div className={style.scrollArea}>
         <h2 className="text text_type_main-medium pb-6">Булки</h2>
         <div className={style.cards__container}>
-          {data.map(
-            (el, index) =>
-              el.type === "bun" && (
-                <IngredientCard
-                  key={el._id}
-                  image={el.image_large}
-                  price={el.price}
-                  name={el.name}
-                />
-              )
-          )}
+          {data &&
+            data.map(
+              (el, index) =>
+                el.type === "bun" && (
+                  <IngredientCard
+                    key={el._id}
+                    image={el.image_large}
+                    price={el.price}
+                    name={el.name}
+                  />
+                )
+            )}
         </div>
         <h2 className="text text_type_main-medium pb-6">Соусы</h2>
         <div className={style.cards__container}>
-          {data.map(
-            (el, index) =>
-              el.type === "sauce" && (
-                <IngredientCard
-                  key={el._id}
-                  image={el.image_large}
-                  price={el.price}
-                  name={el.name}
-                />
-              )
-          )}
+          {data &&
+            data.map(
+              (el, index) =>
+                el.type === "sauce" && (
+                  <IngredientCard
+                    key={el._id}
+                    image={el.image_large}
+                    price={el.price}
+                    name={el.name}
+                  />
+                )
+            )}
         </div>
       </div>
     </section>
