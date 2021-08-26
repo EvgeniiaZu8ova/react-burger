@@ -5,17 +5,15 @@ import style from "./BurgerIngredients.module.css";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 
 import IngredientCard from "./IngredientCard/IngredientCard";
-import Modal from "../Modal/Modal";
 
-function BurgerIngredients({ data }) {
+function BurgerIngredients({ data, forModalClick }) {
   const [current, setCurrent] = useState("Булки");
-  const [isIngredientModalOpen, setIsIngredientModalOpen] = useState(false);
 
   const handleTabClick = (e) => setCurrent(e);
 
-  function handleIngredientModalSwitch() {
-    setIsIngredientModalOpen((prev) => !prev);
-  }
+  const handleIngredientClick = (e) => {
+    forModalClick();
+  };
 
   return (
     <section className={`${style.section} pt-10 pb-10`}>
@@ -55,7 +53,7 @@ function BurgerIngredients({ data }) {
                   <div
                     key={el._id}
                     className={style.card}
-                    onClick={handleIngredientModalSwitch}
+                    onClick={handleIngredientClick}
                   >
                     <IngredientCard
                       image={el.image_large}
@@ -75,7 +73,7 @@ function BurgerIngredients({ data }) {
                   <div
                     key={el._id}
                     className={style.card}
-                    onClick={handleIngredientModalSwitch}
+                    onClick={handleIngredientClick}
                   >
                     <IngredientCard
                       image={el.image_large}
@@ -87,10 +85,6 @@ function BurgerIngredients({ data }) {
             )}
         </div>
       </div>
-      <Modal
-        isModalOpen={isIngredientModalOpen}
-        onClick={handleIngredientModalSwitch}
-      />
     </section>
   );
 }

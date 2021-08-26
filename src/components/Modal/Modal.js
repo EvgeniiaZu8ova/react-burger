@@ -17,12 +17,12 @@ function Modal({ isModalOpen, onClick }) {
   }
 
   useEffect(() => {
-    window.addEventListener("keydown", onClick);
+    document.addEventListener("keydown", onClick);
 
     return () => {
-      window.removeEventListener("keydown", onClick);
+      document.removeEventListener("keydown", onClick);
     };
-  });
+  }, [onClick]);
 
   return createPortal(
     <section
