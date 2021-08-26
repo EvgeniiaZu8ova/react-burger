@@ -10,7 +10,11 @@ import {
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
-function BurgerConstructor({ data }) {
+function BurgerConstructor({ data, forModalClick }) {
+  const handleOrderClick = (e) => {
+    forModalClick();
+  };
+
   return (
     <section className={`${style.section} pl-4 pr-2 pt-25`}>
       {data.length > 0 && (
@@ -59,7 +63,7 @@ function BurgerConstructor({ data }) {
               </p>
               <img src={bigCurrency} alt="Иконка стоимости" />
             </div>
-            <Button type="primary" size="large">
+            <Button type="primary" size="large" onClick={handleOrderClick}>
               Оформить заказ
             </Button>
           </div>

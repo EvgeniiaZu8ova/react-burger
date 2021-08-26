@@ -6,9 +6,15 @@ import api from "../../utils/Api";
 
 import AppHeader from "../AppHeader/AppHeader";
 import Main from "../Main/Main";
+import Modal from "../Modal/Modal";
 
 function App() {
   const [data, setData] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  function handleModalSwitch() {
+    setIsModalOpen((prev) => !prev);
+  }
 
   useEffect(() => {
     api
@@ -24,7 +30,8 @@ function App() {
   return (
     <div className={app.page}>
       <AppHeader />
-      <Main ingredients={data} />
+      <Main ingredients={data} forModalClick={handleModalSwitch} />
+      <Modal isModalOpen={isModalOpen} onClick={handleModalSwitch} />
     </div>
   );
 }

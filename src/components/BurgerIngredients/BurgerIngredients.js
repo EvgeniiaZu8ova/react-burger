@@ -6,10 +6,14 @@ import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 
 import IngredientCard from "./IngredientCard/IngredientCard";
 
-function BurgerIngredients({ data }) {
+function BurgerIngredients({ data, forModalClick }) {
   const [current, setCurrent] = useState("Булки");
 
   const handleTabClick = (e) => setCurrent(e);
+
+  const handleIngredientClick = (e) => {
+    forModalClick();
+  };
 
   return (
     <section className={`${style.section} pt-10 pb-10`}>
@@ -46,12 +50,17 @@ function BurgerIngredients({ data }) {
             data.map(
               (el, index) =>
                 el.type === "bun" && (
-                  <IngredientCard
+                  <div
                     key={el._id}
-                    image={el.image_large}
-                    price={el.price}
-                    name={el.name}
-                  />
+                    className={style.card}
+                    onClick={handleIngredientClick}
+                  >
+                    <IngredientCard
+                      image={el.image_large}
+                      price={el.price}
+                      name={el.name}
+                    />
+                  </div>
                 )
             )}
         </div>
@@ -61,12 +70,17 @@ function BurgerIngredients({ data }) {
             data.map(
               (el, index) =>
                 el.type === "sauce" && (
-                  <IngredientCard
+                  <div
                     key={el._id}
-                    image={el.image_large}
-                    price={el.price}
-                    name={el.name}
-                  />
+                    className={style.card}
+                    onClick={handleIngredientClick}
+                  >
+                    <IngredientCard
+                      image={el.image_large}
+                      price={el.price}
+                      name={el.name}
+                    />
+                  </div>
                 )
             )}
         </div>

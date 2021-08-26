@@ -1,0 +1,47 @@
+.container {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0.5s, opacity 0.5s linear;
+}
+
+.container_visible {
+  visibility: visible;
+  opacity: 1;
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #1c1c21;
+  z-index: 2;
+  width: 720px;
+  min-height: 539px;
+  border: 1px solid rgba(76, 76, 255, 0.2);
+  padding: 40px;
+  box-sizing: border-box;
+  box-shadow: 0px 24px 32px rgba(0, 0, 0, 0.04),
+    0px 16px 24px rgba(0, 0, 0, 0.04), 0px 4px 8px rgba(0, 0, 0, 0.04),
+    0px 0px 1px rgba(0, 0, 0, 0.04);
+  border-radius: 40px;
+}
+
+.header {
+  height: 64px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.closeIcon {
+  width: 18px;
+  height: 18px;
+  opacity: 1;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.closeIcon:hover {
+  cursor: pointer;
+  opacity: 0.8;
+}
