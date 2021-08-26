@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { createPortal } from "react-dom";
+import PropTypes from "prop-types";
 
 import style from "./Modal.module.css";
 
@@ -53,5 +54,11 @@ function Modal({ isModalOpen, title, children, onClose }) {
     modalRoot
   );
 }
+
+Modal.propTypes = {
+  isModalOpen: PropTypes.bool.isRequired,
+  title: PropTypes.string.isRequired,
+  onClose: PropTypes.func.isRequired,
+};
 
 export default Modal;

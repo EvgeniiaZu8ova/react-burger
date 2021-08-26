@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 import main from "./Main.module.css";
 
@@ -13,5 +14,9 @@ function Main({ ingredients }) {
     </main>
   );
 }
+
+Main.propTypes = {
+  ingredients: PropTypes.array.isRequired,
+};
 
 export default Main;

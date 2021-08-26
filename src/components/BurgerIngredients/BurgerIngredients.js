@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 
 import style from "./BurgerIngredients.module.css";
 
@@ -15,7 +16,9 @@ function BurgerIngredients({ data }) {
   const [isIngredientsModalOpen, setIsIngredientsModalOpen] = useState(false);
   const [selectedIngredient, setSelectedIngredient] = useState({});
 
-  const handleTabClick = (e) => setCurrent(e);
+  function handleTabClick(e) {
+    setCurrent(e);
+  }
 
   function handleIngredientClick(e) {
     const target =
@@ -118,5 +121,9 @@ function BurgerIngredients({ data }) {
     </section>
   );
 }
+
+BurgerIngredients.propTypes = {
+  data: PropTypes.array.isRequired,
+};
 
 export default BurgerIngredients;

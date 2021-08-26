@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 
 import style from "./BurgerConstructor.module.css";
 
@@ -84,5 +85,9 @@ function BurgerConstructor({ data }) {
     </section>
   );
 }
+
+BurgerConstructor.propTypes = {
+  data: PropTypes.array.isRequired,
+};
 
 export default BurgerConstructor;
