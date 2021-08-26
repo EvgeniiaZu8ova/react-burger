@@ -1,5 +1,6 @@
 .section {
   width: 600px;
+  overflow: hidden;
 }
 
 .scrollArea {

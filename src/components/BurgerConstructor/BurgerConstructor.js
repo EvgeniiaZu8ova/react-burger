@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import style from "./BurgerConstructor.module.css";
 
@@ -10,10 +10,14 @@ import {
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
-function BurgerConstructor({ data, forModalClick }) {
-  const handleOrderClick = (e) => {
-    forModalClick();
-  };
+import Modal from "../Modal/Modal";
+
+function BurgerConstructor({ data }) {
+  const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
+
+  function handleOrderModalSwitch() {
+    setIsOrderModalOpen((prev) => !prev);
+  }
 
   return (
     <section className={`${style.section} pl-4 pr-2 pt-25`}>
@@ -63,12 +67,17 @@ function BurgerConstructor({ data, forModalClick }) {
               </p>
               <img src={bigCurrency} alt="Иконка стоимости" />
             </div>
-            <Button type="primary" size="large" onClick={handleOrderClick}>
+            <Button
+              type="primary"
+              size="large"
+              onClick={handleOrderModalSwitch}
+            >
               Оформить заказ
             </Button>
           </div>
         </>
       )}
+      <Modal isModalOpen={isOrderModalOpen} onClick={handleOrderModalSwitch} />
     </section>
   );
 }
