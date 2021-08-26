@@ -12,7 +12,10 @@ function BurgerIngredients({ data, forModalClick }) {
   const handleTabClick = (e) => setCurrent(e);
 
   const handleIngredientClick = (e) => {
-    forModalClick();
+    const target =
+      e.target.parentElement.querySelector(".text_type_main-default")
+        .textContent || null;
+    forModalClick(target);
   };
 
   return (

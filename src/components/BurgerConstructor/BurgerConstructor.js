@@ -12,7 +12,7 @@ import {
 
 function BurgerConstructor({ data, forModalClick }) {
   const handleOrderClick = (e) => {
-    forModalClick();
+    forModalClick(e.target.parentElement);
   };
 
   return (

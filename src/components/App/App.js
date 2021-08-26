@@ -11,8 +11,23 @@ import Modal from "../Modal/Modal";
 function App() {
   const [data, setData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedIngredient, setSelectedIngredient] = useState({});
 
-  function handleModalSwitch() {
+  function handleItemSearch(arr, item) {
+    return arr.find((el) => el.name === item);
+  }
+
+  function handleModalSwitch(target) {
+    const item = handleItemSearch(data, target);
+
+    if (!isModalOpen && item) {
+      setSelectedIngredient(item);
+    }
+
+    if (isModalOpen) {
+      setSelectedIngredient({});
+    }
+
     setIsModalOpen((prev) => !prev);
   }
 
@@ -31,7 +46,11 @@ function App() {
     <div className={app.page}>
       <AppHeader />
       <Main ingredients={data} forModalClick={handleModalSwitch} />
-      <Modal isModalOpen={isModalOpen} onClick={handleModalSwitch} />
+      <Modal
+        isModalOpen={isModalOpen}
+        onClick={handleModalSwitch}
+        item={selectedIngredient}
+      />
     </div>
   );
 }

@@ -6,9 +6,12 @@ import style from "./Modal.module.css";
 import closeIcon from "../../images/close-icon.svg";
 
 import ModalOverlay from "./ModalOverlay/ModalOverlay";
+import OrderDetails from "./OrderDetails/OrderDetails";
+import IngredientDetails from "./IngredientDetails/IngredientDetails";
 
-function Modal({ isModalOpen, onClick }) {
+function Modal({ isModalOpen, onClick, item }) {
   const modalRoot = document.getElementById("modals");
+  const itemLength = Object.keys(item).length;
 
   function handleCloseOverlay(e) {
     if (e.target.className.includes("Overlay")) {
@@ -17,12 +20,18 @@ function Modal({ isModalOpen, onClick }) {
   }
 
   useEffect(() => {
-    document.addEventListener("keydown", onClick);
+    const listenEsc = () => {
+      if (isModalOpen) {
+        onClick();
+      }
+    };
+
+    document.addEventListener("keydown", listenEsc);
 
     return () => {
-      document.removeEventListener("keydown", onClick);
+      document.removeEventListener("keydown", listenEsc);
     };
-  }, [onClick]);
+  }, [isModalOpen, onClick]);
 
   return createPortal(
     <section
@@ -33,7 +42,9 @@ function Modal({ isModalOpen, onClick }) {
       <ModalOverlay />
       <div className={style.modal}>
         <div className={style.header}>
-          <h2 className="text text_type_main-large">Детали ингредиента</h2>
+          <h2 className="text text_type_main-large">
+            {itemLength > 0 && "Детали ингредиента"}
+          </h2>
           <img
             onClick={onClick}
             src={closeIcon}
@@ -41,6 +52,7 @@ function Modal({ isModalOpen, onClick }) {
             className={style.closeIcon}
           />
         </div>
+        {itemLength > 0 && <IngredientDetails item={item} />}
       </div>
     </section>,
     modalRoot
