@@ -33,11 +33,10 @@ function Modal({ isModalOpen, title, children, onClose }) {
 
   return createPortal(
     <section
-      onClick={handleCloseOverlay}
       className={`${style.container}
         ${isModalOpen && style.container_visible}`}
     >
-      <ModalOverlay />
+      <ModalOverlay onClose={handleCloseOverlay} />
       <div className={style.modal}>
         <div className={style.header}>
           <h2 className="text text_type_main-large">{title}</h2>
