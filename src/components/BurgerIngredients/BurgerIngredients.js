@@ -1,16 +1,43 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 
 import style from "./BurgerIngredients.module.css";
 
-import data from "../../utils/data";
-
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 
-import IngredientCard from "./IngredientCard/IngredientCard";
-function BurgerIngredients() {
-  const [current, setCurrent] = useState("Булки");
+import { handleItemSearch } from "../../utils/findItem";
 
-  const handleTabClick = (e) => setCurrent(e);
+import IngredientCard from "./IngredientCard/IngredientCard";
+import Modal from "../Modal/Modal";
+import IngredientDetails from "../Modal/IngredientDetails/IngredientDetails";
+
+function BurgerIngredients({ data }) {
+  const [current, setCurrent] = useState("Булки");
+  const [isIngredientsModalOpen, setIsIngredientsModalOpen] = useState(false);
+  const [selectedIngredient, setSelectedIngredient] = useState({});
+
+  function handleTabClick(e) {
+    setCurrent(e);
+  }
+
+  function handleIngredientClick(e) {
+    const target =
+      e.target.parentElement.querySelector(".text_type_main-default")
+        .textContent || null;
+
+    const item = handleItemSearch(data, target);
+
+    if (item) {
+      setSelectedIngredient(item);
+    }
+
+    setIsIngredientsModalOpen(true);
+  }
+
+  function closeModal() {
+    setIsIngredientsModalOpen(false);
+    setSelectedIngredient({});
+  }
 
   return (
     <section className={`${style.section} pt-10 pb-10`}>
@@ -43,35 +70,60 @@ function BurgerIngredients() {
       <div className={style.scrollArea}>
         <h2 className="text text_type_main-medium pb-6">Булки</h2>
         <div className={style.cards__container}>
-          {data.map(
-            (el, index) =>
-              el.type === "bun" && (
-                <IngredientCard
-                  key={el._id}
-                  image={el.image_large}
-                  price={el.price}
-                  name={el.name}
-                />
-              )
-          )}
+          {data &&
+            data.map(
+              (el, index) =>
+                el.type === "bun" && (
+                  <div
+                    key={el._id}
+                    className={style.card}
+                    onClick={handleIngredientClick}
+                  >
+                    <IngredientCard
+                      image={el.image_large}
+                      price={el.price}
+                      name={el.name}
+                    />
+                  </div>
+                )
+            )}
         </div>
         <h2 className="text text_type_main-medium pb-6">Соусы</h2>
         <div className={style.cards__container}>
-          {data.map(
-            (el, index) =>
-              el.type === "sauce" && (
-                <IngredientCard
-                  key={el._id}
-                  image={el.image_large}
-                  price={el.price}
-                  name={el.name}
-                />
-              )
-          )}
+          {data &&
+            data.map(
+              (el, index) =>
+                el.type === "sauce" && (
+                  <div
+                    key={el._id}
+                    className={style.card}
+                    onClick={handleIngredientClick}
+                  >
+                    <IngredientCard
+                      image={el.image_large}
+                      price={el.price}
+                      name={el.name}
+                    />
+                  </div>
+                )
+            )}
         </div>
       </div>
+      <Modal
+        isModalOpen={isIngredientsModalOpen}
+        title="Детали ингредиента"
+        onClose={closeModal}
+      >
+        {isIngredientsModalOpen && (
+          <IngredientDetails item={selectedIngredient} />
+        )}
+      </Modal>
     </section>
   );
 }
+
+BurgerIngredients.propTypes = {
+  data: PropTypes.array.isRequired,
+};
 
 export default BurgerIngredients;

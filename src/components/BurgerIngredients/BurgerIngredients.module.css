@@ -27,3 +27,14 @@
   grid-template-columns: repeat(2, 272px);
   grid-auto-rows: 208px;
 }
+
+.card {
+  cursor: default;
+  opacity: 1;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.card:hover {
+  cursor: pointer;
+  opacity: 0.8;
+}
