@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 
 import main from "./Main.module.css";
 
+import ConstructorContext from "../../contexts/ConstructorContext";
+
 import BurgerConstructor from "../BurgerConstructor/BurgerConstructor";
 import BurgerIngredients from "../BurgerIngredients/BurgerIngredients";
 
@@ -10,7 +12,9 @@ function Main({ ingredients }) {
   return (
     <main className={main.content}>
       <BurgerIngredients data={ingredients} />
-      <BurgerConstructor data={ingredients} />
+      <ConstructorContext.Provider value={ingredients}>
+        <BurgerConstructor />
+      </ConstructorContext.Provider>
     </main>
   );
 }

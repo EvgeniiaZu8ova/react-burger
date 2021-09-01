@@ -1,21 +1,24 @@
-import React, { useState } from "react";
-import PropTypes from "prop-types";
+import React, { useState, useContext } from "react";
 
 import style from "./BurgerConstructor.module.css";
 
 import bigCurrency from "../../images/big-currency-icon.svg";
 
 import OrderDetails from "../Modal/OrderDetails/OrderDetails";
+import Modal from "../Modal/Modal";
 
 import {
   DragIcon,
   ConstructorElement,
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import Modal from "../Modal/Modal";
 
-function BurgerConstructor({ data }) {
+import ConstructorContext from "../../contexts/ConstructorContext";
+
+function BurgerConstructor() {
   const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
+
+  const data = useContext(ConstructorContext);
 
   function handleOrderModalCall() {
     setIsOrderModalOpen(true);
@@ -85,9 +88,5 @@ function BurgerConstructor({ data }) {
     </section>
   );
 }
-
-BurgerConstructor.propTypes = {
-  data: PropTypes.array.isRequired,
-};
 
 export default BurgerConstructor;
