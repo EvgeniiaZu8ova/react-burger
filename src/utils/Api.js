@@ -19,6 +19,16 @@ class Api {
       headers: this._headers,
     }).then((res) => this._handlePromise(res));
   }
+
+  makeOrder(data) {
+    return fetch(`${this._baseUrl}/orders`, {
+      method: "POST",
+      headers: this._headers,
+      body: JSON.stringify({
+        ingredients: data,
+      }),
+    }).then((res) => this._handlePromise(res));
+  }
 }
 
 const api = new Api(normaApiOptions);

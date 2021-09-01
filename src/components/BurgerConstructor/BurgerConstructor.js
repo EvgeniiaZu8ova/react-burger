@@ -4,6 +4,8 @@ import style from "./BurgerConstructor.module.css";
 
 import bigCurrency from "../../images/big-currency-icon.svg";
 
+import api from "../../utils/Api";
+
 import OrderDetails from "../Modal/OrderDetails/OrderDetails";
 import Modal from "../Modal/Modal";
 
@@ -15,13 +17,32 @@ import {
 
 import ConstructorContext from "../../contexts/ConstructorContext";
 
+import handleConstructorRender from "../../utils/handleConstructorRender";
+
 function BurgerConstructor() {
   const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
+  const [orderNumber, setOrderNumber] = useState(0);
 
   const data = useContext(ConstructorContext);
+  const { findBun, removeBuns, calcFinalSum } = handleConstructorRender();
+
+  const bun = findBun(data);
+  const otherItems = removeBuns(data);
 
   function handleOrderModalCall() {
-    setIsOrderModalOpen(true);
+    const myOrder = data.map((el) => el._id);
+
+    api
+      .makeOrder(myOrder)
+      .then((res) => {
+        setOrderNumber(res.order.number);
+      })
+      .then(() => {
+        setIsOrderModalOpen(true);
+      })
+      .catch((err) => {
+        console.log("Ошибка при попытке оформить заказ", err.message);
+      });
   }
 
   function closeModal() {
@@ -37,34 +58,31 @@ function BurgerConstructor() {
               <ConstructorElement
                 type="top"
                 isLocked={true}
-                text={data[0].name.concat(" (верх)")}
-                price={data[0].price}
-                thumbnail={data[0].image}
+                text={bun && bun.name.concat(" (верх)")}
+                price={bun && bun.price}
+                thumbnail={bun && bun.image}
               />
 
               <div className={`${style.cards__container} mt-4 mb-4 pr-2`}>
-                {data.map(
-                  (el, index) =>
-                    index > 0 &&
-                    index < data.length - 2 && (
-                      <article key={el._id} className={style.card}>
-                        <DragIcon type="primary" />
-                        <ConstructorElement
-                          text={el.name}
-                          price={el.price}
-                          thumbnail={el.image}
-                        />
-                      </article>
-                    )
-                )}
+                {otherItems &&
+                  otherItems.map((el, index) => (
+                    <article key={el._id} className={style.card}>
+                      <DragIcon type="primary" />
+                      <ConstructorElement
+                        text={el.name}
+                        price={el.price}
+                        thumbnail={el.image}
+                      />
+                    </article>
+                  ))}
               </div>
 
               <ConstructorElement
                 type="bottom"
                 isLocked={true}
-                text={data[0].name.concat(" (низ)")}
-                price={data[0].price}
-                thumbnail={data[0].image}
+                text={bun && bun.name.concat(" (низ)")}
+                price={bun && bun.price}
+                thumbnail={bun && bun.image}
               />
             </div>
           </div>
@@ -72,7 +90,7 @@ function BurgerConstructor() {
           <div className={`${style.order__container} mt-10`}>
             <div className={`${style.order__price} mr-10`}>
               <p className="text text_type_digits-medium mr-2">
-                {data.reduce((acc, curr) => acc + curr.price, 0)}
+                {data && String(calcFinalSum(data))}
               </p>
               <img src={bigCurrency} alt="Иконка стоимости" />
             </div>
@@ -83,7 +101,7 @@ function BurgerConstructor() {
         </>
       )}
       <Modal isModalOpen={isOrderModalOpen} title="" onClose={closeModal}>
-        <OrderDetails />
+        <OrderDetails orderNumber={orderNumber} />
       </Modal>
     </section>
   );

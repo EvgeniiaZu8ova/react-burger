@@ -21,17 +21,18 @@ function BurgerIngredients({ data }) {
   }
 
   function handleIngredientClick(e) {
-    const target =
-      e.target.parentElement.querySelector(".text_type_main-default")
-        .textContent || null;
+    const parentElement = e.target.parentElement.querySelector(
+      ".text_type_main-default"
+    );
+
+    const target = parentElement && parentElement.textContent;
 
     const item = handleItemSearch(data, target);
 
     if (item) {
       setSelectedIngredient(item);
+      setIsIngredientsModalOpen(true);
     }
-
-    setIsIngredientsModalOpen(true);
   }
 
   function closeModal() {
