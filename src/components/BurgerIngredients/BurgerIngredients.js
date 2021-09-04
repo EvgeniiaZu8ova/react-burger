@@ -11,7 +11,7 @@ import IngredientCard from "./IngredientCard/IngredientCard";
 import Modal from "../Modal/Modal";
 import IngredientDetails from "../Modal/IngredientDetails/IngredientDetails";
 
-function BurgerIngredients({ data }) {
+function BurgerIngredients({ data, itemsDispatcher }) {
   const [current, setCurrent] = useState("Булки");
   const [isIngredientsModalOpen, setIsIngredientsModalOpen] = useState(false);
   const [selectedIngredient, setSelectedIngredient] = useState({});
@@ -26,6 +26,10 @@ function BurgerIngredients({ data }) {
     );
 
     const target = parentElement && parentElement.textContent;
+
+    if (target) {
+      itemsDispatcher({ type: "add", payload: target });
+    }
 
     const item = handleItemSearch(data, target);
 
@@ -124,7 +128,23 @@ function BurgerIngredients({ data }) {
 }
 
 BurgerIngredients.propTypes = {
-  data: PropTypes.array.isRequired,
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      _id: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      type: PropTypes.string.isRequired,
+      proteins: PropTypes.number.isRequired,
+      fat: PropTypes.number.isRequired,
+      carbohydrates: PropTypes.number.isRequired,
+      calories: PropTypes.number.isRequired,
+      price: PropTypes.number.isRequired,
+      image: PropTypes.string.isRequired,
+      image_mobile: PropTypes.string.isRequired,
+      image_large: PropTypes.string.isRequired,
+      __v: PropTypes.number.isRequired,
+    })
+  ).isRequired,
+  itemsDispatcher: PropTypes.func.isRequired,
 };
 
 export default BurgerIngredients;
