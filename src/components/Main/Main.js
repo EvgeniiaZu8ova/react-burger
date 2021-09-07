@@ -47,7 +47,7 @@ function Main({ ingredients }) {
         }
         break;
       default:
-        throw new Error(`Wrong type of action: ${action.type}`);
+        return state;
     }
   }
 
