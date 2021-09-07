@@ -1,24 +1,48 @@
-import React, { useState } from "react";
-import PropTypes from "prop-types";
+import React, { useState, useContext } from "react";
 
 import style from "./BurgerConstructor.module.css";
 
 import bigCurrency from "../../images/big-currency-icon.svg";
 
+import api from "../../utils/Api";
+
 import OrderDetails from "../Modal/OrderDetails/OrderDetails";
+import Modal from "../Modal/Modal";
 
 import {
   DragIcon,
   ConstructorElement,
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import Modal from "../Modal/Modal";
 
-function BurgerConstructor({ data }) {
+import ConstructorContext from "../../contexts/ConstructorContext";
+
+function BurgerConstructor() {
   const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
+  const [orderNumber, setOrderNumber] = useState(0);
+
+  const data = useContext(ConstructorContext);
+
+  const { itemsState, itemsDispatcher } = data;
+  const { bun, otherItems, finalSum } = itemsState;
 
   function handleOrderModalCall() {
-    setIsOrderModalOpen(true);
+    if (Object.keys(bun).length > 0) {
+      const myItems = otherItems.map((el) => el._id);
+      const myOrder = [...myItems, bun._id, bun._id];
+
+      api
+        .makeOrder(myOrder)
+        .then((res) => {
+          setOrderNumber(res.order.number);
+        })
+        .then(() => {
+          setIsOrderModalOpen(true);
+        })
+        .catch((err) => {
+          console.log("Ошибка при попытке оформить заказ", err.message);
+        });
+    }
   }
 
   function closeModal() {
@@ -27,67 +51,66 @@ function BurgerConstructor({ data }) {
 
   return (
     <section className={`${style.section} pl-4 pr-2 pt-25`}>
-      {data.length > 0 && (
-        <>
-          <div className={style.mainContent}>
-            <div className={`${style.burger__container} pr-2`}>
-              <ConstructorElement
-                type="top"
-                isLocked={true}
-                text={data[0].name.concat(" (верх)")}
-                price={data[0].price}
-                thumbnail={data[0].image}
-              />
+      <div className={style.mainContent}>
+        <div className={`${style.burger__container} pr-2`}>
+          {Object.keys(bun).length > 0 && (
+            <ConstructorElement
+              type="top"
+              isLocked={true}
+              text={bun && bun.name && bun.name.concat(" (верх)")}
+              price={bun.price}
+              thumbnail={bun.image}
+            />
+          )}
 
-              <div className={`${style.cards__container} mt-4 mb-4 pr-2`}>
-                {data.map(
-                  (el, index) =>
-                    index > 0 &&
-                    index < data.length - 2 && (
-                      <article key={el._id} className={style.card}>
-                        <DragIcon type="primary" />
-                        <ConstructorElement
-                          text={el.name}
-                          price={el.price}
-                          thumbnail={el.image}
-                        />
-                      </article>
-                    )
-                )}
-              </div>
-
-              <ConstructorElement
-                type="bottom"
-                isLocked={true}
-                text={data[0].name.concat(" (низ)")}
-                price={data[0].price}
-                thumbnail={data[0].image}
-              />
-            </div>
+          <div className={`${style.cards__container} mt-4 mb-4 pr-2`}>
+            {otherItems &&
+              otherItems.map((el, index) => (
+                <article key={index} className={style.card}>
+                  <DragIcon type="primary" />
+                  <ConstructorElement
+                    text={el.name}
+                    price={el.price}
+                    thumbnail={el.image}
+                    handleClose={() => {
+                      itemsDispatcher({ type: "remove", payload: el.name });
+                    }}
+                  />
+                </article>
+              ))}
           </div>
 
-          <div className={`${style.order__container} mt-10`}>
-            <div className={`${style.order__price} mr-10`}>
-              <p className="text text_type_digits-medium mr-2">
-                {data.reduce((acc, curr) => acc + curr.price, 0)}
-              </p>
-              <img src={bigCurrency} alt="Иконка стоимости" />
-            </div>
-            <Button type="primary" size="large" onClick={handleOrderModalCall}>
-              Оформить заказ
-            </Button>
+          {Object.keys(bun).length > 0 && (
+            <ConstructorElement
+              type="bottom"
+              isLocked={true}
+              text={bun && bun.name && bun.name.concat(" (низ)")}
+              price={bun.price}
+              thumbnail={bun.image}
+            />
+          )}
+        </div>
+      </div>
+
+      {finalSum > 0 && (
+        <div className={`${style.order__container} mt-10`}>
+          <div className={`${style.order__price} mr-10`}>
+            <p className="text text_type_digits-medium mr-2">
+              {String(finalSum)}
+            </p>
+            <img src={bigCurrency} alt="Иконка стоимости" />
           </div>
-        </>
+          <Button type="primary" size="large" onClick={handleOrderModalCall}>
+            Оформить заказ
+          </Button>
+        </div>
       )}
+
       <Modal isModalOpen={isOrderModalOpen} title="" onClose={closeModal}>
-        <OrderDetails />
+        <OrderDetails orderNumber={orderNumber} />
       </Modal>
     </section>
   );
 }
-
-BurgerConstructor.propTypes = {
-  data: PropTypes.array.isRequired,
-};
 
 export default BurgerConstructor;
