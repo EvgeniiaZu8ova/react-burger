@@ -1,18 +1,17 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../utils/Api";
 
-// export const getItems = createAsyncThunk(
-//   "ingredients/getItems",
-//   api
-//     .getIngredientsData()
-//     .then((res) => {
-//       const { data } = res;
-//       return data;
-//     })
-//     .catch((err) => {
-//       console.log("Ошибка при загрузке данных об ингредиентах", err.message);
-//     })
-// );
+export const getItems = createAsyncThunk(
+  "ingredients/getItems",
+  async function (_, { rejectWithValue }) {
+    try {
+      const { data } = await api.getIngredientsData();
+      return { data };
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
 
 // export const sendOrder = createAsyncThunk(
 //   "ingredients/sendOrder",
@@ -30,6 +29,8 @@ const ingredientsSlice = createSlice({
   name: "ingredients",
   initialState: {
     allIngredients: [],
+    allIngredientsRequest: false,
+    allIngredientsFailed: false,
     chosenBun: {},
     chosenOtherItems: [],
     finalSum: 0,
@@ -61,7 +62,21 @@ const ingredientsSlice = createSlice({
       }
     },
   },
-  // extraReducers: {},
+  extraReducers: {
+    [getItems.pending]: (state, action) => {
+      state.allIngredientsRequest = true;
+    },
+    [getItems.fulfilled]: (state, action) => {
+      state.allIngredientsRequest = false;
+      state.allIngredientsFailed = false;
+      state.allIngredients = action.payload.data;
+    },
+    [getItems.rejected]: (state, action) => {
+      state.allIngredientsRequest = false;
+      state.allIngredientsFailed = true;
+      console.log(action.payload);
+    },
+  },
 });
 
 export const { addIngredient, removeIngredient } = ingredientsSlice.actions;
