@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
+import { useDispatch } from "react-redux";
+
+import { addIngredient } from "../../services/reducers";
 
 import style from "./BurgerIngredients.module.css";
 
@@ -11,10 +14,13 @@ import IngredientCard from "./IngredientCard/IngredientCard";
 import Modal from "../Modal/Modal";
 import IngredientDetails from "../Modal/IngredientDetails/IngredientDetails";
 
-function BurgerIngredients({ data, itemsDispatcher }) {
+function BurgerIngredients({ data }) {
   const [current, setCurrent] = useState("Булки");
   const [isIngredientsModalOpen, setIsIngredientsModalOpen] = useState(false);
   const [selectedIngredient, setSelectedIngredient] = useState({});
+
+  const dispatch = useDispatch();
+  const addItem = (item) => dispatch(addIngredient({ item }));
 
   function handleTabClick(e) {
     setCurrent(e);
@@ -24,16 +30,11 @@ function BurgerIngredients({ data, itemsDispatcher }) {
     const parentElement = e.target.parentElement.querySelector(
       ".text_type_main-default"
     );
-
     const target = parentElement && parentElement.textContent;
-
-    if (target) {
-      itemsDispatcher({ type: "add", payload: target });
-    }
-
     const item = handleItemSearch(data, target);
 
     if (item) {
+      addItem(item);
       setSelectedIngredient(item);
       setIsIngredientsModalOpen(true);
     }
@@ -144,7 +145,7 @@ BurgerIngredients.propTypes = {
       __v: PropTypes.number.isRequired,
     })
   ).isRequired,
-  itemsDispatcher: PropTypes.func.isRequired,
+  // itemsDispatcher: PropTypes.func.isRequired,
 };
 
 export default BurgerIngredients;

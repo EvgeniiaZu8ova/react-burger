@@ -1,4 +1,7 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+
+import { removeIngredient } from "../../services/reducers";
 
 import style from "./BurgerConstructor.module.css";
 
@@ -15,16 +18,18 @@ import {
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
-import ConstructorContext from "../../contexts/ConstructorContext";
-
 function BurgerConstructor() {
   const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
   const [orderNumber, setOrderNumber] = useState(0);
 
-  const data = useContext(ConstructorContext);
+  const {
+    chosenBun: bun,
+    chosenOtherItems: otherItems,
+    finalSum,
+  } = useSelector((store) => store.ingredients);
 
-  const { itemsState, itemsDispatcher } = data;
-  const { bun, otherItems, finalSum } = itemsState;
+  const dispatch = useDispatch();
+  const removeItem = (item) => dispatch(removeIngredient({ item }));
 
   function handleOrderModalCall() {
     if (Object.keys(bun).length > 0) {
@@ -73,7 +78,7 @@ function BurgerConstructor() {
                     price={el.price}
                     thumbnail={el.image}
                     handleClose={() => {
-                      itemsDispatcher({ type: "remove", payload: el.name });
+                      removeItem(el);
                     }}
                   />
                 </article>
