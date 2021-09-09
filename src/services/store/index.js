@@ -5,6 +5,7 @@ const store = configureStore({
   reducer: {
     ingredients: ingredientsReducer,
   },
+  devTools: true,
 });
 
 export default store;

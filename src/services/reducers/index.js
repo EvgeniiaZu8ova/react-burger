@@ -13,17 +13,17 @@ export const getItems = createAsyncThunk(
   }
 );
 
-// export const sendOrder = createAsyncThunk(
-//   "ingredients/sendOrder",
-//   api
-//     .makeOrder()
-//     .then((res) => {
-//       return res.order.number;
-//     })
-//     .catch((err) => {
-//       console.log("Ошибка при попытке оформить заказ", err.message);
-//     })
-// );
+export const sendOrder = createAsyncThunk(
+  "ingredients/sendOrder",
+  async function (myOrder, { rejectWithValue }) {
+    try {
+      const { order } = await api.makeOrder(myOrder);
+      return { order };
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
 
 const ingredientsSlice = createSlice({
   name: "ingredients",
@@ -36,7 +36,10 @@ const ingredientsSlice = createSlice({
     finalSum: 0,
     currentIngredient: {},
     orderObject: {},
-    isOrderSuccess: false,
+    orderRequest: false,
+    orderFailed: false,
+    isOrderModalOpen: false,
+    isIngredientsModalOpen: false,
   },
   reducers: {
     addIngredient(state, action) {
@@ -61,6 +64,15 @@ const ingredientsSlice = createSlice({
         state.finalSum = state.finalSum - action.payload.item.price;
       }
     },
+    handleCurrentIngredient(state, action) {
+      state.currentIngredient = action.payload.ingredient;
+    },
+    handleOrderModal(state, action) {
+      state.isOrderModalOpen = action.payload;
+    },
+    handleIngredientModal(state, action) {
+      state.isIngredientsModalOpen = action.payload;
+    },
   },
   extraReducers: {
     [getItems.pending]: (state, action) => {
@@ -76,9 +88,29 @@ const ingredientsSlice = createSlice({
       state.allIngredientsFailed = true;
       console.log(action.payload);
     },
+    [sendOrder.pending]: (state, action) => {
+      state.orderRequest = true;
+    },
+    [sendOrder.fulfilled]: (state, action) => {
+      state.orderRequest = false;
+      state.orderFailed = false;
+      state.orderObject = action.payload.order;
+      state.isOrderModalOpen = true;
+    },
+    [sendOrder.rejected]: (state, action) => {
+      state.orderRequest = false;
+      state.orderFailed = true;
+      console.log(action.payload);
+    },
   },
 });
 
-export const { addIngredient, removeIngredient } = ingredientsSlice.actions;
+export const {
+  addIngredient,
+  removeIngredient,
+  handleOrderModal,
+  handleIngredientModal,
+  handleCurrentIngredient,
+} = ingredientsSlice.actions;
 
 export default ingredientsSlice.reducer;

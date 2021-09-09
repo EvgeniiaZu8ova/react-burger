@@ -1,8 +1,11 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
 import { useSelector, useDispatch } from "react-redux";
 
-import { addIngredient } from "../../services/reducers";
+import {
+  addIngredient,
+  handleIngredientModal,
+  handleCurrentIngredient,
+} from "../../services/reducers";
 
 import style from "./BurgerIngredients.module.css";
 
@@ -14,20 +17,29 @@ import IngredientCard from "./IngredientCard/IngredientCard";
 import Modal from "../Modal/Modal";
 import IngredientDetails from "../Modal/IngredientDetails/IngredientDetails";
 
-function BurgerIngredients({ data }) {
+function BurgerIngredients() {
   const [current, setCurrent] = useState("Булки");
-  const [isIngredientsModalOpen, setIsIngredientsModalOpen] = useState(false);
-  const [selectedIngredient, setSelectedIngredient] = useState({});
 
   const dispatch = useDispatch();
   const addItem = (item) => dispatch(addIngredient({ item }));
+  const manageIngredientModal = (isOpen) =>
+    dispatch(handleIngredientModal(isOpen));
+  const manageIngredient = (ingredient) =>
+    dispatch(handleCurrentIngredient({ ingredient }));
 
-  const { allIngredientsRequest, allIngredientsFailed } = useSelector(
-    (store) => store.ingredients
-  );
+  const {
+    allIngredients: data,
+    allIngredientsRequest,
+    allIngredientsFailed,
+    isIngredientsModalOpen,
+  } = useSelector((store) => store.ingredients);
 
   function handleTabClick(e) {
     setCurrent(e);
+  }
+
+  function handleScroll(e) {
+    console.log(e.target.querySelectorAll("h2")[0]);
   }
 
   function handleIngredientClick(e) {
@@ -39,14 +51,14 @@ function BurgerIngredients({ data }) {
 
     if (item) {
       addItem(item);
-      setSelectedIngredient(item);
-      setIsIngredientsModalOpen(true);
+      manageIngredientModal(true);
+      manageIngredient(item);
     }
   }
 
   function closeModal() {
-    setIsIngredientsModalOpen(false);
-    setSelectedIngredient({});
+    manageIngredientModal(false);
+    manageIngredient({});
   }
 
   return (
@@ -61,7 +73,7 @@ function BurgerIngredients({ data }) {
 
       {data && data.length > 0 && (
         <>
-          <div style={{ display: "flex" }} className="pb-10">
+          <div style={{ display: "flex" }}>
             <Tab
               value="Булки"
               active={current === "Булки"}
@@ -84,8 +96,8 @@ function BurgerIngredients({ data }) {
               Начинки
             </Tab>
           </div>
-          <div className={style.scrollArea}>
-            <h2 className="text text_type_main-medium pb-6">Булки</h2>
+          <div className={style.scrollArea} onScroll={(e) => handleScroll(e)}>
+            <h2 className="text text_type_main-medium pt-10 pb-6">Булки</h2>
             <div className={style.cards__container}>
               {data &&
                 data.map(
@@ -105,12 +117,32 @@ function BurgerIngredients({ data }) {
                     )
                 )}
             </div>
-            <h2 className="text text_type_main-medium pb-6">Соусы</h2>
+            <h2 className="text text_type_main-medium pt-10 pb-6">Соусы</h2>
             <div className={style.cards__container}>
               {data &&
                 data.map(
                   (el, index) =>
                     el.type === "sauce" && (
+                      <div
+                        key={el._id}
+                        className={style.card}
+                        onClick={handleIngredientClick}
+                      >
+                        <IngredientCard
+                          image={el.image_large}
+                          price={el.price}
+                          name={el.name}
+                        />
+                      </div>
+                    )
+                )}
+            </div>
+            <h2 className="text text_type_main-medium pt-10 pb-6">Начинки</h2>
+            <div className={style.cards__container}>
+              {data &&
+                data.map(
+                  (el, index) =>
+                    el.type === "main" && (
                       <div
                         key={el._id}
                         className={style.card}
@@ -134,31 +166,10 @@ function BurgerIngredients({ data }) {
         title="Детали ингредиента"
         onClose={closeModal}
       >
-        {isIngredientsModalOpen && (
-          <IngredientDetails item={selectedIngredient} />
-        )}
+        {isIngredientsModalOpen && <IngredientDetails />}
       </Modal>
     </section>
   );
 }
-
-BurgerIngredients.propTypes = {
-  data: PropTypes.arrayOf(
-    PropTypes.shape({
-      _id: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      type: PropTypes.string.isRequired,
-      proteins: PropTypes.number.isRequired,
-      fat: PropTypes.number.isRequired,
-      carbohydrates: PropTypes.number.isRequired,
-      calories: PropTypes.number.isRequired,
-      price: PropTypes.number.isRequired,
-      image: PropTypes.string.isRequired,
-      image_mobile: PropTypes.string.isRequired,
-      image_large: PropTypes.string.isRequired,
-      __v: PropTypes.number.isRequired,
-    })
-  ).isRequired,
-};
 
 export default BurgerIngredients;

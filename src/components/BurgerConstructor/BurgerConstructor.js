@@ -1,13 +1,15 @@
-import React, { useState } from "react";
+import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-import { removeIngredient } from "../../services/reducers";
+import {
+  removeIngredient,
+  sendOrder,
+  handleOrderModal,
+} from "../../services/reducers";
 
 import style from "./BurgerConstructor.module.css";
 
 import bigCurrency from "../../images/big-currency-icon.svg";
-
-import api from "../../utils/Api";
 
 import OrderDetails from "../Modal/OrderDetails/OrderDetails";
 import Modal from "../Modal/Modal";
@@ -19,39 +21,31 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
 function BurgerConstructor() {
-  const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
-  const [orderNumber, setOrderNumber] = useState(0);
-
   const {
     chosenBun: bun,
     chosenOtherItems: otherItems,
     finalSum,
+    orderObject,
+    isOrderModalOpen,
+    orderRequest,
+    orderFailed,
   } = useSelector((store) => store.ingredients);
 
   const dispatch = useDispatch();
   const removeItem = (item) => dispatch(removeIngredient({ item }));
+  const makeOrder = (myOrder) => dispatch(sendOrder(myOrder));
+  const manageOrderModal = (isOpen) => dispatch(handleOrderModal(isOpen));
 
   function handleOrderModalCall() {
     if (Object.keys(bun).length > 0) {
       const myItems = otherItems.map((el) => el._id);
       const myOrder = [...myItems, bun._id, bun._id];
-
-      api
-        .makeOrder(myOrder)
-        .then((res) => {
-          setOrderNumber(res.order.number);
-        })
-        .then(() => {
-          setIsOrderModalOpen(true);
-        })
-        .catch((err) => {
-          console.log("Ошибка при попытке оформить заказ", err.message);
-        });
+      makeOrder(myOrder);
     }
   }
 
   function closeModal() {
-    setIsOrderModalOpen(false);
+    manageOrderModal(false);
   }
 
   return (
@@ -106,13 +100,17 @@ function BurgerConstructor() {
             <img src={bigCurrency} alt="Иконка стоимости" />
           </div>
           <Button type="primary" size="large" onClick={handleOrderModalCall}>
-            Оформить заказ
+            {orderRequest
+              ? "Отправляем..."
+              : orderFailed
+              ? "Что-то пошло не так :("
+              : "Оформить заказ"}
           </Button>
         </div>
       )}
 
       <Modal isModalOpen={isOrderModalOpen} title="" onClose={closeModal}>
-        <OrderDetails orderNumber={orderNumber} />
+        <OrderDetails orderNumber={orderObject.number} />
       </Modal>
     </section>
   );

@@ -21,7 +21,9 @@ function IngredientCard({ image, price, name }) {
         <p className="text text_type_digits-default pr-2">{price}</p>
         <CurrencyIcon type="primary" />
       </div>
-      <p className="text text_type_main-default">{name}</p>
+      <p className={`${style.card__title} text text_type_main-default`}>
+        {name}
+      </p>
     </article>
   );
 }
