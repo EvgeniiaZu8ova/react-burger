@@ -18,7 +18,7 @@ import Modal from "../Modal/Modal";
 import IngredientDetails from "../Modal/IngredientDetails/IngredientDetails";
 
 function BurgerIngredients() {
-  const [current, setCurrent] = useState("Булки");
+  const [currentTab, setCurrentTab] = useState("Булки");
 
   const dispatch = useDispatch();
   const addItem = (item) => dispatch(addIngredient({ item }));
@@ -35,11 +35,18 @@ function BurgerIngredients() {
   } = useSelector((store) => store.ingredients);
 
   function handleTabClick(e) {
-    setCurrent(e);
+    setCurrentTab(e);
   }
 
   function handleScroll(e) {
-    console.log(e.target.querySelectorAll("h2")[0]);
+    const titles = Array.from(e.target.querySelectorAll("h2"));
+    const titlesOnScroll = titles.map((el) => ({
+      title: el.innerText,
+      top: Math.abs(el.getBoundingClientRect().top - 203),
+    }));
+    const minTop = Math.min(...titlesOnScroll.map((el) => el.top));
+    const closestTitle = titlesOnScroll.find((el) => el.top === minTop).title;
+    setCurrentTab(closestTitle);
   }
 
   function handleIngredientClick(e) {
@@ -74,30 +81,38 @@ function BurgerIngredients() {
       {data && data.length > 0 && (
         <>
           <div style={{ display: "flex" }}>
-            <Tab
-              value="Булки"
-              active={current === "Булки"}
-              onClick={handleTabClick}
-            >
-              Булки
-            </Tab>
-            <Tab
-              value="Соусы"
-              active={current === "Соусы"}
-              onClick={handleTabClick}
-            >
-              Соусы
-            </Tab>
-            <Tab
-              value="Начинки"
-              active={current === "Начинки"}
-              onClick={handleTabClick}
-            >
-              Начинки
-            </Tab>
+            <a href="#buns" className={style.link}>
+              <Tab
+                value="Булки"
+                active={currentTab === "Булки"}
+                onClick={handleTabClick}
+              >
+                Булки
+              </Tab>
+            </a>
+            <a href="#sauces" className={style.link}>
+              <Tab
+                value="Соусы"
+                active={currentTab === "Соусы"}
+                onClick={handleTabClick}
+              >
+                Соусы
+              </Tab>
+            </a>
+            <a href="#mains" className={style.link}>
+              <Tab
+                value="Начинки"
+                active={currentTab === "Начинки"}
+                onClick={handleTabClick}
+              >
+                Начинки
+              </Tab>
+            </a>
           </div>
           <div className={style.scrollArea} onScroll={(e) => handleScroll(e)}>
-            <h2 className="text text_type_main-medium pt-10 pb-6">Булки</h2>
+            <h2 id="buns" className="text text_type_main-medium pt-10 pb-6">
+              Булки
+            </h2>
             <div className={style.cards__container}>
               {data &&
                 data.map(
@@ -117,7 +132,9 @@ function BurgerIngredients() {
                     )
                 )}
             </div>
-            <h2 className="text text_type_main-medium pt-10 pb-6">Соусы</h2>
+            <h2 id="sauces" className="text text_type_main-medium pt-10 pb-6">
+              Соусы
+            </h2>
             <div className={style.cards__container}>
               {data &&
                 data.map(
@@ -137,7 +154,9 @@ function BurgerIngredients() {
                     )
                 )}
             </div>
-            <h2 className="text text_type_main-medium pt-10 pb-6">Начинки</h2>
+            <h2 id="mains" className="text text_type_main-medium pt-10 pb-6">
+              Начинки
+            </h2>
             <div className={style.cards__container}>
               {data &&
                 data.map(
