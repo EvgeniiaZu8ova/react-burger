@@ -8,10 +8,10 @@ import {
   Counter,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
-function IngredientCard({ image, price, name }) {
+function IngredientCard({ image, price, name, quantity = 0 }) {
   return (
     <article className={`${style.card}`}>
-      <Counter count={1} size="default" />
+      {quantity > 0 && <Counter count={quantity} size="default" />}
       <img
         src={image}
         alt="Ингредиент"
@@ -32,6 +32,7 @@ IngredientCard.propTypes = {
   image: PropTypes.string.isRequired,
   price: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
+  quantity: PropTypes.number,
 };
 
 export default IngredientCard;

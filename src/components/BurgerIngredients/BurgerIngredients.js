@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 import {
   addIngredient,
@@ -31,6 +33,8 @@ function BurgerIngredients() {
     allIngredients: data,
     allIngredientsRequest,
     allIngredientsFailed,
+    chosenBun,
+    chosenOtherItems,
     isIngredientsModalOpen,
   } = useSelector((store) => store.ingredients);
 
@@ -127,6 +131,7 @@ function BurgerIngredients() {
                           image={el.image_large}
                           price={el.price}
                           name={el.name}
+                          quantity={chosenBun.name === el.name ? 2 : 0}
                         />
                       </div>
                     )
@@ -149,6 +154,11 @@ function BurgerIngredients() {
                           image={el.image_large}
                           price={el.price}
                           name={el.name}
+                          quantity={
+                            chosenOtherItems.filter(
+                              (item) => item.name === el.name
+                            ).length
+                          }
                         />
                       </div>
                     )
@@ -171,6 +181,11 @@ function BurgerIngredients() {
                           image={el.image_large}
                           price={el.price}
                           name={el.name}
+                          quantity={
+                            chosenOtherItems.filter(
+                              (item) => item.name === el.name
+                            ).length
+                          }
                         />
                       </div>
                     )
