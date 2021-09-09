@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { useDrag } from "react-dnd";
 
 import style from "./IngredientCard.module.css";
 
@@ -9,8 +10,19 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
 function IngredientCard({ image, price, name, quantity = 0 }) {
+  const [{ isDragging }, drag] = useDrag({
+    type: "card",
+    item: { name },
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+  });
+
   return (
-    <article className={`${style.card}`}>
+    <article
+      ref={drag}
+      className={`${style.card} ${isDragging && style.card_transparent}`}
+    >
       {quantity > 0 && <Counter count={quantity} size="default" />}
       <img
         src={image}

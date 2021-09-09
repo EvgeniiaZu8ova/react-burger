@@ -4,6 +4,11 @@
   justify-content: flex-start;
   align-items: center;
   position: relative;
+  opacity: 1;
+}
+
+.card_transparent {
+  opacity: 0.5;
 }
 
 .card__image {

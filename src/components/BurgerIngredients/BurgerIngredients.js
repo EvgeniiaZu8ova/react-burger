@@ -1,10 +1,7 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
 
 import {
-  addIngredient,
   handleIngredientModal,
   handleCurrentIngredient,
 } from "../../services/reducers";
@@ -23,7 +20,7 @@ function BurgerIngredients() {
   const [currentTab, setCurrentTab] = useState("Булки");
 
   const dispatch = useDispatch();
-  const addItem = (item) => dispatch(addIngredient({ item }));
+
   const manageIngredientModal = (isOpen) =>
     dispatch(handleIngredientModal(isOpen));
   const manageIngredient = (ingredient) =>
@@ -61,7 +58,6 @@ function BurgerIngredients() {
     const item = handleItemSearch(data, target);
 
     if (item) {
-      addItem(item);
       manageIngredientModal(true);
       manageIngredient(item);
     }
@@ -113,6 +109,7 @@ function BurgerIngredients() {
               </Tab>
             </a>
           </div>
+
           <div className={style.scrollArea} onScroll={(e) => handleScroll(e)}>
             <h2 id="buns" className="text text_type_main-medium pt-10 pb-6">
               Булки

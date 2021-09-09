@@ -1,11 +1,15 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useDrop } from "react-dnd";
 
 import {
+  addIngredient,
   removeIngredient,
   sendOrder,
   handleOrderModal,
 } from "../../services/reducers";
+
+import { handleItemSearch } from "../../utils/findItem";
 
 import style from "./BurgerConstructor.module.css";
 
@@ -22,6 +26,7 @@ import {
 
 function BurgerConstructor() {
   const {
+    allIngredients: data,
     chosenBun: bun,
     chosenOtherItems: otherItems,
     finalSum,
@@ -32,9 +37,28 @@ function BurgerConstructor() {
   } = useSelector((store) => store.ingredients);
 
   const dispatch = useDispatch();
+  const addItem = (item) => dispatch(addIngredient({ item }));
   const removeItem = (item) => dispatch(removeIngredient({ item }));
   const makeOrder = (myOrder) => dispatch(sendOrder(myOrder));
   const manageOrderModal = (isOpen) => dispatch(handleOrderModal(isOpen));
+
+  function handleAddItem(name) {
+    const item = handleItemSearch(data, name);
+
+    if (item) {
+      addItem(item);
+    }
+  }
+
+  const [{ isHover }, dropCard] = useDrop({
+    accept: "card",
+    drop({ name }) {
+      handleAddItem(name);
+    },
+    collect: (monitor) => ({
+      isHover: monitor.isOver(),
+    }),
+  });
 
   function handleOrderModalCall() {
     if (Object.keys(bun).length > 0) {
@@ -49,7 +73,7 @@ function BurgerConstructor() {
   }
 
   return (
-    <section className={`${style.section} pl-4 pr-2 pt-25`}>
+    <section ref={dropCard} className={`${style.section} pl-4 pr-2 pt-25`}>
       <div className={style.mainContent}>
         <div className={`${style.burger__container} pr-2`}>
           {Object.keys(bun).length > 0 && (
@@ -65,7 +89,12 @@ function BurgerConstructor() {
           <div className={`${style.cards__container} mt-4 mb-4 pr-2`}>
             {otherItems &&
               otherItems.map((el, index) => (
-                <article key={index} className={style.card}>
+                <article
+                  key={index}
+                  className={`${style.card} ${
+                    isHover && style.card_transparent
+                  }`}
+                >
                   <DragIcon type="primary" />
                   <ConstructorElement
                     text={el.name}
