@@ -5,6 +5,7 @@ import { useDrop } from "react-dnd";
 import {
   addIngredient,
   removeIngredient,
+  moveIngredients,
   sendOrder,
   handleOrderModal,
 } from "../../services/reducers";
@@ -19,10 +20,10 @@ import OrderDetails from "../Modal/OrderDetails/OrderDetails";
 import Modal from "../Modal/Modal";
 
 import {
-  DragIcon,
   ConstructorElement,
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
+import NotBunItem from "./NotBunItem/NotBunItem";
 
 function BurgerConstructor() {
   const {
@@ -39,6 +40,7 @@ function BurgerConstructor() {
   const dispatch = useDispatch();
   const addItem = (item) => dispatch(addIngredient({ item }));
   const removeItem = (item) => dispatch(removeIngredient({ item }));
+  const moveItems = (newItems) => dispatch(moveIngredients({ newItems }));
   const makeOrder = (myOrder) => dispatch(sendOrder(myOrder));
   const manageOrderModal = (isOpen) => dispatch(handleOrderModal(isOpen));
 
@@ -48,6 +50,15 @@ function BurgerConstructor() {
     if (item) {
       addItem(item);
     }
+  }
+
+  function moveItem(dragIndex, hoverIndex) {
+    const dragItem = otherItems[dragIndex];
+    const newItems = [...otherItems];
+    newItems.splice(dragIndex, 1);
+    newItems.splice(hoverIndex, 0, dragItem);
+
+    moveItems(newItems);
   }
 
   const [{ isHover }, dropCard] = useDrop({
@@ -89,22 +100,18 @@ function BurgerConstructor() {
           <div className={`${style.cards__container} mt-4 mb-4 pr-2`}>
             {otherItems &&
               otherItems.map((el, index) => (
-                <article
+                <NotBunItem
                   key={index}
-                  className={`${style.card} ${
-                    isHover && style.card_transparent
-                  }`}
-                >
-                  <DragIcon type="primary" />
-                  <ConstructorElement
-                    text={el.name}
-                    price={el.price}
-                    thumbnail={el.image}
-                    handleClose={() => {
-                      removeItem(el);
-                    }}
-                  />
-                </article>
+                  index={index}
+                  text={el.name}
+                  price={el.price}
+                  thumbnail={el.image}
+                  handleClose={() => {
+                    removeItem(el);
+                  }}
+                  moveItem={moveItem}
+                  isHover={isHover}
+                />
               ))}
           </div>
 

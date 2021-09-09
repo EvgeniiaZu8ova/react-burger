@@ -64,6 +64,9 @@ const ingredientsSlice = createSlice({
         state.finalSum = state.finalSum - action.payload.item.price;
       }
     },
+    moveIngredients(state, action) {
+      state.chosenOtherItems = action.payload.newItems;
+    },
     handleCurrentIngredient(state, action) {
       state.currentIngredient = action.payload.ingredient;
     },
@@ -108,6 +111,7 @@ const ingredientsSlice = createSlice({
 export const {
   addIngredient,
   removeIngredient,
+  moveIngredients,
   handleOrderModal,
   handleIngredientModal,
   handleCurrentIngredient,
