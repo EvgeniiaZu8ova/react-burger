@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import style from "./IngredientDetails.module.css";
 
 function IngredientDetails() {
-  const { currentIngredient } = useSelector((store) => store.ingredients);
+  const { currentIngredient } = useSelector((store) => store.ingredientModal);
   const { image, name, calories, proteins, fat, carbohydrates } =
     currentIngredient;
 

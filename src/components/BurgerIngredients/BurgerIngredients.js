@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   handleIngredientModal,
   handleCurrentIngredient,
-} from "../../services/reducers";
+} from "../../services/reducers/ingredientModal";
 
 import style from "./BurgerIngredients.module.css";
 
@@ -30,10 +30,13 @@ function BurgerIngredients() {
     allIngredients: data,
     allIngredientsRequest,
     allIngredientsFailed,
-    chosenBun,
-    chosenOtherItems,
-    isIngredientsModalOpen,
-  } = useSelector((store) => store.ingredients);
+  } = useSelector((store) => store.allIngredients);
+
+  const { chosenBun, chosenOtherItems } = useSelector((store) => store.order);
+
+  const { isIngredientsModalOpen } = useSelector(
+    (store) => store.ingredientModal
+  );
 
   function handleTabClick(e) {
     setCurrentTab(e);

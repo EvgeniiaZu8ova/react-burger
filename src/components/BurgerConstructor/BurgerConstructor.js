@@ -8,7 +8,7 @@ import {
   moveIngredients,
   sendOrder,
   handleOrderModal,
-} from "../../services/reducers";
+} from "../../services/reducers/order";
 
 import { handleItemSearch } from "../../utils/findItem";
 
@@ -26,18 +26,19 @@ import {
 import NotBunItem from "./NotBunItem/NotBunItem";
 
 function BurgerConstructor() {
+  const { allIngredients: data } = useSelector((store) => store.allIngredients);
+
   const {
-    allIngredients: data,
     chosenBun: bun,
     chosenOtherItems: otherItems,
     orderObject,
     isOrderModalOpen,
     orderRequest,
     orderFailed,
-  } = useSelector((store) => store.ingredients);
+  } = useSelector((store) => store.order);
 
   const finalSum = useMemo(() => {
-    const bunPrice = bun.price || 0;
+    const bunPrice = bun.price * 2 || 0;
     const otherItemsPrice = otherItems.reduce(
       (acc, curr) => acc + curr.price,
       0

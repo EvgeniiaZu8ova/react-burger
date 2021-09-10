@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
-import { getItems } from "../../services/reducers";
+import { getItems } from "../../services/reducers/allIngredients";
 
 import app from "./App.module.css";
 
