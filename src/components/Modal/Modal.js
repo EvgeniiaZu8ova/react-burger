@@ -18,12 +18,13 @@ function Modal({ isModalOpen, title, children, onClose }) {
   }
 
   useEffect(() => {
-    const listenEsc = () => {
-      if (isModalOpen) {
+    const listenEsc = (e) => {
+      if (isModalOpen && e.key === "Escape") {
         onClose();
       }
     };
 
+    if (!isModalOpen) return;
     document.addEventListener("keydown", listenEsc);
 
     return () => {
