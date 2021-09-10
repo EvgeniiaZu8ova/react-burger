@@ -42,7 +42,13 @@ const orderSlice = createSlice({
       }
     },
     moveIngredients(state, action) {
-      state.chosenOtherItems = action.payload.newItems;
+      const { dragIndex, hoverIndex } = action.payload;
+      const dragItem = state.chosenOtherItems[dragIndex];
+      const newItems = [...state.chosenOtherItems];
+      newItems.splice(dragIndex, 1);
+      newItems.splice(hoverIndex, 0, dragItem);
+
+      state.chosenOtherItems = newItems;
     },
     handleOrderModal(state, action) {
       state.isOrderModalOpen = action.payload;

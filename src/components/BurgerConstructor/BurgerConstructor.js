@@ -5,7 +5,6 @@ import { useDrop } from "react-dnd";
 import {
   addIngredient,
   removeIngredient,
-  moveIngredients,
   sendOrder,
   handleOrderModal,
 } from "../../services/reducers/order";
@@ -49,7 +48,6 @@ function BurgerConstructor() {
   const dispatch = useDispatch();
   const addItem = (item) => dispatch(addIngredient({ item }));
   const removeItem = (item) => dispatch(removeIngredient({ item }));
-  const moveItems = (newItems) => dispatch(moveIngredients({ newItems }));
   const makeOrder = (myOrder) => dispatch(sendOrder(myOrder));
   const manageOrderModal = (isOpen) => dispatch(handleOrderModal(isOpen));
 
@@ -59,15 +57,6 @@ function BurgerConstructor() {
     if (item) {
       addItem(item);
     }
-  }
-
-  function moveItem(dragIndex, hoverIndex) {
-    const dragItem = otherItems[dragIndex];
-    const newItems = [...otherItems];
-    newItems.splice(dragIndex, 1);
-    newItems.splice(hoverIndex, 0, dragItem);
-
-    moveItems(newItems);
   }
 
   const [{ isHover }, dropCard] = useDrop({
@@ -118,7 +107,6 @@ function BurgerConstructor() {
                   handleClose={() => {
                     removeItem(el);
                   }}
-                  moveItem={moveItem}
                   isHover={isHover}
                 />
               ))}

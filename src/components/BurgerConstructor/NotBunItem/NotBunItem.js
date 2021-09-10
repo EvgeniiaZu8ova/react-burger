@@ -1,23 +1,22 @@
 import React, { useRef } from "react";
+import { useDispatch } from "react-redux";
 import PropTypes from "prop-types";
+import { useDrag, useDrop } from "react-dnd";
+
 import style from "./NotBunItem.module.css";
 
-import { useDrag, useDrop } from "react-dnd";
+import { moveIngredients } from "../../../services/reducers/order";
 
 import {
   DragIcon,
   ConstructorElement,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
-function NotBunItem({
-  index,
-  text,
-  price,
-  thumbnail,
-  handleClose,
-  moveItem,
-  isHover,
-}) {
+function NotBunItem({ index, text, price, thumbnail, handleClose, isHover }) {
+  const dispatch = useDispatch();
+  const moveItems = (dragIndex, hoverIndex) =>
+    dispatch(moveIngredients({ dragIndex, hoverIndex }));
+
   const ref = useRef(null);
 
   const [{ isDragging }, dragItem] = useDrag({
@@ -58,7 +57,7 @@ function NotBunItem({
         return;
       }
 
-      moveItem(dragIndex, hoverIndex);
+      moveItems(dragIndex, hoverIndex);
 
       item.index = hoverIndex;
     },
@@ -89,7 +88,6 @@ NotBunItem.propTypes = {
   price: PropTypes.number.isRequired,
   thumbnail: PropTypes.string.isRequired,
   handleClose: PropTypes.func.isRequired,
-  moveItem: PropTypes.func.isRequired,
   isHover: PropTypes.bool,
 };
 
