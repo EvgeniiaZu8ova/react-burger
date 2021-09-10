@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useDrop } from "react-dnd";
 
@@ -30,12 +30,20 @@ function BurgerConstructor() {
     allIngredients: data,
     chosenBun: bun,
     chosenOtherItems: otherItems,
-    finalSum,
     orderObject,
     isOrderModalOpen,
     orderRequest,
     orderFailed,
   } = useSelector((store) => store.ingredients);
+
+  const finalSum = useMemo(() => {
+    const bunPrice = bun.price || 0;
+    const otherItemsPrice = otherItems.reduce(
+      (acc, curr) => acc + curr.price,
+      0
+    );
+    return bunPrice + otherItemsPrice;
+  }, [bun, otherItems]);
 
   const dispatch = useDispatch();
   const addItem = (item) => dispatch(addIngredient({ item }));
@@ -140,7 +148,9 @@ function BurgerConstructor() {
               ? "Отправляем..."
               : orderFailed
               ? "Что-то пошло не так :("
-              : "Оформить заказ"}
+              : bun.name
+              ? "Оформить заказ"
+              : "Необходимо добавить булку!"}
           </Button>
         </div>
       )}

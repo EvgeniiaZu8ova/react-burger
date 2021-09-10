@@ -33,7 +33,6 @@ const ingredientsSlice = createSlice({
     allIngredientsFailed: false,
     chosenBun: {},
     chosenOtherItems: [],
-    finalSum: 0,
     currentIngredient: {},
     orderObject: {},
     orderRequest: false,
@@ -44,13 +43,9 @@ const ingredientsSlice = createSlice({
   reducers: {
     addIngredient(state, action) {
       if (action.payload.item.type === "bun") {
-        const bunPrevPrice = state.chosenBun.price || 0;
         state.chosenBun = action.payload.item;
-        state.finalSum =
-          state.finalSum - 2 * bunPrevPrice + 2 * action.payload.item.price;
       } else {
         state.chosenOtherItems.push(action.payload.item);
-        state.finalSum = state.finalSum + action.payload.item.price;
       }
     },
     removeIngredient(state, action) {
@@ -61,7 +56,6 @@ const ingredientsSlice = createSlice({
         state.chosenOtherItems = state.chosenOtherItems.filter(
           (el, index, arr) => index !== arr.indexOf(deletedItem)
         );
-        state.finalSum = state.finalSum - action.payload.item.price;
       }
     },
     moveIngredients(state, action) {
