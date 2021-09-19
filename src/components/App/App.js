@@ -9,6 +9,7 @@ import app from "./App.module.css";
 import AppHeader from "../AppHeader/AppHeader";
 import Main from "../Main/Main";
 import LoginPage from "../../pages/login";
+import RegisterPage from "../../pages/register";
 
 function App() {
   const dispatch = useDispatch();
@@ -27,6 +28,9 @@ function App() {
           </Route>
           <Route path="/login" exact={true}>
             <LoginPage />
+          </Route>
+          <Route path="/register" exact={true}>
+            <RegisterPage />
           </Route>
         </Switch>
       </div>
