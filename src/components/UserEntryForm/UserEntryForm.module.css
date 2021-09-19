@@ -1,0 +1,22 @@
+.entry {
+  min-height: 100vh;
+}
+
+.entry__form {
+  margin: 180px auto 0;
+  width: 480px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.entry__input {
+  width: 480px;
+  height: 64px;
+}
+
+.entry__link {
+  text-decoration: none;
+  color: #4c4cff;
+}
