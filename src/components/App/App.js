@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 
 import { getItems } from "../../services/reducers/allIngredients";
 
@@ -16,10 +17,16 @@ function App() {
   }, [dispatch]);
 
   return (
-    <div className={app.page}>
-      <AppHeader />
-      <Main />
-    </div>
+    <BrowserRouter>
+      <div className={app.page}>
+        <AppHeader />
+        <Switch>
+          <Route path="/" exact={true}>
+            <Main />
+          </Route>
+        </Switch>
+      </div>
+    </BrowserRouter>
   );
 }
 
