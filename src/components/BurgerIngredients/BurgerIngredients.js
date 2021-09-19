@@ -1,5 +1,10 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
+import { useSelector, useDispatch } from "react-redux";
+
+import {
+  handleIngredientModal,
+  handleCurrentIngredient,
+} from "../../services/reducers/ingredientModal";
 
 import style from "./BurgerIngredients.module.css";
 
@@ -11,140 +16,194 @@ import IngredientCard from "./IngredientCard/IngredientCard";
 import Modal from "../Modal/Modal";
 import IngredientDetails from "../Modal/IngredientDetails/IngredientDetails";
 
-function BurgerIngredients({ data, itemsDispatcher }) {
-  const [current, setCurrent] = useState("Булки");
-  const [isIngredientsModalOpen, setIsIngredientsModalOpen] = useState(false);
-  const [selectedIngredient, setSelectedIngredient] = useState({});
+function BurgerIngredients() {
+  const [currentTab, setCurrentTab] = useState("Булки");
+
+  const dispatch = useDispatch();
+
+  const manageIngredientModal = (isOpen) =>
+    dispatch(handleIngredientModal(isOpen));
+  const manageIngredient = (ingredient) =>
+    dispatch(handleCurrentIngredient({ ingredient }));
+
+  const {
+    allIngredients: data,
+    allIngredientsRequest,
+    allIngredientsFailed,
+  } = useSelector((store) => store.allIngredients);
+
+  const { chosenBun, chosenOtherItems } = useSelector((store) => store.order);
+
+  const { isIngredientsModalOpen } = useSelector(
+    (store) => store.ingredientModal
+  );
 
   function handleTabClick(e) {
-    setCurrent(e);
+    setCurrentTab(e);
+  }
+
+  function handleScroll(e) {
+    const titles = Array.from(e.target.querySelectorAll("h2"));
+    const titlesOnScroll = titles.map((el) => ({
+      title: el.innerText,
+      top: Math.abs(el.getBoundingClientRect().top - 203),
+    }));
+    const minTop = Math.min(...titlesOnScroll.map((el) => el.top));
+    const closestTitle = titlesOnScroll.find((el) => el.top === minTop).title;
+    setCurrentTab(closestTitle);
   }
 
   function handleIngredientClick(e) {
     const parentElement = e.target.parentElement.querySelector(
       ".text_type_main-default"
     );
-
     const target = parentElement && parentElement.textContent;
-
-    if (target) {
-      itemsDispatcher({ type: "add", payload: target });
-    }
-
     const item = handleItemSearch(data, target);
 
     if (item) {
-      setSelectedIngredient(item);
-      setIsIngredientsModalOpen(true);
+      manageIngredientModal(true);
+      manageIngredient(item);
     }
   }
 
   function closeModal() {
-    setIsIngredientsModalOpen(false);
-    setSelectedIngredient({});
+    manageIngredientModal(false);
+    manageIngredient({});
   }
 
   return (
     <section className={`${style.section} pt-10 pb-10`}>
       <h1 className="text text_type_main-large pl-0 pr-0 pb-5">
-        Соберите бургер
+        {allIngredientsRequest
+          ? "Загрузка..."
+          : allIngredientsFailed
+          ? "Что-то пошло не так :("
+          : "Соберите бургер"}
       </h1>
-      <div style={{ display: "flex" }} className="pb-10">
-        <Tab
-          value="Булки"
-          active={current === "Булки"}
-          onClick={handleTabClick}
-        >
-          Булки
-        </Tab>
-        <Tab
-          value="Соусы"
-          active={current === "Соусы"}
-          onClick={handleTabClick}
-        >
-          Соусы
-        </Tab>
-        <Tab
-          value="Начинки"
-          active={current === "Начинки"}
-          onClick={handleTabClick}
-        >
-          Начинки
-        </Tab>
-      </div>
-      <div className={style.scrollArea}>
-        <h2 className="text text_type_main-medium pb-6">Булки</h2>
-        <div className={style.cards__container}>
-          {data &&
-            data.map(
-              (el, index) =>
-                el.type === "bun" && (
-                  <div
-                    key={el._id}
-                    className={style.card}
-                    onClick={handleIngredientClick}
-                  >
-                    <IngredientCard
-                      image={el.image_large}
-                      price={el.price}
-                      name={el.name}
-                    />
-                  </div>
-                )
-            )}
-        </div>
-        <h2 className="text text_type_main-medium pb-6">Соусы</h2>
-        <div className={style.cards__container}>
-          {data &&
-            data.map(
-              (el, index) =>
-                el.type === "sauce" && (
-                  <div
-                    key={el._id}
-                    className={style.card}
-                    onClick={handleIngredientClick}
-                  >
-                    <IngredientCard
-                      image={el.image_large}
-                      price={el.price}
-                      name={el.name}
-                    />
-                  </div>
-                )
-            )}
-        </div>
-      </div>
+
+      {data && data.length > 0 && (
+        <>
+          <div style={{ display: "flex" }}>
+            <a href="#buns" className={style.link}>
+              <Tab
+                value="Булки"
+                active={currentTab === "Булки"}
+                onClick={handleTabClick}
+              >
+                Булки
+              </Tab>
+            </a>
+            <a href="#sauces" className={style.link}>
+              <Tab
+                value="Соусы"
+                active={currentTab === "Соусы"}
+                onClick={handleTabClick}
+              >
+                Соусы
+              </Tab>
+            </a>
+            <a href="#mains" className={style.link}>
+              <Tab
+                value="Начинки"
+                active={currentTab === "Начинки"}
+                onClick={handleTabClick}
+              >
+                Начинки
+              </Tab>
+            </a>
+          </div>
+
+          <div className={style.scrollArea} onScroll={(e) => handleScroll(e)}>
+            <h2 id="buns" className="text text_type_main-medium pt-10 pb-6">
+              Булки
+            </h2>
+            <div className={style.cards__container}>
+              {data &&
+                data.map(
+                  (el, index) =>
+                    el.type === "bun" && (
+                      <div
+                        key={el._id}
+                        className={style.card}
+                        onClick={handleIngredientClick}
+                      >
+                        <IngredientCard
+                          image={el.image_large}
+                          price={el.price}
+                          name={el.name}
+                          quantity={chosenBun.name === el.name ? 2 : 0}
+                        />
+                      </div>
+                    )
+                )}
+            </div>
+            <h2 id="sauces" className="text text_type_main-medium pt-10 pb-6">
+              Соусы
+            </h2>
+            <div className={style.cards__container}>
+              {data &&
+                data.map(
+                  (el, index) =>
+                    el.type === "sauce" && (
+                      <div
+                        key={el._id}
+                        className={style.card}
+                        onClick={handleIngredientClick}
+                      >
+                        <IngredientCard
+                          image={el.image_large}
+                          price={el.price}
+                          name={el.name}
+                          quantity={
+                            chosenOtherItems.filter(
+                              (item) => item.name === el.name
+                            ).length
+                          }
+                        />
+                      </div>
+                    )
+                )}
+            </div>
+            <h2 id="mains" className="text text_type_main-medium pt-10 pb-6">
+              Начинки
+            </h2>
+            <div className={style.cards__container}>
+              {data &&
+                data.map(
+                  (el, index) =>
+                    el.type === "main" && (
+                      <div
+                        key={el._id}
+                        className={style.card}
+                        onClick={handleIngredientClick}
+                      >
+                        <IngredientCard
+                          image={el.image_large}
+                          price={el.price}
+                          name={el.name}
+                          quantity={
+                            chosenOtherItems.filter(
+                              (item) => item.name === el.name
+                            ).length
+                          }
+                        />
+                      </div>
+                    )
+                )}
+            </div>
+          </div>
+        </>
+      )}
+
       <Modal
         isModalOpen={isIngredientsModalOpen}
         title="Детали ингредиента"
         onClose={closeModal}
       >
-        {isIngredientsModalOpen && (
-          <IngredientDetails item={selectedIngredient} />
-        )}
+        {isIngredientsModalOpen && <IngredientDetails />}
       </Modal>
     </section>
   );
 }
-
-BurgerIngredients.propTypes = {
-  data: PropTypes.arrayOf(
-    PropTypes.shape({
-      _id: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      type: PropTypes.string.isRequired,
-      proteins: PropTypes.number.isRequired,
-      fat: PropTypes.number.isRequired,
-      carbohydrates: PropTypes.number.isRequired,
-      calories: PropTypes.number.isRequired,
-      price: PropTypes.number.isRequired,
-      image: PropTypes.string.isRequired,
-      image_mobile: PropTypes.string.isRequired,
-      image_large: PropTypes.string.isRequired,
-      __v: PropTypes.number.isRequired,
-    })
-  ).isRequired,
-  itemsDispatcher: PropTypes.func.isRequired,
-};
 
 export default BurgerIngredients;

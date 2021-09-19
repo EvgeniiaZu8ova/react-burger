@@ -1,56 +1,88 @@
-import React, { useState, useContext } from "react";
+import React, { useMemo } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useDrop } from "react-dnd";
+
+import {
+  addIngredient,
+  removeIngredient,
+  sendOrder,
+  handleOrderModal,
+} from "../../services/reducers/order";
+
+import { handleItemSearch } from "../../utils/findItem";
 
 import style from "./BurgerConstructor.module.css";
 
 import bigCurrency from "../../images/big-currency-icon.svg";
 
-import api from "../../utils/Api";
-
 import OrderDetails from "../Modal/OrderDetails/OrderDetails";
 import Modal from "../Modal/Modal";
 
 import {
-  DragIcon,
   ConstructorElement,
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-
-import ConstructorContext from "../../contexts/ConstructorContext";
+import NotBunItem from "./NotBunItem/NotBunItem";
 
 function BurgerConstructor() {
-  const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
-  const [orderNumber, setOrderNumber] = useState(0);
+  const { allIngredients: data } = useSelector((store) => store.allIngredients);
 
-  const data = useContext(ConstructorContext);
+  const {
+    chosenBun: bun,
+    chosenOtherItems: otherItems,
+    orderObject,
+    isOrderModalOpen,
+    orderRequest,
+    orderFailed,
+  } = useSelector((store) => store.order);
 
-  const { itemsState, itemsDispatcher } = data;
-  const { bun, otherItems, finalSum } = itemsState;
+  const finalSum = useMemo(() => {
+    const bunPrice = bun.price * 2 || 0;
+    const otherItemsPrice = otherItems.reduce(
+      (acc, curr) => acc + curr.price,
+      0
+    );
+    return bunPrice + otherItemsPrice;
+  }, [bun, otherItems]);
+
+  const dispatch = useDispatch();
+  const addItem = (item) => dispatch(addIngredient({ item }));
+  const removeItem = (item) => dispatch(removeIngredient({ item }));
+  const makeOrder = (myOrder) => dispatch(sendOrder(myOrder));
+  const manageOrderModal = (isOpen) => dispatch(handleOrderModal(isOpen));
+
+  function handleAddItem(name) {
+    const item = handleItemSearch(data, name);
+
+    if (item) {
+      addItem(item);
+    }
+  }
+
+  const [{ isHover }, dropCard] = useDrop({
+    accept: "card",
+    drop({ name }) {
+      handleAddItem(name);
+    },
+    collect: (monitor) => ({
+      isHover: monitor.isOver(),
+    }),
+  });
 
   function handleOrderModalCall() {
     if (Object.keys(bun).length > 0) {
       const myItems = otherItems.map((el) => el._id);
       const myOrder = [...myItems, bun._id, bun._id];
-
-      api
-        .makeOrder(myOrder)
-        .then((res) => {
-          setOrderNumber(res.order.number);
-        })
-        .then(() => {
-          setIsOrderModalOpen(true);
-        })
-        .catch((err) => {
-          console.log("Ошибка при попытке оформить заказ", err.message);
-        });
+      makeOrder(myOrder);
     }
   }
 
   function closeModal() {
-    setIsOrderModalOpen(false);
+    manageOrderModal(false);
   }
 
   return (
-    <section className={`${style.section} pl-4 pr-2 pt-25`}>
+    <section ref={dropCard} className={`${style.section} pl-4 pr-2 pt-25`}>
       <div className={style.mainContent}>
         <div className={`${style.burger__container} pr-2`}>
           {Object.keys(bun).length > 0 && (
@@ -66,17 +98,17 @@ function BurgerConstructor() {
           <div className={`${style.cards__container} mt-4 mb-4 pr-2`}>
             {otherItems &&
               otherItems.map((el, index) => (
-                <article key={index} className={style.card}>
-                  <DragIcon type="primary" />
-                  <ConstructorElement
-                    text={el.name}
-                    price={el.price}
-                    thumbnail={el.image}
-                    handleClose={() => {
-                      itemsDispatcher({ type: "remove", payload: el.name });
-                    }}
-                  />
-                </article>
+                <NotBunItem
+                  key={index}
+                  index={index}
+                  text={el.name}
+                  price={el.price}
+                  thumbnail={el.image}
+                  handleClose={() => {
+                    removeItem(el);
+                  }}
+                  isHover={isHover}
+                />
               ))}
           </div>
 
@@ -101,13 +133,19 @@ function BurgerConstructor() {
             <img src={bigCurrency} alt="Иконка стоимости" />
           </div>
           <Button type="primary" size="large" onClick={handleOrderModalCall}>
-            Оформить заказ
+            {orderRequest
+              ? "Отправляем..."
+              : orderFailed
+              ? "Что-то пошло не так :("
+              : bun.name
+              ? "Оформить заказ"
+              : "Необходимо добавить булку!"}
           </Button>
         </div>
       )}
 
       <Modal isModalOpen={isOrderModalOpen} title="" onClose={closeModal}>
-        <OrderDetails orderNumber={orderNumber} />
+        <OrderDetails orderNumber={orderObject.number} />
       </Modal>
     </section>
   );

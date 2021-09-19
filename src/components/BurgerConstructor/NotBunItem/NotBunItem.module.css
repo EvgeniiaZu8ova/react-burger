@@ -1,0 +1,11 @@
+.card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 568px;
+  opacity: 1;
+}
+
+.card_transparent {
+  opacity: 0.5;
+}

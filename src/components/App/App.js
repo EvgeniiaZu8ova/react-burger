@@ -1,30 +1,24 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
+
+import { getItems } from "../../services/reducers/allIngredients";
 
 import app from "./App.module.css";
-
-import api from "../../utils/Api";
 
 import AppHeader from "../AppHeader/AppHeader";
 import Main from "../Main/Main";
 
 function App() {
-  const [data, setData] = useState([]);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    api
-      .getIngredientsData()
-      .then((res) => {
-        setData(res.data);
-      })
-      .catch((err) => {
-        console.log("Ошибка при загрузке данных об ингредиентах", err.message);
-      });
-  }, []);
+    dispatch(getItems());
+  }, [dispatch]);
 
   return (
     <div className={app.page}>
       <AppHeader />
-      <Main ingredients={data} />
+      <Main />
     </div>
   );
 }
