@@ -29,6 +29,39 @@ class Api {
       }),
     }).then((res) => this._handlePromise(res));
   }
+
+  register({ email, password, name }) {
+    return fetch(`${this._baseUrl}/auth/register`, {
+      method: "POST",
+      headers: this._headers,
+      body: JSON.stringify({
+        email: email,
+        password: password,
+        name: name,
+      }),
+    }).then((res) => this._handlePromise(res));
+  }
+
+  resetPassword(email) {
+    return fetch(`${this._baseUrl}/password-reset`, {
+      method: "POST",
+      headers: this._headers,
+      body: JSON.stringify({
+        email: email,
+      }),
+    }).then((res) => this._handlePromise(res));
+  }
+
+  changePassword({ password, token }) {
+    return fetch(`${this._baseUrl}/password-reset/reset`, {
+      method: "POST",
+      headers: this._headers,
+      body: JSON.stringify({
+        password: password,
+        token: token,
+      }),
+    }).then((res) => this._handlePromise(res));
+  }
 }
 
 const api = new Api(normaApiOptions);

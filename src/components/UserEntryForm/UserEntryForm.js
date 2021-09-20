@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Link, useRouteMatch } from "react-router-dom";
 
+import api from "../../utils/Api";
+
 import style from "./UserEntryForm.module.css";
 
 import {
@@ -10,7 +12,12 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
 function UserEntryForm() {
-  const [value, setValue] = useState("");
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    password: "",
+    token: "",
+  });
   const { path } = useRouteMatch();
   const currentPath = path.split("/")[1];
 
@@ -35,8 +42,37 @@ function UserEntryForm() {
       buttonText = "Сохранить";
   }
 
+  function onChange(e) {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  }
+
   function handleSubmitClick(e) {
     e.preventDefault();
+
+    if (currentPath === "register") {
+      api
+        .register({
+          email: form.email,
+          password: form.password,
+          name: form.name,
+        })
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err));
+    }
+
+    if (currentPath === "forgot-password") {
+      api
+        .resetPassword(form.email)
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err));
+    }
+
+    if (currentPath === "reset-password") {
+      api
+        .changePassword({ password: form.password, token: form.token })
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err));
+    }
   }
 
   return (
@@ -48,8 +84,8 @@ function UserEntryForm() {
             <Input
               type={"text"}
               placeholder={"Имя"}
-              onChange={(e) => setValue(e.target.value)}
-              value={value}
+              onChange={onChange}
+              value={form.name}
               name={"name"}
             />
           </div>
@@ -60,15 +96,15 @@ function UserEntryForm() {
               <Input
                 type={"email"}
                 placeholder={"E-mail"}
-                onChange={(e) => setValue(e.target.value)}
-                value={value}
+                onChange={onChange}
+                value={form.email}
                 name={"email"}
               />
             </div>
             <div className="mb-6">
               <PasswordInput
-                onChange={(e) => setValue(e.target.value)}
-                value={value}
+                onChange={onChange}
+                value={form.password}
                 name={"password"}
               />
             </div>
@@ -79,8 +115,8 @@ function UserEntryForm() {
             <Input
               type={"email"}
               placeholder={"Укажите e-mail"}
-              onChange={(e) => setValue(e.target.value)}
-              value={value}
+              onChange={onChange}
+              value={form.email}
               name={"email"}
               error={false}
               errorText={"Ошибка"}
@@ -92,17 +128,17 @@ function UserEntryForm() {
           <>
             <div className="mb-6">
               <PasswordInput
-                onChange={(e) => setValue(e.target.value)}
-                value={value}
+                onChange={onChange}
+                value={form.password}
                 name={"password"}
               />
             </div>
             <div className="mb-6">
               <Input
                 placeholder={"Введите код из письма"}
-                onChange={(e) => setValue(e.target.value)}
-                value={value}
-                name={"code"}
+                onChange={onChange}
+                value={form.token}
+                name={"token"}
                 error={false}
                 errorText={"Ошибка"}
                 size={"default"}
