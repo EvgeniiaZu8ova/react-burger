@@ -42,6 +42,37 @@ class Api {
     }).then((res) => this._handlePromise(res));
   }
 
+  login({ email, password }) {
+    return fetch(`${this._baseUrl}/auth/login`, {
+      method: "POST",
+      headers: this._headers,
+      body: JSON.stringify({
+        email: email,
+        password: password,
+      }),
+    }).then((res) => this._handlePromise(res));
+  }
+
+  logout(refreshToken) {
+    return fetch(`${this._baseUrl}/auth/logout`, {
+      method: "POST",
+      headers: this._headers,
+      body: JSON.stringify({
+        token: "{{refreshToken}}",
+      }),
+    }).then((res) => this._handlePromise(res));
+  }
+
+  refreshToken(refreshToken) {
+    return fetch(`${this._baseUrl}/auth/token`, {
+      method: "POST",
+      headers: this._headers,
+      body: JSON.stringify({
+        token: "{{refreshToken}}",
+      }),
+    }).then((res) => this._handlePromise(res));
+  }
+
   resetPassword(email) {
     return fetch(`${this._baseUrl}/password-reset`, {
       method: "POST",
