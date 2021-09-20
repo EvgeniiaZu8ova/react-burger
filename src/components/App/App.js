@@ -10,6 +10,8 @@ import AppHeader from "../AppHeader/AppHeader";
 import Main from "../Main/Main";
 import LoginPage from "../../pages/login";
 import RegisterPage from "../../pages/register";
+import ForgotPasswordPage from "../../pages/forgot-password";
+import ResetPasswordPage from "../../pages/reset-password";
 
 function App() {
   const dispatch = useDispatch();
@@ -31,6 +33,12 @@ function App() {
           </Route>
           <Route path="/register" exact={true}>
             <RegisterPage />
+          </Route>
+          <Route path="/forgot-password" exact={true}>
+            <ForgotPasswordPage />
+          </Route>
+          <Route path="/reset-password" exact={true}>
+            <ResetPasswordPage />
           </Route>
         </Switch>
       </div>
