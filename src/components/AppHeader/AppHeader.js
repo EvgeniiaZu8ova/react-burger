@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 import {
   BurgerIcon,
@@ -38,15 +39,15 @@ function AppHeader() {
             </a>
           </div>
 
-          <a
-            href="http://localhost:3000"
+          <Link
+            to="/profile"
             className={`${header.navBar__link} pl-5 pr-5 pb-4 pt-4`}
           >
             <ProfileIcon type="secondary" />
             <span className="text text_type_main-default text_color_inactive pl-2">
               Личный кабинет
             </span>
-          </a>
+          </Link>
         </nav>
       </div>
     </header>

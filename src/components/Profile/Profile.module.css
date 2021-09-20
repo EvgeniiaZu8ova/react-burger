@@ -1,0 +1,25 @@
+.profile {
+  min-height: 100vh;
+  padding: 120px 410px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.menu {
+  width: 320px;
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.link {
+  text-decoration: none;
+}
+
+.text_active {
+  color: #f2f2f3;
+}
