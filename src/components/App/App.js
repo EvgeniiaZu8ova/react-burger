@@ -13,6 +13,7 @@ import RegisterPage from "../../pages/register";
 import ForgotPasswordPage from "../../pages/forgot-password";
 import ResetPasswordPage from "../../pages/reset-password";
 import ProfilePage from "../../pages/profile";
+import NotFound404Page from "../../pages/not-found-404";
 
 function App() {
   const dispatch = useDispatch();
@@ -46,6 +47,9 @@ function App() {
           </Route>
           <Route path="/profile/orders" exact={true}>
             <ProfilePage />
+          </Route>
+          <Route>
+            <NotFound404Page />
           </Route>
         </Switch>
       </div>
