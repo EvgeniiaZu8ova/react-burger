@@ -30,6 +30,20 @@ class Api {
     }).then((res) => this._handlePromise(res));
   }
 
+  // getUserInfo() {
+  //   return fetch(`${this._baseUrl}/auth/user`, {
+  //     mode: "cors",
+  //     cache: "no-cache",
+  //     credentials: "same-origin",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Authorization: "Bearer " + getCookie("token"),
+  //     },
+  //     redirect: "follow",
+  //     referrerPolicy: "no-referrer",
+  //   });
+  // }
+
   register({ email, password, name }) {
     return fetch(`${this._baseUrl}/auth/register`, {
       method: "POST",
@@ -45,7 +59,12 @@ class Api {
   login({ email, password }) {
     return fetch(`${this._baseUrl}/auth/login`, {
       method: "POST",
+      mode: "cors",
+      cache: "no-cache",
+      credentials: "same-origin",
       headers: this._headers,
+      redirect: "follow",
+      referrerPolicy: "no-referrer",
       body: JSON.stringify({
         email: email,
         password: password,
