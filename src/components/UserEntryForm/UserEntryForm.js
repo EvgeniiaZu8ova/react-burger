@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import { Link, useRouteMatch } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+
+import { createUser, signIn } from "../../services/reducers/auth";
 
 import api from "../../utils/Api";
 
@@ -18,22 +21,25 @@ function UserEntryForm() {
     password: "",
     token: "",
   });
+  const dispatch = useDispatch();
   const { path } = useRouteMatch();
-  const currentPath = path.split("/")[1];
+
+  const { registerRequest, registerFailed, loginRequest, loginFailed } =
+    useSelector((store) => store.auth);
 
   let title;
   let buttonText;
 
-  switch (currentPath) {
-    case "register":
+  switch (path) {
+    case "/register":
       title = "Регистрация";
       buttonText = "Зарегистрироваться";
       break;
-    case "login":
+    case "/login":
       title = "Вход";
       buttonText = "Войти";
       break;
-    case "forgot-password":
+    case "/forgot-password":
       title = "Восстановление пароля";
       buttonText = "Восстановить";
       break;
@@ -49,25 +55,33 @@ function UserEntryForm() {
   function handleSubmitClick(e) {
     e.preventDefault();
 
-    if (currentPath === "register") {
-      api
-        .register({
+    if (path === "/register") {
+      dispatch(
+        createUser({
           email: form.email,
           password: form.password,
           name: form.name,
         })
-        .then((res) => console.log(res))
-        .catch((err) => console.log(err));
+      );
     }
 
-    if (currentPath === "forgot-password") {
+    if (path === "/login") {
+      dispatch(
+        signIn({
+          email: form.email,
+          password: form.password,
+        })
+      );
+    }
+
+    if (path === "/forgot-password") {
       api
         .resetPassword(form.email)
         .then((res) => console.log(res))
         .catch((err) => console.log(err));
     }
 
-    if (currentPath === "reset-password") {
+    if (path === "/reset-password") {
       api
         .changePassword({ password: form.password, token: form.token })
         .then((res) => console.log(res))
@@ -79,7 +93,7 @@ function UserEntryForm() {
     <section className={style.entry}>
       <form noValidate className={style.entry__form}>
         <h2 className="text text_type_main-medium mb-6">{title}</h2>
-        {currentPath === "register" && (
+        {path === "/register" && (
           <div className="mb-6">
             <Input
               type={"text"}
@@ -90,7 +104,7 @@ function UserEntryForm() {
             />
           </div>
         )}
-        {(currentPath === "register" || currentPath === "login") && (
+        {(path === "/register" || path === "/login") && (
           <>
             <div className="mb-6">
               <Input
@@ -110,7 +124,7 @@ function UserEntryForm() {
             </div>
           </>
         )}
-        {currentPath === "forgot-password" && (
+        {path === "/forgot-password" && (
           <div className="mb-6">
             <Input
               type={"email"}
@@ -124,7 +138,7 @@ function UserEntryForm() {
             />
           </div>
         )}
-        {currentPath === "reset-password" && (
+        {path === "/reset-password" && (
           <>
             <div className="mb-6">
               <PasswordInput
@@ -148,18 +162,33 @@ function UserEntryForm() {
         )}
 
         <div className="mb-20">
-          <Button onClick={handleSubmitClick} type="primary" size="medium">
-            {buttonText}
-          </Button>
+          {path === "/register" && (
+            <Button onClick={handleSubmitClick} type="primary" size="medium">
+              {registerRequest
+                ? "Подождите..."
+                : registerFailed
+                ? "Что-то пошло не так :("
+                : buttonText}
+            </Button>
+          )}
+          {path === "/login" && (
+            <Button onClick={handleSubmitClick} type="primary" size="medium">
+              {loginRequest
+                ? "Подождите..."
+                : loginFailed
+                ? "Что-то пошло не так :("
+                : buttonText}
+            </Button>
+          )}
         </div>
-        {currentPath === "register" ? (
+        {path === "/register" ? (
           <p className="text text_type_main-default text_color_inactive">
             Уже зарегистрированы?{" "}
             <Link to="login" className={style.entry__link}>
               Войти
             </Link>
           </p>
-        ) : currentPath === "login" ? (
+        ) : path === "/login" ? (
           <>
             <p className="text text_type_main-default text_color_inactive">
               Вы — новый пользователь?{" "}
