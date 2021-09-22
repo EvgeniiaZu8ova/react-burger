@@ -128,6 +128,7 @@ function UserEntryForm() {
                 onChange={onChange}
                 value={form.password}
                 name={"password"}
+                autocomplete="on"
               />
             </div>
           </>

@@ -10,9 +10,9 @@ export default function ProtectedRoute({ children, ...rest }) {
   const { accessToken, getUserFailed } = useSelector((store) => store.auth);
   const cookie = getCookie("accessToken");
 
-  useEffect(() => {
-    dispatch(getUserInfo(accessToken));
-  }, [dispatch, accessToken]);
+  // useEffect(() => {
+  //   dispatch(getUserInfo(accessToken));
+  // }, [dispatch, accessToken]);
 
   if (getUserFailed) {
     return null;

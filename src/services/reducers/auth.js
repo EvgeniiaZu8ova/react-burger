@@ -40,7 +40,6 @@ export const signOut = createAsyncThunk(
   async function (refreshToken, { rejectWithValue }) {
     try {
       const res = await api.logout(refreshToken);
-      document.cookie = "cleared";
       console.log(res);
       deleteCookie("refreshToken");
       deleteCookie("accessToken");
@@ -55,7 +54,7 @@ export const refreshToken = createAsyncThunk(
   "auth/refreshToken",
   async function (token, { rejectWithValue }) {
     try {
-      const { accessToken, refreshToken } = api.refreshToken(token);
+      const { accessToken, refreshToken } = await api.refreshToken(token);
       return { accessToken, refreshToken };
     } catch (error) {
       return rejectWithValue(error.message);
@@ -67,10 +66,10 @@ export const getUserInfo = createAsyncThunk(
   "auth/getUserInfo",
   async function (accessToken, { rejectWithValue }) {
     try {
-      const { user } = api.getUserInfo(accessToken);
+      const { user } = await api.getUserInfo(accessToken);
       return user;
     } catch (error) {
-      return rejectWithValue(error.message);
+      return rejectWithValue({ message: error.message, status: error.status });
     }
   }
 );
@@ -79,10 +78,10 @@ export const updateUserInfo = createAsyncThunk(
   "auth/getUserInfo",
   async function ({ accessToken, name, email }, { rejectWithValue }) {
     try {
-      const { user } = api.updateUserInfo({ accessToken, name, email });
+      const { user } = await api.updateUserInfo({ accessToken, name, email });
       return user;
     } catch (error) {
-      return rejectWithValue(error.message);
+      return rejectWithValue({ message: error.message, status: error.status });
     }
   }
 );
@@ -92,6 +91,7 @@ const authSlice = createSlice({
   initialState: {
     name: "",
     email: "",
+    isTokenExpired: false,
     accessToken: "",
     refreshToken: "",
     registerRequest: false,
@@ -146,6 +146,8 @@ const authSlice = createSlice({
     [refreshToken.fulfilled]: (state, action) => {
       state.tokenRequest = false;
       state.tokenFailed = false;
+      state.accessToken = action.payload.accessToken;
+      state.isTokenExpired = false;
     },
     [refreshToken.rejected]: (state, action) => {
       state.tokenRequest = false;
@@ -181,7 +183,10 @@ const authSlice = createSlice({
     [getUserInfo.rejected]: (state, action) => {
       state.getUserRequest = false;
       state.getUserFailed = true;
-      console.log(action.payload);
+      console.log(action.payload.message);
+      if (action.payload.status === 403) {
+        state.isTokenExpired = true;
+      }
     },
     [updateUserInfo.pending]: (state, action) => {
       state.updateUserRequest = true;
@@ -195,7 +200,10 @@ const authSlice = createSlice({
     [updateUserInfo.rejected]: (state, action) => {
       state.updateUserRequest = false;
       state.updateUserFailed = true;
-      console.log(action.payload);
+      console.log(action.payload.message);
+      if (action.payload.status === 403) {
+        state.isTokenExpired = true;
+      }
     },
   },
 });

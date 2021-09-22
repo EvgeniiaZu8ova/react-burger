@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Link, useRouteMatch } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import { getCookie } from "../../utils/cookie";
 
 import {
   getUserInfo,
   updateUserInfo,
   signOut,
+  refreshToken,
 } from "../../services/reducers/auth";
 
 import {
@@ -18,21 +20,24 @@ import style from "./Profile.module.css";
 function Profile() {
   const { path } = useRouteMatch();
   const dispatch = useDispatch();
+  const tokenRefresh = getCookie("refreshToken");
+  const token = getCookie("accessToken");
 
   const {
     name,
     email,
     accessToken,
-    refreshToken,
-    getUserRequest,
-    getUserFailed,
-    updateUserRequest,
-    updateUserFailed,
+    isTokenExpired,
+    // getUserRequest,
+    // getUserFailed,
+    // updateUserRequest,
+    // updateUserFailed,
   } = useSelector((store) => store.auth);
 
   const [form, setForm] = useState({
     name: name,
     email: email,
+    password: "",
   });
 
   function onChange(e) {
@@ -42,9 +47,7 @@ function Profile() {
   function onSubmit(e) {
     e.preventDefault();
 
-    dispatch(
-      updateUserInfo({ accessToken, name: form.name, email: form.email })
-    );
+    dispatch(updateUserInfo({ token, name: form.name, email: form.email }));
   }
 
   function onReset(e) {
@@ -57,8 +60,13 @@ function Profile() {
   }
 
   useEffect(() => {
-    dispatch(getUserInfo(accessToken));
-  }, [dispatch, accessToken]);
+    dispatch(getUserInfo(token));
+  }, [dispatch, token]);
+
+  useEffect(() => {
+    dispatch(refreshToken(refreshToken));
+    console.log(tokenRefresh, isTokenExpired);
+  }, [dispatch, tokenRefresh, isTokenExpired]);
 
   return (
     <section className={style.profile}>
@@ -91,7 +99,7 @@ function Profile() {
               <Link to="/profile" className={style.link}>
                 <p
                   onClick={() => {
-                    dispatch(signOut(refreshToken));
+                    dispatch(signOut(tokenRefresh));
                   }}
                   className={`text text_type_main-medium text_color_inactive`}
                 >
@@ -139,7 +147,7 @@ function Profile() {
           placeholder={"Пароль"}
           onChange={onChange}
           icon={"EditIcon"}
-          value={"password"}
+          value={form.password}
           name={"name"}
           error={false}
           disabled={true}
