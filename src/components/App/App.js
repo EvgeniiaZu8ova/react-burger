@@ -6,6 +6,7 @@ import { getItems } from "../../services/reducers/allIngredients";
 
 import app from "./App.module.css";
 
+import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 import AppHeader from "../AppHeader/AppHeader";
 import Main from "../Main/Main";
 import LoginPage from "../../pages/login";
@@ -42,12 +43,12 @@ function App() {
           <Route path="/reset-password" exact={true}>
             <ResetPasswordPage />
           </Route>
-          <Route path="/profile" exact={true}>
+          <ProtectedRoute path="/profile" exact={true}>
             <ProfilePage />
-          </Route>
-          <Route path="/profile/orders" exact={true}>
+          </ProtectedRoute>
+          <ProtectedRoute path="/profile/orders" exact={true}>
             <ProfilePage />
-          </Route>
+          </ProtectedRoute>
           <Route>
             <NotFound404Page />
           </Route>
