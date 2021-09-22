@@ -1,6 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useRouteMatch } from "react-router-dom";
-import { Input } from "@ya.praktikum/react-developer-burger-ui-components";
+import { useSelector, useDispatch } from "react-redux";
+
+import {
+  getUserInfo,
+  updateUserInfo,
+  signOut,
+} from "../../services/reducers/auth";
+
+import {
+  Input,
+  Button,
+} from "@ya.praktikum/react-developer-burger-ui-components";
 
 import style from "./Profile.module.css";
 
@@ -11,10 +22,26 @@ function Profile() {
     password: "",
   });
   const { path } = useRouteMatch();
+  const dispatch = useDispatch();
+
+  const {
+    name,
+    email,
+    accessToken,
+    refreshToken,
+    getUserRequest,
+    getUserFailed,
+    updateUserRequest,
+    updateUserFailed,
+  } = useSelector((store) => store.auth);
 
   function onChange(e) {
     setForm({ ...form, [e.target.name]: e.target.value });
   }
+
+  useEffect(() => {
+    dispatch(getUserInfo(accessToken));
+  }, [dispatch, accessToken]);
 
   return (
     <section className={style.profile}>
@@ -45,7 +72,12 @@ function Profile() {
             </li>
             <li className="pt-6 pb-4">
               <Link to="/profile" className={style.link}>
-                <p className={`text text_type_main-medium text_color_inactive`}>
+                <p
+                  onClick={() => {
+                    dispatch(signOut(refreshToken));
+                  }}
+                  className={`text text_type_main-medium text_color_inactive`}
+                >
                   Выход
                 </p>
               </Link>
@@ -63,7 +95,7 @@ function Profile() {
             placeholder={"Имя"}
             onChange={onChange}
             icon={"EditIcon"}
-            value={form.name}
+            value={name || form.name}
             name={"name"}
             error={false}
             disabled={false}
@@ -77,7 +109,7 @@ function Profile() {
             placeholder={"Логин"}
             onChange={onChange}
             icon={"EditIcon"}
-            value={form.email}
+            value={email || form.email}
             name={"email"}
             error={false}
             disabled={false}
@@ -97,6 +129,10 @@ function Profile() {
           errorText={"Ошибка"}
           size={"default"}
         />
+        <div className={`${style.buttons} mt-6`}>
+          <Button>Сохранить</Button>
+          <Button>Отмена</Button>
+        </div>
       </form>
     </section>
   );

@@ -25,6 +25,7 @@ export const signIn = createAsyncThunk(
         email,
         password,
       });
+      document.cookie = "refreshToken" + "=" + refreshToken;
       return { user, accessToken, refreshToken };
     } catch (error) {
       return rejectWithValue(error.message);
@@ -36,7 +37,10 @@ export const signOut = createAsyncThunk(
   "auth/signOut",
   async function (refreshToken, { rejectWithValue }) {
     try {
-      return await api.logout(refreshToken);
+      const res = await api.logout(refreshToken);
+      document.cookie = "refreshToken" + "=" + "cleared";
+      console.log(res);
+      return res;
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -49,6 +53,30 @@ export const refreshToken = createAsyncThunk(
     try {
       const { accessToken, refreshToken } = api.refreshToken(token);
       return { accessToken, refreshToken };
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const getUserInfo = createAsyncThunk(
+  "auth/getUserInfo",
+  async function (accessToken, { rejectWithValue }) {
+    try {
+      const { user } = api.getUserInfo(accessToken);
+      return user;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const updateUserInfo = createAsyncThunk(
+  "auth/getUserInfo",
+  async function ({ accessToken, name, email }, { rejectWithValue }) {
+    try {
+      const { user } = api.updateUserInfo({ accessToken, name, email });
+      return user;
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -70,6 +98,10 @@ const authSlice = createSlice({
     logoutFailed: false,
     tokenRequest: false,
     tokenFailed: false,
+    getUserRequest: false,
+    getUserFailed: false,
+    updateUserRequest: false,
+    updateUserFailed: false,
   },
   extraReducers: {
     [createUser.pending]: (state, action) => {
@@ -122,10 +154,43 @@ const authSlice = createSlice({
     [signOut.fulfilled]: (state, action) => {
       state.logoutRequest = false;
       state.logoutFailed = false;
+      state.accessToken = "";
+      state.refreshToken = "";
+      state.name = "";
+      state.email = "";
+      state.password = "";
     },
     [signOut.rejected]: (state, action) => {
       state.logoutRequest = false;
       state.logoutFailed = true;
+      console.log(action.payload);
+    },
+    [getUserInfo.pending]: (state, action) => {
+      state.getUserRequest = true;
+    },
+    [getUserInfo.fulfilled]: (state, action) => {
+      state.getUserRequest = false;
+      state.getUserFailed = false;
+      state.email = action.payload.user.email;
+      state.name = action.payload.user.name;
+    },
+    [getUserInfo.rejected]: (state, action) => {
+      state.getUserRequest = false;
+      state.getUserFailed = true;
+      console.log(action.payload);
+    },
+    [updateUserInfo.pending]: (state, action) => {
+      state.updateUserRequest = true;
+    },
+    [updateUserInfo.fulfilled]: (state, action) => {
+      state.updateUserRequest = false;
+      state.updateUserFailed = false;
+      // state.email = action.payload.user.email;
+      // state.name = action.payload.user.name;
+    },
+    [updateUserInfo.rejected]: (state, action) => {
+      state.updateUserRequest = false;
+      state.updateUserFailed = true;
       console.log(action.payload);
     },
   },

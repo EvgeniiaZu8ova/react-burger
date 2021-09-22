@@ -44,17 +44,18 @@ class Api {
     });
   }
 
-  updateUserInfo({ accessToken, name }) {
+  updateUserInfo({ accessToken, name, email }) {
     return fetch(`${this._baseUrl}/auth/user`, {
       mode: "cors",
       cache: "no-cache",
       credentials: "same-origin",
-      method: "POST",
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json",
         Authorization: accessToken,
       },
       body: JSON.stringify({
+        email: email,
         name: name,
       }),
       redirect: "follow",
@@ -95,7 +96,7 @@ class Api {
       method: "POST",
       headers: this._headers,
       body: JSON.stringify({
-        token: "{{refreshToken}}",
+        token: refreshToken,
       }),
     }).then((res) => this._handlePromise(res));
   }
@@ -105,7 +106,7 @@ class Api {
       method: "POST",
       headers: this._headers,
       body: JSON.stringify({
-        token: "{{refreshToken}}",
+        token: refreshToken,
       }),
     }).then((res) => this._handlePromise(res));
   }
