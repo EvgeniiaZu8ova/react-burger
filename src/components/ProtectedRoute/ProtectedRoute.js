@@ -1,14 +1,14 @@
 import React, { useEffect } from "react";
 import { Route, Redirect } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import { getCookie } from "../../utils/cookie";
 
 import { getUserInfo } from "../../services/reducers/auth";
 
 export default function ProtectedRoute({ children, ...rest }) {
   const dispatch = useDispatch();
-  const { accessToken, getUserFailed, email } = useSelector(
-    (store) => store.auth
-  );
+  const { accessToken, getUserFailed } = useSelector((store) => store.auth);
+  const cookie = getCookie("accessToken");
 
   useEffect(() => {
     dispatch(getUserInfo(accessToken));
@@ -22,7 +22,7 @@ export default function ProtectedRoute({ children, ...rest }) {
     <Route
       {...rest}
       render={({ location }) =>
-        email ? (
+        cookie ? (
           children
         ) : (
           <Redirect

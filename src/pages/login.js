@@ -1,13 +1,13 @@
 import React from "react";
 import { Redirect } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { getCookie } from "../utils/cookie";
 
 import UserEntryForm from "../components/UserEntryForm/UserEntryForm";
 
 function LoginPage() {
-  const { email } = useSelector((store) => store.auth);
+  const cookie = getCookie("accessToken");
 
-  if (email) {
+  if (cookie) {
     return <Redirect to={{ pathname: "/" }} />;
   }
 

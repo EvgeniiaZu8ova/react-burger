@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../utils/Api";
+import { setCookie, deleteCookie } from "../../utils/cookie";
 
 export const createUser = createAsyncThunk(
   "auth/createUser",
@@ -25,7 +26,8 @@ export const signIn = createAsyncThunk(
         email,
         password,
       });
-      document.cookie = "refreshToken" + "=" + refreshToken;
+      setCookie("refreshToken", refreshToken);
+      setCookie("accessToken", accessToken);
       return { user, accessToken, refreshToken };
     } catch (error) {
       return rejectWithValue(error.message);
@@ -38,8 +40,10 @@ export const signOut = createAsyncThunk(
   async function (refreshToken, { rejectWithValue }) {
     try {
       const res = await api.logout(refreshToken);
-      document.cookie = "refreshToken" + "=" + "cleared";
+      document.cookie = "cleared";
       console.log(res);
+      deleteCookie("refreshToken");
+      deleteCookie("accessToken");
       return res;
     } catch (error) {
       return rejectWithValue(error.message);
