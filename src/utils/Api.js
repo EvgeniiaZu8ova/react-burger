@@ -30,19 +30,37 @@ class Api {
     }).then((res) => this._handlePromise(res));
   }
 
-  // getUserInfo() {
-  //   return fetch(`${this._baseUrl}/auth/user`, {
-  //     mode: "cors",
-  //     cache: "no-cache",
-  //     credentials: "same-origin",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Authorization: "Bearer " + getCookie("token"),
-  //     },
-  //     redirect: "follow",
-  //     referrerPolicy: "no-referrer",
-  //   });
-  // }
+  getUserInfo(accessToken) {
+    return fetch(`${this._baseUrl}/auth/user`, {
+      mode: "cors",
+      cache: "no-cache",
+      credentials: "same-origin",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: accessToken,
+      },
+      redirect: "follow",
+      referrerPolicy: "no-referrer",
+    });
+  }
+
+  updateUserInfo({ accessToken, name }) {
+    return fetch(`${this._baseUrl}/auth/user`, {
+      mode: "cors",
+      cache: "no-cache",
+      credentials: "same-origin",
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: accessToken,
+      },
+      body: JSON.stringify({
+        name: name,
+      }),
+      redirect: "follow",
+      referrerPolicy: "no-referrer",
+    });
+  }
 
   register({ email, password, name }) {
     return fetch(`${this._baseUrl}/auth/register`, {
