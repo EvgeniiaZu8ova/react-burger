@@ -16,11 +16,6 @@ import {
 import style from "./Profile.module.css";
 
 function Profile() {
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
   const { path } = useRouteMatch();
   const dispatch = useDispatch();
 
@@ -35,8 +30,30 @@ function Profile() {
     updateUserFailed,
   } = useSelector((store) => store.auth);
 
+  const [form, setForm] = useState({
+    name: name,
+    email: email,
+  });
+
   function onChange(e) {
     setForm({ ...form, [e.target.name]: e.target.value });
+  }
+
+  function onSubmit(e) {
+    e.preventDefault();
+
+    dispatch(
+      updateUserInfo({ accessToken, name: form.name, email: form.email })
+    );
+  }
+
+  function onReset(e) {
+    e.preventDefault();
+
+    setForm({
+      name: name,
+      email: email,
+    });
   }
 
   useEffect(() => {
@@ -95,7 +112,7 @@ function Profile() {
             placeholder={"Имя"}
             onChange={onChange}
             icon={"EditIcon"}
-            value={name || form.name}
+            value={form.name}
             name={"name"}
             error={false}
             disabled={false}
@@ -109,7 +126,7 @@ function Profile() {
             placeholder={"Логин"}
             onChange={onChange}
             icon={"EditIcon"}
-            value={email || form.email}
+            value={form.email}
             name={"email"}
             error={false}
             disabled={false}
@@ -122,16 +139,16 @@ function Profile() {
           placeholder={"Пароль"}
           onChange={onChange}
           icon={"EditIcon"}
-          value={form.password}
+          value={"password"}
           name={"name"}
           error={false}
-          disabled={false}
+          disabled={true}
           errorText={"Ошибка"}
           size={"default"}
         />
         <div className={`${style.buttons} mt-6`}>
-          <Button>Сохранить</Button>
-          <Button>Отмена</Button>
+          <Button onClick={onSubmit}>Сохранить</Button>
+          <Button onClick={onReset}>Отмена</Button>
         </div>
       </form>
     </section>

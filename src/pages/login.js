@@ -8,7 +8,6 @@ function LoginPage() {
   const { email } = useSelector((store) => store.auth);
 
   if (email) {
-    console.log(email);
     return <Redirect to={{ pathname: "/" }} />;
   }
 

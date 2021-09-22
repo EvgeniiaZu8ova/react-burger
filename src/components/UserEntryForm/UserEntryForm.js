@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link, useRouteMatch } from "react-router-dom";
+import { useHistory } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
 
 import { createUser, signIn } from "../../services/reducers/auth";
@@ -23,6 +24,7 @@ function UserEntryForm() {
   });
   const dispatch = useDispatch();
   const { path } = useRouteMatch();
+  const history = useHistory();
 
   const { registerRequest, registerFailed, loginRequest, loginFailed } =
     useSelector((store) => store.auth);
@@ -77,14 +79,20 @@ function UserEntryForm() {
     if (path === "/forgot-password") {
       api
         .resetPassword(form.email)
-        .then((res) => console.log(res))
+        .then((res) => {
+          history.push("/reset-password");
+          console.log(res);
+        })
         .catch((err) => console.log(err));
     }
 
     if (path === "/reset-password") {
       api
         .changePassword({ password: form.password, token: form.token })
-        .then((res) => console.log(res))
+        .then((res) => {
+          history.push("/login");
+          console.log(res);
+        })
         .catch((err) => console.log(err));
     }
   }
@@ -162,7 +170,7 @@ function UserEntryForm() {
         )}
 
         <div className="mb-20">
-          {path === "/register" && (
+          {path === "/register" ? (
             <Button onClick={handleSubmitClick} type="primary" size="medium">
               {registerRequest
                 ? "Подождите..."
@@ -170,14 +178,17 @@ function UserEntryForm() {
                 ? "Что-то пошло не так :("
                 : buttonText}
             </Button>
-          )}
-          {path === "/login" && (
+          ) : path === "/login" ? (
             <Button onClick={handleSubmitClick} type="primary" size="medium">
               {loginRequest
                 ? "Подождите..."
                 : loginFailed
                 ? "Что-то пошло не так :("
                 : buttonText}
+            </Button>
+          ) : (
+            <Button onClick={handleSubmitClick} type="primary" size="medium">
+              {buttonText}
             </Button>
           )}
         </div>
