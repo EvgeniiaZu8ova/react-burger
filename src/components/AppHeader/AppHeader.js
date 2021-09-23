@@ -25,7 +25,7 @@ function AppHeader() {
               to="/"
               className={`${header.navBar__link} pl-5 pr-5 pb-4 pt-4`}
             >
-              <BurgerIcon type="primary" />
+              <BurgerIcon type={pathname === "/" ? "primary" : "secondary"} />
               <span
                 className={`${
                   pathname === "/"
@@ -40,8 +40,16 @@ function AppHeader() {
               to="/profile/orders"
               className={`${header.navBar__link} pl-5 pr-5 pb-4 pt-4 ml-2`}
             >
-              <ListIcon type="secondary" />
-              <span className="text text_type_main-default text_color_inactive pl-2">
+              <ListIcon
+                type={pathname === "/profile/orders" ? "primary" : "secondary"}
+              />
+              <span
+                className={`${
+                  pathname === "/profile/orders"
+                    ? header.navBar__caption_active
+                    : "text_color_inactive"
+                } text text_type_main-default pl-2`}
+              >
                 Лента заказов
               </span>
             </Link>
@@ -51,10 +59,16 @@ function AppHeader() {
             to="/profile"
             className={`${header.navBar__link} pl-5 pr-5 pb-4 pt-4`}
           >
-            <ProfileIcon type="secondary" />
+            <ProfileIcon
+              type={
+                pathname.includes("/profile") && pathname !== "/profile/orders"
+                  ? "primary"
+                  : "secondary"
+              }
+            />
             <span
               className={`${
-                pathname.includes("/profile")
+                pathname.includes("/profile") && pathname !== "/profile/orders"
                   ? header.navBar__caption_active
                   : "text_color_inactive"
               } text text_type_main-default pl-2`}

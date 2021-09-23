@@ -53,11 +53,12 @@ export const signOut = createAsyncThunk(
 export const refreshToken = createAsyncThunk(
   "auth/refreshToken",
   async function (token, { rejectWithValue }) {
+    deleteCookie("accessToken");
+    deleteCookie("refreshToken");
     try {
       const { accessToken, refreshToken } = await api.refreshToken(token);
       setCookie("refreshToken", refreshToken);
       setCookie("accessToken", accessToken);
-      localStorage.setItem("isTokenExpired", false);
       return { accessToken, refreshToken };
     } catch (error) {
       return rejectWithValue(error.message);
@@ -151,6 +152,7 @@ const authSlice = createSlice({
       state.tokenFailed = false;
       state.accessToken = action.payload.accessToken;
       state.refreshToken = action.payload.refreshToken;
+      localStorage.removeItem("isTokenExpired");
     },
     [refreshToken.rejected]: (state, action) => {
       state.tokenRequest = false;
