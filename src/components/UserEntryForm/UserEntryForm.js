@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useRouteMatch } from "react-router-dom";
 import { useHistory } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
 
 import { createUser, signIn } from "../../services/reducers/auth";
-
-import api from "../../utils/Api";
+import {
+  resetMyPassword,
+  changeMyPassword,
+} from "../../services/reducers/password";
 
 import style from "./UserEntryForm.module.css";
 
@@ -28,6 +30,10 @@ function UserEntryForm() {
 
   const { registerRequest, registerFailed, loginRequest, loginFailed } =
     useSelector((store) => store.auth);
+
+  const { isPassResetSuccess, isPassChangeSuccess } = useSelector(
+    (store) => store.password
+  );
 
   let title;
   let buttonText;
@@ -77,25 +83,27 @@ function UserEntryForm() {
     }
 
     if (path === "/forgot-password") {
-      api
-        .resetPassword(form.email)
-        .then((res) => {
-          history.push("/reset-password");
-          console.log(res);
-        })
-        .catch((err) => console.log(err));
+      dispatch(resetMyPassword(form.email));
     }
 
     if (path === "/reset-password") {
-      api
-        .changePassword({ password: form.password, token: form.token })
-        .then((res) => {
-          history.push("/login");
-          console.log(res);
-        })
-        .catch((err) => console.log(err));
+      dispatch(
+        changeMyPassword({ password: form.password, token: form.token })
+      );
     }
   }
+
+  useEffect(() => {
+    if (isPassResetSuccess) {
+      history.push("/reset-password");
+    }
+  }, [isPassResetSuccess, history]);
+
+  useEffect(() => {
+    if (isPassChangeSuccess) {
+      history.push("/login");
+    }
+  }, [isPassChangeSuccess, history]);
 
   return (
     <section className={style.entry}>

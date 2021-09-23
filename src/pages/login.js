@@ -5,14 +5,14 @@ import { getCookie } from "../utils/cookie";
 
 import UserEntryForm from "../components/UserEntryForm/UserEntryForm";
 
-function LoginPage() {
+function LoginPage({ state }) {
   const { accessToken } = useSelector((store) => store.auth);
   const token = getCookie("accessToken");
 
   useEffect(() => {}, [accessToken]);
 
   if (token) {
-    return <Redirect to={{ pathname: "/" }} />;
+    return <Redirect to={state?.from || "/"} />;
   }
 
   return <UserEntryForm />;
