@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 import { getItems } from "../../services/reducers/allIngredients";
 
@@ -15,9 +16,13 @@ import ForgotPasswordPage from "../../pages/forgot-password";
 import ResetPasswordPage from "../../pages/reset-password";
 import ProfilePage from "../../pages/profile";
 import NotFound404Page from "../../pages/not-found-404";
+import IngredientPage from "../../pages/ingredient";
 
 function App() {
   const dispatch = useDispatch();
+  const { isIngredientsModalOpen } = useSelector(
+    (store) => store.ingredientModal
+  );
 
   useEffect(() => {
     dispatch(getItems());
@@ -31,9 +36,15 @@ function App() {
           <Route path="/" exact={true}>
             <Main />
           </Route>
-          <Route path="/ingredients/:id">
-            <Main />
-          </Route>
+          {isIngredientsModalOpen ? (
+            <Route path="/ingredients/:id">
+              <Main />
+            </Route>
+          ) : (
+            <Route path="/ingredients/:id">
+              <IngredientPage />
+            </Route>
+          )}
           <Route path="/login" exact={true}>
             <LoginPage />
           </Route>
