@@ -23,16 +23,7 @@ function Profile() {
   const tokenRefresh = getCookie("refreshToken");
   const token = getCookie("accessToken");
 
-  const {
-    name,
-    email,
-    accessToken,
-    isTokenExpired,
-    // getUserRequest,
-    // getUserFailed,
-    // updateUserRequest,
-    // updateUserFailed,
-  } = useSelector((store) => store.auth);
+  const { name, email } = useSelector((store) => store.auth);
 
   const [form, setForm] = useState({
     name: name,
@@ -61,12 +52,22 @@ function Profile() {
 
   useEffect(() => {
     dispatch(getUserInfo(token));
-  }, [dispatch, token]);
+  }, [dispatch, token, email, name]);
 
   useEffect(() => {
-    dispatch(refreshToken(refreshToken));
-    console.log(tokenRefresh, isTokenExpired);
-  }, [dispatch, tokenRefresh, isTokenExpired]);
+    setForm({
+      name: name,
+      email: email,
+      password: "",
+    });
+  }, [email, name]);
+
+  useEffect(() => {
+    const isTokenExpired = JSON.parse(localStorage.getItem("isTokenExpired"));
+    if (isTokenExpired) {
+      dispatch(refreshToken(tokenRefresh));
+    }
+  }, [dispatch, tokenRefresh]);
 
   return (
     <section className={style.profile}>

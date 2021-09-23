@@ -41,7 +41,7 @@ class Api {
       },
       redirect: "follow",
       referrerPolicy: "no-referrer",
-    });
+    }).then((res) => this._handlePromise(res));
   }
 
   updateUserInfo({ accessToken, name, email }) {
@@ -60,7 +60,7 @@ class Api {
       }),
       redirect: "follow",
       referrerPolicy: "no-referrer",
-    });
+    }).then((res) => this._handlePromise(res));
   }
 
   register({ email, password, name }) {
