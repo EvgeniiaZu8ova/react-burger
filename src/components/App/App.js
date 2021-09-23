@@ -31,6 +31,9 @@ function App() {
           <Route path="/" exact={true}>
             <Main />
           </Route>
+          <Route path="/ingredients/:id">
+            <Main />
+          </Route>
           <Route path="/login" exact={true}>
             <LoginPage />
           </Route>

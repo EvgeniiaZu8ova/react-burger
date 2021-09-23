@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
+import { useHistory } from "react-router";
 
 import {
   handleIngredientModal,
@@ -19,6 +21,7 @@ import IngredientDetails from "../Modal/IngredientDetails/IngredientDetails";
 function BurgerIngredients() {
   const [currentTab, setCurrentTab] = useState("Булки");
 
+  const history = useHistory();
   const dispatch = useDispatch();
 
   const manageIngredientModal = (isOpen) =>
@@ -69,6 +72,7 @@ function BurgerIngredients() {
   function closeModal() {
     manageIngredientModal(false);
     manageIngredient({});
+    history.push("/");
   }
 
   return (
@@ -122,10 +126,11 @@ function BurgerIngredients() {
                 data.map(
                   (el, index) =>
                     el.type === "bun" && (
-                      <div
-                        key={el._id}
+                      <Link
                         className={style.card}
                         onClick={handleIngredientClick}
+                        key={el._id}
+                        to={`/ingredients/${el._id}`}
                       >
                         <IngredientCard
                           image={el.image_large}
@@ -133,7 +138,7 @@ function BurgerIngredients() {
                           name={el.name}
                           quantity={chosenBun.name === el.name ? 2 : 0}
                         />
-                      </div>
+                      </Link>
                     )
                 )}
             </div>
@@ -145,10 +150,11 @@ function BurgerIngredients() {
                 data.map(
                   (el, index) =>
                     el.type === "sauce" && (
-                      <div
-                        key={el._id}
+                      <Link
                         className={style.card}
                         onClick={handleIngredientClick}
+                        key={el._id}
+                        to={`/ingredients/${el._id}`}
                       >
                         <IngredientCard
                           image={el.image_large}
@@ -160,7 +166,7 @@ function BurgerIngredients() {
                             ).length
                           }
                         />
-                      </div>
+                      </Link>
                     )
                 )}
             </div>
@@ -172,10 +178,11 @@ function BurgerIngredients() {
                 data.map(
                   (el, index) =>
                     el.type === "main" && (
-                      <div
-                        key={el._id}
+                      <Link
                         className={style.card}
                         onClick={handleIngredientClick}
+                        key={el._id}
+                        to={`/ingredients/${el._id}`}
                       >
                         <IngredientCard
                           image={el.image_large}
@@ -187,7 +194,7 @@ function BurgerIngredients() {
                             ).length
                           }
                         />
-                      </div>
+                      </Link>
                     )
                 )}
             </div>
