@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 import {
   BurgerIcon,
@@ -11,6 +11,8 @@ import {
 import header from "./AppHeader.module.css";
 
 function AppHeader() {
+  const { pathname } = useLocation();
+
   return (
     <header className={header.header}>
       <div className={header.container}>
@@ -24,7 +26,13 @@ function AppHeader() {
               className={`${header.navBar__link} pl-5 pr-5 pb-4 pt-4`}
             >
               <BurgerIcon type="primary" />
-              <span className={`${header.navBar__caption_active} pl-2`}>
+              <span
+                className={`${
+                  pathname === "/"
+                    ? header.navBar__caption_active
+                    : "text_color_inactive"
+                } text text_type_main-default  pl-2`}
+              >
                 Конструктор
               </span>
             </Link>
@@ -44,7 +52,13 @@ function AppHeader() {
             className={`${header.navBar__link} pl-5 pr-5 pb-4 pt-4`}
           >
             <ProfileIcon type="secondary" />
-            <span className="text text_type_main-default text_color_inactive pl-2">
+            <span
+              className={`${
+                pathname.includes("/profile")
+                  ? header.navBar__caption_active
+                  : "text_color_inactive"
+              } text text_type_main-default pl-2`}
+            >
               Личный кабинет
             </span>
           </Link>

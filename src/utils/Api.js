@@ -20,10 +20,13 @@ class Api {
     }).then((res) => this._handlePromise(res));
   }
 
-  makeOrder(data) {
+  makeOrder(accessToken, data) {
     return fetch(`${this._baseUrl}/orders`, {
       method: "POST",
-      headers: this._headers,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: accessToken,
+      },
       body: JSON.stringify({
         ingredients: data,
       }),

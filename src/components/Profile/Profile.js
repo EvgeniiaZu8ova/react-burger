@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useRouteMatch } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { getCookie } from "../../utils/cookie";
+import { useHistory } from "react-router";
 
 import {
   getUserInfo,
@@ -18,6 +19,7 @@ import {
 import style from "./Profile.module.css";
 
 function Profile() {
+  const history = useHistory();
   const { path } = useRouteMatch();
   const dispatch = useDispatch();
   const tokenRefresh = getCookie("refreshToken");
@@ -52,6 +54,11 @@ function Profile() {
       email: email,
       password: "",
     });
+  }
+
+  function onSignOut() {
+    dispatch(signOut(tokenRefresh));
+    history.push("/login");
   }
 
   useEffect(() => {
@@ -102,9 +109,7 @@ function Profile() {
             <li className="pt-6 pb-4">
               <Link to="/profile" className={style.link}>
                 <p
-                  onClick={() => {
-                    dispatch(signOut(tokenRefresh));
-                  }}
+                  onClick={onSignOut}
                   className={`text text_type_main-medium text_color_inactive`}
                 >
                   Выход

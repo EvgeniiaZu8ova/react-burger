@@ -3,9 +3,9 @@ import api from "../../utils/Api";
 
 export const sendOrder = createAsyncThunk(
   "order/sendOrder",
-  async function (myOrder, { rejectWithValue }) {
+  async function ({ accessToken, myOrder }, { rejectWithValue }) {
     try {
-      const { order } = await api.makeOrder(myOrder);
+      const { order } = await api.makeOrder(accessToken, myOrder);
       return { order };
     } catch (error) {
       return rejectWithValue(error.message);
