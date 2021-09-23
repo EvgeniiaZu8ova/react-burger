@@ -83,7 +83,7 @@ export const updateUserInfo = createAsyncThunk(
   async function ({ accessToken, name, email }, { rejectWithValue }) {
     try {
       const { user } = await api.updateUserInfo({ accessToken, name, email });
-      return user;
+      return { user };
     } catch (error) {
       return rejectWithValue({ message: error.message, status: error.status });
     }
@@ -200,19 +200,19 @@ const authSlice = createSlice({
     [updateUserInfo.fulfilled]: (state, action) => {
       state.updateUserRequest = false;
       state.updateUserFailed = false;
-      const { user, status } = action.payload;
+      const { user } = action.payload;
       if (user) {
-        state.email = action.payload.user.email;
-        state.name = action.payload.user.name;
-      }
-      if (status === 403) {
-        state.isTokenExpired = true;
+        state.email = user.email;
+        state.name = user.name;
       }
     },
     [updateUserInfo.rejected]: (state, action) => {
       state.updateUserRequest = false;
       state.updateUserFailed = true;
       console.log(action.payload);
+      if (action.payload === "Ошибка 403") {
+        localStorage.setItem("isTokenExpired", true);
+      }
     },
   },
 });
