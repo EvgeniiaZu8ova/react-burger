@@ -100,6 +100,7 @@ const authSlice = createSlice({
     refreshToken: "",
     registerRequest: false,
     registerFailed: false,
+    isRegisterSuccess: false,
     loginRequest: false,
     loginFailed: false,
     logoutRequest: false,
@@ -122,6 +123,7 @@ const authSlice = createSlice({
       state.name = action.payload.user.name;
       state.accessToken = action.payload.accessToken;
       state.refreshToken = action.payload.refreshToken;
+      state.isRegisterSuccess = true;
     },
     [createUser.rejected]: (state, action) => {
       state.registerRequest = false;

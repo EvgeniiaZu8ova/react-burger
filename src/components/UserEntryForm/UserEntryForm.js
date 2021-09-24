@@ -1,30 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
+import PropTypes from "prop-types";
 import { Link, useRouteMatch } from "react-router-dom";
 import { useHistory } from "react-router";
-import { useSelector, useDispatch } from "react-redux";
-
-import { createUser, signIn } from "../../services/reducers/auth";
-import {
-  resetMyPassword,
-  changeMyPassword,
-} from "../../services/reducers/password";
+import { useSelector } from "react-redux";
 
 import style from "./UserEntryForm.module.css";
 
-import {
-  Input,
-  PasswordInput,
-  Button,
-} from "@ya.praktikum/react-developer-burger-ui-components";
-
-function UserEntryForm() {
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    password: "",
-    token: "",
-  });
-  const dispatch = useDispatch();
+function UserEntryForm({ children, onSubmit, title, buttonText }) {
   const { path } = useRouteMatch();
   const history = useHistory();
 
@@ -34,64 +16,6 @@ function UserEntryForm() {
   const { isPassResetSuccess, isPassChangeSuccess } = useSelector(
     (store) => store.password
   );
-
-  let title;
-  let buttonText;
-
-  switch (path) {
-    case "/register":
-      title = "Регистрация";
-      buttonText = "Зарегистрироваться";
-      break;
-    case "/login":
-      title = "Вход";
-      buttonText = "Войти";
-      break;
-    case "/forgot-password":
-      title = "Восстановление пароля";
-      buttonText = "Восстановить";
-      break;
-    default:
-      title = "Восстановление пароля";
-      buttonText = "Сохранить";
-  }
-
-  function onChange(e) {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  }
-
-  function handleSubmitClick(e) {
-    e.preventDefault();
-
-    if (path === "/register") {
-      dispatch(
-        createUser({
-          email: form.email,
-          password: form.password,
-          name: form.name,
-        })
-      );
-    }
-
-    if (path === "/login") {
-      dispatch(
-        signIn({
-          email: form.email,
-          password: form.password,
-        })
-      );
-    }
-
-    if (path === "/forgot-password") {
-      dispatch(resetMyPassword(form.email));
-    }
-
-    if (path === "/reset-password") {
-      dispatch(
-        changeMyPassword({ password: form.password, token: form.token })
-      );
-    }
-  }
 
   useEffect(() => {
     if (isPassResetSuccess) {
@@ -107,98 +31,40 @@ function UserEntryForm() {
 
   return (
     <section className={style.entry}>
-      <form noValidate className={style.entry__form}>
+      <form noValidate onSubmit={onSubmit} className={style.entry__form}>
         <h2 className="text text_type_main-medium mb-6">{title}</h2>
-        {path === "/register" && (
-          <div className="mb-6">
-            <Input
-              type={"text"}
-              placeholder={"Имя"}
-              onChange={onChange}
-              value={form.name}
-              name={"name"}
-            />
-          </div>
-        )}
-        {(path === "/register" || path === "/login") && (
-          <>
-            <div className="mb-6">
-              <Input
-                type={"email"}
-                placeholder={"E-mail"}
-                onChange={onChange}
-                value={form.email}
-                name={"email"}
-              />
-            </div>
-            <div className="mb-6">
-              <PasswordInput
-                onChange={onChange}
-                value={form.password}
-                name={"password"}
-                autocomplete="on"
-              />
-            </div>
-          </>
-        )}
-        {path === "/forgot-password" && (
-          <div className="mb-6">
-            <Input
-              type={"email"}
-              placeholder={"Укажите e-mail"}
-              onChange={onChange}
-              value={form.email}
-              name={"email"}
-              error={false}
-              errorText={"Ошибка"}
-              size={"default"}
-            />
-          </div>
-        )}
-        {path === "/reset-password" && (
-          <>
-            <div className="mb-6">
-              <PasswordInput
-                onChange={onChange}
-                value={form.password}
-                name={"password"}
-              />
-            </div>
-            <div className="mb-6">
-              <Input
-                placeholder={"Введите код из письма"}
-                onChange={onChange}
-                value={form.token}
-                name={"token"}
-                error={false}
-                errorText={"Ошибка"}
-                size={"default"}
-              />
-            </div>
-          </>
-        )}
+        {children}
 
         <div className="mb-20">
           {path === "/register" ? (
-            <Button onClick={handleSubmitClick} type="primary" size="medium">
+            <button
+              type="submit"
+              className={`${style.button} ${style.button_type_primary} ${style.button_size_medium}`}
+            >
               {registerRequest
                 ? "Подождите..."
                 : registerFailed
                 ? "Что-то пошло не так :("
                 : buttonText}
-            </Button>
+            </button>
           ) : path === "/login" ? (
-            <Button onClick={handleSubmitClick} type="primary" size="medium">
+            <button
+              type="submit"
+              className={`${style.button} ${style.button_type_primary} ${style.button_size_medium}`}
+            >
               {loginRequest
                 ? "Подождите..."
                 : loginFailed
                 ? "Что-то пошло не так :("
                 : buttonText}
-            </Button>
+            </button>
           ) : (
-            <Button onClick={handleSubmitClick} type="primary" size="medium">
+            <button
+              type="submit"
+              className={`${style.button} ${style.button_type_primary} ${style.button_size_medium}`}
+            >
               {buttonText}
-            </Button>
+            </button>
           )}
         </div>
         {path === "/register" ? (
@@ -235,5 +101,11 @@ function UserEntryForm() {
     </section>
   );
 }
+
+UserEntryForm.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+  title: PropTypes.string,
+  buttonText: PropTypes.string,
+};
 
 export default UserEntryForm;
