@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
-import { useHistory } from "react-router";
+import { Link, useLocation, useHistory } from "react-router-dom";
 
 import {
   handleIngredientModal,
@@ -21,6 +20,7 @@ import IngredientDetails from "../Modal/IngredientDetails/IngredientDetails";
 function BurgerIngredients() {
   const [currentTab, setCurrentTab] = useState("Булки");
 
+  const location = useLocation();
   const history = useHistory();
   const dispatch = useDispatch();
 
@@ -130,7 +130,10 @@ function BurgerIngredients() {
                         className={style.card}
                         onClick={handleIngredientClick}
                         key={el._id}
-                        to={`/ingredients/${el._id}`}
+                        to={{
+                          pathname: `/ingredients/${el._id}`,
+                          state: { background: location },
+                        }}
                       >
                         <IngredientCard
                           image={el.image_large}
@@ -154,7 +157,10 @@ function BurgerIngredients() {
                         className={style.card}
                         onClick={handleIngredientClick}
                         key={el._id}
-                        to={`/ingredients/${el._id}`}
+                        to={{
+                          pathname: `/ingredients/${el._id}`,
+                          state: { background: location },
+                        }}
                       >
                         <IngredientCard
                           image={el.image_large}
@@ -182,7 +188,10 @@ function BurgerIngredients() {
                         className={style.card}
                         onClick={handleIngredientClick}
                         key={el._id}
-                        to={`/ingredients/${el._id}`}
+                        to={{
+                          pathname: `/ingredients/${el._id}`,
+                          state: { background: location },
+                        }}
                       >
                         <IngredientCard
                           image={el.image_large}

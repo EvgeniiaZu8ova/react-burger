@@ -1,7 +1,18 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  useLocation,
+  useHistory,
+} from "react-router-dom";
 import { useSelector } from "react-redux";
+
+import {
+  handleIngredientModal,
+  handleCurrentIngredient,
+} from "../../services/reducers/ingredientModal";
 
 import { getItems } from "../../services/reducers/allIngredients";
 
@@ -17,26 +28,49 @@ import ResetPasswordPage from "../../pages/reset-password";
 import ProfilePage from "../../pages/profile";
 import NotFound404Page from "../../pages/not-found-404";
 import IngredientPage from "../../pages/ingredient";
+import Modal from "../Modal/Modal";
+import IngredientDetails from "../Modal/IngredientDetails/IngredientDetails";
 
-function App() {
+export default function App() {
+  return (
+    <Router>
+      <AppSwitch />
+    </Router>
+  );
+}
+
+function AppSwitch() {
+  const history = useHistory();
+  let location = useLocation();
+  let background = location.state && location.state.background;
   const dispatch = useDispatch();
   const { isIngredientsModalOpen } = useSelector(
     (store) => store.ingredientModal
   );
 
+  function closeModal() {
+    dispatch(handleIngredientModal(false));
+    dispatch(handleCurrentIngredient({}));
+    background = null;
+    history.push("/");
+  }
+
   useEffect(() => {
     dispatch(getItems());
   }, [dispatch]);
 
+  useEffect(() => {
+    return null;
+  }, [background, location]);
+
   return (
-    <BrowserRouter>
-      <div className={app.page}>
-        <AppHeader />
-        <Switch>
-          <Route path="/" exact={true}>
-            <Main />
-          </Route>
-          {isIngredientsModalOpen ? (
+    <div className={app.page}>
+      <AppHeader />
+      <Switch location={background || location}>
+        <Route path="/" exact={true}>
+          <Main />
+        </Route>
+        {/* {isIngredientsModalOpen ? (
             <Route path="/ingredients/:id">
               <Main />
             </Route>
@@ -44,32 +78,45 @@ function App() {
             <Route path="/ingredients/:id">
               <IngredientPage />
             </Route>
-          )}
-          <Route path="/login" exact={true}>
-            <LoginPage />
+          )} */}
+        {!background && (
+          <Route path="/ingredients/:id">
+            <IngredientPage />
           </Route>
-          <Route path="/register" exact={true}>
-            <RegisterPage />
-          </Route>
-          <Route path="/forgot-password" exact={true}>
-            <ForgotPasswordPage />
-          </Route>
-          <Route path="/reset-password" exact={true}>
-            <ResetPasswordPage />
-          </Route>
-          <ProtectedRoute path="/profile" exact={true}>
-            <ProfilePage />
-          </ProtectedRoute>
-          <ProtectedRoute path="/profile/orders" exact={true}>
-            <ProfilePage />
-          </ProtectedRoute>
-          <Route>
-            <NotFound404Page />
-          </Route>
-        </Switch>
-      </div>
-    </BrowserRouter>
+        )}
+        <Route path="/login" exact={true}>
+          <LoginPage />
+        </Route>
+        <Route path="/register" exact={true}>
+          <RegisterPage />
+        </Route>
+        <Route path="/forgot-password" exact={true}>
+          <ForgotPasswordPage />
+        </Route>
+        <Route path="/reset-password" exact={true}>
+          <ResetPasswordPage />
+        </Route>
+        <ProtectedRoute path="/profile" exact={true}>
+          <ProfilePage />
+        </ProtectedRoute>
+        <ProtectedRoute path="/profile/orders" exact={true}>
+          <ProfilePage />
+        </ProtectedRoute>
+        <Route>
+          <NotFound404Page />
+        </Route>
+      </Switch>
+      {background && history.action !== "POP" && (
+        <Route path="/ingredients/:id">
+          <Modal
+            isModalOpen={isIngredientsModalOpen}
+            title="Детали ингредиента"
+            onClose={closeModal}
+          >
+            {isIngredientsModalOpen && <IngredientDetails />}
+          </Modal>
+        </Route>
+      )}
+    </div>
   );
 }
-
-export default App;
