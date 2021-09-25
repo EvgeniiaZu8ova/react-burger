@@ -16,9 +16,9 @@ function AppHeader() {
   return (
     <header className={header.header}>
       <div className={header.container}>
-        <div className={header.logo}>
+        <Link to="/" className={header.logo}>
           <Logo />
-        </div>
+        </Link>
         <nav className={header.navBar}>
           <div className={header.navBar__groupedLinks}>
             <Link
