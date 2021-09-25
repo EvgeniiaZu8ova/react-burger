@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useDrop } from "react-dnd";
-import { useHistory } from "react-router";
+import { useHistory } from "react-router-dom";
 
 import { getCookie } from "../../utils/cookie";
 

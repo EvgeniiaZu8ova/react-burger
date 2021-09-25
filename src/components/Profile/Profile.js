@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Link, useRouteMatch } from "react-router-dom";
+import { Link, useRouteMatch, useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { getCookie } from "../../utils/cookie";
-import { useHistory } from "react-router";
 
 import {
   getUserInfo,

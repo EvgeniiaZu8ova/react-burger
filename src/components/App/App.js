@@ -42,7 +42,10 @@ export default function App() {
 function AppSwitch() {
   const history = useHistory();
   let location = useLocation();
-  let background = location.state && location.state.background;
+  const background =
+    (history.action === "PUSH" || history.action === "REPLACE") &&
+    location.state &&
+    location.state.background;
   const dispatch = useDispatch();
   const { isIngredientsModalOpen } = useSelector(
     (store) => store.ingredientModal
@@ -51,8 +54,7 @@ function AppSwitch() {
   function closeModal() {
     dispatch(handleIngredientModal(false));
     dispatch(handleCurrentIngredient({}));
-    background = null;
-    history.push("/");
+    history.goBack();
   }
 
   useEffect(() => {
@@ -70,20 +72,9 @@ function AppSwitch() {
         <Route path="/" exact={true}>
           <Main />
         </Route>
-        {/* {isIngredientsModalOpen ? (
-            <Route path="/ingredients/:id">
-              <Main />
-            </Route>
-          ) : (
-            <Route path="/ingredients/:id">
-              <IngredientPage />
-            </Route>
-          )} */}
-        {!background && (
-          <Route path="/ingredients/:id">
-            <IngredientPage />
-          </Route>
-        )}
+        <Route path="/ingredients/:id">
+          <IngredientPage />
+        </Route>
         <Route path="/login" exact={true}>
           <LoginPage />
         </Route>
@@ -106,7 +97,7 @@ function AppSwitch() {
           <NotFound404Page />
         </Route>
       </Switch>
-      {background && history.action !== "POP" && (
+      {background && (
         <Route path="/ingredients/:id">
           <Modal
             isModalOpen={isIngredientsModalOpen}

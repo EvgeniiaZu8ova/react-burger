@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
-import { Link, useRouteMatch } from "react-router-dom";
-import { useHistory } from "react-router";
+import { Link, useRouteMatch, useHistory } from "react-router-dom";
+import {} from "react-router";
 import { useSelector } from "react-redux";
 
 import style from "./UserEntryForm.module.css";
