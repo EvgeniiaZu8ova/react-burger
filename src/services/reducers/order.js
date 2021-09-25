@@ -63,6 +63,8 @@ const orderSlice = createSlice({
       state.orderFailed = false;
       state.orderObject = action.payload.order;
       state.isOrderModalOpen = true;
+      state.chosenBun = {};
+      state.chosenOtherItems = [];
     },
     [sendOrder.rejected]: (state, action) => {
       state.orderRequest = false;
