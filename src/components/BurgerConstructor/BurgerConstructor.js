@@ -30,6 +30,7 @@ import NotBunItem from "./NotBunItem/NotBunItem";
 function BurgerConstructor() {
   const history = useHistory();
 
+  const isTokenExpired = JSON.parse(localStorage.getItem("isTokenExpired"));
   const token = getCookie("accessToken");
   const { allIngredients: data } = useSelector((store) => store.allIngredients);
 
@@ -79,10 +80,12 @@ function BurgerConstructor() {
   function handleOrderModalCall() {
     if (!token) {
       history.push("/login");
-    } else if (Object.keys(bun).length > 0) {
+    } else if (Object.keys(bun).length > 0 && isTokenExpired === null) {
       const myItems = otherItems.map((el) => el._id);
       const myOrder = [...myItems, bun._id, bun._id];
       makeOrder({ accessToken: token, myOrder: myOrder });
+    } else {
+      return token;
     }
   }
 

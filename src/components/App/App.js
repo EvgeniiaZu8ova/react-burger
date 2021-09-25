@@ -30,6 +30,8 @@ import NotFound404Page from "../../pages/not-found-404";
 import IngredientPage from "../../pages/ingredient";
 import Modal from "../Modal/Modal";
 import IngredientDetails from "../Modal/IngredientDetails/IngredientDetails";
+import { getCookie } from "../../utils/cookie";
+import { getUserInfo, refreshToken } from "../../services/reducers/auth";
 
 export default function App() {
   return (
@@ -42,10 +44,15 @@ export default function App() {
 function AppSwitch() {
   const history = useHistory();
   let location = useLocation();
+  const token = getCookie("accessToken");
+  const tokenRefresh = getCookie("refreshToken");
+  const isTokenExpired = JSON.parse(localStorage.getItem("isTokenExpired"));
+
   const background =
     (history.action === "PUSH" || history.action === "REPLACE") &&
     location.state &&
     location.state.background;
+
   const dispatch = useDispatch();
   const { isIngredientsModalOpen } = useSelector(
     (store) => store.ingredientModal
@@ -62,8 +69,19 @@ function AppSwitch() {
   }, [dispatch]);
 
   useEffect(() => {
-    return null;
-  }, [background, location]);
+    const actualToken = getCookie("accessToken");
+    if (isTokenExpired === null) {
+      dispatch(getUserInfo(actualToken));
+    } else {
+      return token;
+    }
+  }, [dispatch, token, tokenRefresh, isTokenExpired]);
+
+  useEffect(() => {
+    if (isTokenExpired) {
+      dispatch(refreshToken(tokenRefresh));
+    }
+  }, [dispatch, tokenRefresh, isTokenExpired]);
 
   return (
     <div className={app.page}>

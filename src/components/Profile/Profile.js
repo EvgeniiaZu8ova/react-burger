@@ -3,12 +3,7 @@ import { Link, useRouteMatch, useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { getCookie } from "../../utils/cookie";
 
-import {
-  getUserInfo,
-  updateUserInfo,
-  signOut,
-  refreshToken,
-} from "../../services/reducers/auth";
+import { updateUserInfo, signOut } from "../../services/reducers/auth";
 
 import {
   Input,
@@ -25,7 +20,7 @@ function Profile() {
   const token = getCookie("accessToken");
   const isTokenExpired = JSON.parse(localStorage.getItem("isTokenExpired"));
 
-  const { name, email, getUserFailed } = useSelector((store) => store.auth);
+  const { name, email } = useSelector((store) => store.auth);
 
   const [form, setForm] = useState({
     name: name,
@@ -40,7 +35,7 @@ function Profile() {
   function onSubmit(e) {
     e.preventDefault();
 
-    if (!isTokenExpired) {
+    if (isTokenExpired === null) {
       dispatch(
         updateUserInfo({
           accessToken: token,
@@ -48,6 +43,8 @@ function Profile() {
           email: form.email,
         })
       );
+    } else {
+      return token;
     }
   }
 
@@ -67,25 +64,12 @@ function Profile() {
   }
 
   useEffect(() => {
-    const actualToken = getCookie("accessToken");
-    if (!isTokenExpired) {
-      dispatch(getUserInfo(actualToken));
-    }
-  }, [dispatch, email, name, tokenRefresh, isTokenExpired, getUserFailed]);
-
-  useEffect(() => {
     setForm({
       name: name,
       email: email,
       password: "",
     });
   }, [email, name]);
-
-  useEffect(() => {
-    if (isTokenExpired) {
-      dispatch(refreshToken(tokenRefresh));
-    }
-  }, [dispatch, tokenRefresh, isTokenExpired, getUserFailed]);
 
   return (
     <section className={style.profile}>
