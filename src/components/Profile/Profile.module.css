@@ -30,3 +30,40 @@
   justify-content: space-between;
   align-items: flex-start;
 }
+
+.button {
+  border: none;
+  cursor: pointer;
+  outline: none;
+  border-radius: 64px;
+  transition: all 0.3s ease-in;
+}
+
+.button_type_primary {
+  color: white;
+  background: linear-gradient(63.18deg, #801ab3 0%, #4c4cff 100%);
+}
+
+.button_type_primary:hover {
+  box-shadow: 0px 0px 16px 8px rgba(51, 51, 255, 0.25),
+    0px 0px 8px 8px rgba(51, 51, 255, 0.25);
+  filter: drop-shadow(0px 4px 32px rgba(51, 51, 255, 0.5));
+}
+
+.button_type_primary:active {
+  opacity: 0.9;
+}
+
+.button_size_medium {
+  font-family: "Jet Brains Mono";
+  font-size: 16px;
+  line-height: 1.5;
+  font-weight: normal;
+  padding: 16px 40px;
+}
+
+.button_type_primary[disabled] {
+  color: #8585ad;
+  background: #3a3a55;
+  pointer-events: none;
+}

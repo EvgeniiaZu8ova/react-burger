@@ -40,9 +40,15 @@ function Profile() {
   function onSubmit(e) {
     e.preventDefault();
 
-    dispatch(
-      updateUserInfo({ accessToken: token, name: form.name, email: form.email })
-    );
+    if (!isTokenExpired) {
+      dispatch(
+        updateUserInfo({
+          accessToken: token,
+          name: form.name,
+          email: form.email,
+        })
+      );
+    }
   }
 
   function onReset(e) {
@@ -62,7 +68,9 @@ function Profile() {
 
   useEffect(() => {
     const actualToken = getCookie("accessToken");
-    dispatch(getUserInfo(actualToken));
+    if (!isTokenExpired) {
+      dispatch(getUserInfo(actualToken));
+    }
   }, [dispatch, email, name, tokenRefresh, isTokenExpired, getUserFailed]);
 
   useEffect(() => {
@@ -122,7 +130,7 @@ function Profile() {
           В этом разделе вы можете &nbsp; изменить свои персональные данные
         </p>
       </div>
-      <form noValidate className={style.profile__form}>
+      <form noValidate onSubmit={onSubmit} className={style.profile__form}>
         <div className="mb-6">
           <Input
             type={"text"}
@@ -164,7 +172,12 @@ function Profile() {
           size={"default"}
         />
         <div className={`${style.buttons} mt-6`}>
-          <Button onClick={onSubmit}>Сохранить</Button>
+          <button
+            type="submit"
+            className={`${style.button} ${style.button_type_primary} ${style.button_size_medium}`}
+          >
+            Сохранить
+          </button>
           <Button onClick={onReset}>Отмена</Button>
         </div>
       </form>
