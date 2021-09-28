@@ -1,74 +1,65 @@
 import React from "react";
-import PropTypes from "prop-types";
+//import PropTypes from "prop-types";
+
+import { useSelector } from "react-redux";
 
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 
+import { convertDate } from "../../../utils/dateConverter";
+
 import style from "./OrderCard.module.css";
 
-function OrderCard() {
+function OrderCard({ data }) {
+  const { allIngredients } = useSelector((store) => store.allIngredients);
+
+  const cardIngredients = data.ingredients.map((el) => {
+    const item = allIngredients.find((item) => item._id === el);
+    return {
+      image: item && item.image,
+      price: item && item.price,
+    };
+  });
+
+  const finalSum = cardIngredients.reduce((acc, curr) => {
+    return acc + curr.price;
+  }, 0);
+
+  const restQuantity = cardIngredients.length - 6;
+
+  const convertedDate = convertDate(data.createdAt);
+
   return (
-    <article className={style.card}>
+    <article className={`${style.card} mb-4`}>
       <div className={style.info}>
-        <p className="text text_type_digits-default">#034534</p>
+        <p className="text text_type_digits-default">{`#${data.number}`}</p>
         <p className="text text_type_main-default text_color_inactive">
-          Сегодня, 13:20 i-GMT+3
+          {String(convertedDate)}
         </p>
       </div>
-      <p className="text text_type_main-medium mt-6 mb-6">
-        Interstellar бургер
-      </p>
+      <p className="text text_type_main-medium mt-6 mb-6">{data.name}</p>
       <div className={style.details}>
         <div className={style.components}>
-          <div className={style.component__box}>
-            <img
-              src="https://code.s3.yandex.net/react/code/bun-01.png"
-              alt="Ингредиент"
-              className={style.component__image}
-            />
-          </div>
-          <div className={style.component__box}>
-            <img
-              src="https://code.s3.yandex.net/react/code/meat-03.png"
-              alt="Ингредиент"
-              className={style.component__image}
-            />
-          </div>
-          <div className={style.component__box}>
-            <img
-              src="https://code.s3.yandex.net/react/code/meat-04.png"
-              alt="Ингредиент"
-              className={style.component__image}
-            />
-          </div>
-          <div className={style.component__box}>
-            <img
-              src="https://code.s3.yandex.net/react/code/meat-01.png"
-              alt="Ингредиент"
-              className={style.component__image}
-            />
-          </div>
-          <div className={style.component__box}>
-            <img
-              src="https://code.s3.yandex.net/react/code/sauce-02.png"
-              alt="Ингредиент"
-              className={style.component__image}
-            />
-          </div>
-          <div className={style.component__box}>
-            <img
-              src="https://code.s3.yandex.net/react/code/sauce-03.png"
-              alt="Ингредиент"
-              className={style.component__image}
-            />
-            <p
-              className={`${style.component__count} text text_type_main-default`}
-            >
-              +3
-            </p>
-          </div>
+          {cardIngredients.slice(0, 6).map((el, index) => (
+            <div key={index} className={style.component__box}>
+              <img
+                src={el.image}
+                alt="Ингредиент"
+                className={style.component__image}
+              />
+              {index === 5 && (
+                <p
+                  className={`${style.component__count} text text_type_main-default`}
+                >
+                  {`+${String(restQuantity)}`}
+                </p>
+              )}
+            </div>
+          ))}
         </div>
         <div className={`${style.price} pt-1 pb-1`}>
-          <p className="text text_type_digits-default pr-2">560</p>
+          <p className="text text_type_digits-default pr-2">
+            {String(finalSum)}
+          </p>
           <CurrencyIcon type="primary" />
         </div>
       </div>

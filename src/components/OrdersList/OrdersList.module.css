@@ -1,3 +1,21 @@
 .section {
   width: 608px;
 }
+
+.scrollArea {
+  max-height: calc(100vh - 136px - 88px);
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.scrollArea::-webkit-scrollbar-track {
+  background-color: #2f2f37;
+}
+
+.scrollArea::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollArea::-webkit-scrollbar-thumb {
+  background-color: #8585ad;
+}

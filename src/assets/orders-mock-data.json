@@ -1,0 +1,107 @@
+[
+  {
+    "_id": "6152f2b6a0dd75001c70815b",
+    "ingredients": [
+      "60d3b41abdacab0026a733cd",
+      "60d3b41abdacab0026a733c7",
+      "60d3b41abdacab0026a733c7"
+    ],
+    "status": "done",
+    "name": "Space флюоресцентный бургер",
+    "createdAt": "2021-09-28T10:47:18.024Z",
+    "updatedAt": "2021-09-28T10:47:18.143Z",
+    "number": 4037
+  },
+  {
+    "_id": "6152ed0ca0dd75001c708157",
+    "ingredients": [
+      "60d3b41abdacab0026a733cd",
+      "60d3b41abdacab0026a733cc",
+      "60d3b41abdacab0026a733ce",
+      "60d3b41abdacab0026a733c6",
+      "60d3b41abdacab0026a733c6"
+    ],
+    "status": "done",
+    "name": "Краторный традиционный-галактический space spicy бургер",
+    "createdAt": "2021-09-28T10:23:08.006Z",
+    "updatedAt": "2021-09-28T10:23:08.165Z",
+    "number": 4036
+  },
+  {
+    "_id": "6152e801a0dd75001c708155",
+    "ingredients": [
+      "60d3b41abdacab0026a733cd",
+      "60d3b41abdacab0026a733c7",
+      "60d3b41abdacab0026a733c7"
+    ],
+    "status": "done",
+    "name": "Space флюоресцентный бургер",
+    "createdAt": "2021-09-28T10:01:37.478Z",
+    "updatedAt": "2021-09-28T10:01:37.586Z",
+    "number": 4035
+  },
+  {
+    "_id": "6152e7e7a0dd75001c708154",
+    "ingredients": [
+      "60d3b41abdacab0026a733cd",
+      "60d3b41abdacab0026a733c7",
+      "60d3b41abdacab0026a733c7"
+    ],
+    "status": "done",
+    "name": "Space флюоресцентный бургер",
+    "createdAt": "2021-09-28T10:01:11.025Z",
+    "updatedAt": "2021-09-28T10:01:11.151Z",
+    "number": 4034
+  },
+  {
+    "_id": "6152d5b0a0dd75001c70814f",
+    "ingredients": [
+      "60d3b41abdacab0026a733cd",
+      "60d3b41abdacab0026a733cc",
+      "60d3b41abdacab0026a733c8",
+      "60d3b41abdacab0026a733c9",
+      "60d3b41abdacab0026a733c6",
+      "60d3b41abdacab0026a733c6"
+    ],
+    "status": "done",
+    "name": "Краторный бессмертный люминесцентный spicy space бургер",
+    "createdAt": "2021-09-28T08:43:28.456Z",
+    "updatedAt": "2021-09-28T08:43:28.542Z",
+    "number": 4033
+  },
+  {
+    "_id": "6152ac9fa0dd75001c708134",
+    "ingredients": [
+      "60d3b41abdacab0026a733cd",
+      "60d3b41abdacab0026a733c7",
+      "60d3b41abdacab0026a733c7"
+    ],
+    "status": "done",
+    "name": "Space флюоресцентный бургер",
+    "createdAt": "2021-09-28T05:48:15.835Z",
+    "updatedAt": "2021-09-28T05:48:15.947Z",
+    "number": 4032
+  },
+  {
+    "_id": "61525a68a0dd75001c7080c5",
+    "ingredients": ["60d3b41abdacab0026a733c7", "60d3b41abdacab0026a733c7"],
+    "status": "done",
+    "name": "Флюоресцентный бургер",
+    "createdAt": "2021-09-27T23:57:28.191Z",
+    "updatedAt": "2021-09-27T23:57:28.277Z",
+    "number": 4031
+  },
+  {
+    "_id": "615259e0a0dd75001c7080c2",
+    "ingredients": [
+      "60d3b41abdacab0026a733c7",
+      "60d3b41abdacab0026a733cd",
+      "60d3b41abdacab0026a733c7"
+    ],
+    "status": "done",
+    "name": "Space флюоресцентный бургер",
+    "createdAt": "2021-09-27T23:55:12.933Z",
+    "updatedAt": "2021-09-27T23:55:13.081Z",
+    "number": 4030
+  }
+]
