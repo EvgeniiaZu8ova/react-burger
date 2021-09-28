@@ -19,8 +19,12 @@ import { getItems } from "../../services/reducers/allIngredients";
 import app from "./App.module.css";
 
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
+
 import AppHeader from "../AppHeader/AppHeader";
 import Main from "../Main/Main";
+import Modal from "../Modal/Modal";
+import IngredientDetails from "../Modal/IngredientDetails/IngredientDetails";
+
 import LoginPage from "../../pages/login";
 import RegisterPage from "../../pages/register";
 import ForgotPasswordPage from "../../pages/forgot-password";
@@ -28,8 +32,8 @@ import ResetPasswordPage from "../../pages/reset-password";
 import ProfilePage from "../../pages/profile";
 import NotFound404Page from "../../pages/not-found-404";
 import IngredientPage from "../../pages/ingredient";
-import Modal from "../Modal/Modal";
-import IngredientDetails from "../Modal/IngredientDetails/IngredientDetails";
+import FeedPage from "../../pages/feed";
+
 import { getCookie } from "../../utils/cookie";
 import { getUserInfo, refreshToken } from "../../services/reducers/auth";
 
@@ -92,6 +96,9 @@ function AppSwitch() {
         </Route>
         <Route path="/ingredients/:id">
           <IngredientPage />
+        </Route>
+        <Route path="/feed" exact={true}>
+          <FeedPage />
         </Route>
         <Route path="/login" exact={true}>
           <LoginPage />
