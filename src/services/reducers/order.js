@@ -3,9 +3,9 @@ import api from "../../utils/Api";
 
 export const sendOrder = createAsyncThunk(
   "order/sendOrder",
-  async function (myOrder, { rejectWithValue }) {
+  async function ({ accessToken, myOrder }, { rejectWithValue }) {
     try {
-      const { order } = await api.makeOrder(myOrder);
+      const { order } = await api.makeOrder(accessToken, myOrder);
       return { order };
     } catch (error) {
       return rejectWithValue(error.message);
@@ -63,6 +63,8 @@ const orderSlice = createSlice({
       state.orderFailed = false;
       state.orderObject = action.payload.order;
       state.isOrderModalOpen = true;
+      state.chosenBun = {};
+      state.chosenOtherItems = [];
     },
     [sendOrder.rejected]: (state, action) => {
       state.orderRequest = false;

@@ -1,6 +1,9 @@
 import React, { useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useDrop } from "react-dnd";
+import { useHistory } from "react-router-dom";
+
+import { getCookie } from "../../utils/cookie";
 
 import {
   addIngredient,
@@ -25,6 +28,10 @@ import {
 import NotBunItem from "./NotBunItem/NotBunItem";
 
 function BurgerConstructor() {
+  const history = useHistory();
+
+  const isTokenExpired = JSON.parse(localStorage.getItem("isTokenExpired"));
+  const token = getCookie("accessToken");
   const { allIngredients: data } = useSelector((store) => store.allIngredients);
 
   const {
@@ -48,7 +55,8 @@ function BurgerConstructor() {
   const dispatch = useDispatch();
   const addItem = (item) => dispatch(addIngredient({ item }));
   const removeItem = (item) => dispatch(removeIngredient({ item }));
-  const makeOrder = (myOrder) => dispatch(sendOrder(myOrder));
+  const makeOrder = ({ accessToken, myOrder }) =>
+    dispatch(sendOrder({ accessToken, myOrder }));
   const manageOrderModal = (isOpen) => dispatch(handleOrderModal(isOpen));
 
   function handleAddItem(name) {
@@ -70,10 +78,14 @@ function BurgerConstructor() {
   });
 
   function handleOrderModalCall() {
-    if (Object.keys(bun).length > 0) {
+    if (!token) {
+      history.push("/login");
+    } else if (Object.keys(bun).length > 0 && isTokenExpired === null) {
       const myItems = otherItems.map((el) => el._id);
       const myOrder = [...myItems, bun._id, bun._id];
-      makeOrder(myOrder);
+      makeOrder({ accessToken: token, myOrder: myOrder });
+    } else {
+      return token;
     }
   }
 
