@@ -62,7 +62,7 @@ function OrderCard({ data, isProfile }) {
                 alt="Ингредиент"
                 className={style.component__image}
               />
-              {index === 5 && (
+              {index === 5 && restQuantity > 0 && (
                 <p
                   className={`${style.component__count} text text_type_main-default`}
                 >
