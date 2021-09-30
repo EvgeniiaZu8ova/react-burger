@@ -9,7 +9,9 @@ function ProfilePage() {
   return (
     <section className={style.profile}>
       <ProfileNav />
-      <ProfileForm />
+      <div style={{ marginLeft: "80px" }}>
+        <ProfileForm />
+      </div>
     </section>
   );
 }

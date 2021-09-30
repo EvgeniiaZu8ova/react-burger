@@ -7,7 +7,7 @@ import style from "./feed.module.css";
 function FeedPage() {
   return (
     <div className={style.content}>
-      <OrdersList />
+      <OrdersList isProfile={false} />
     </div>
   );
 }

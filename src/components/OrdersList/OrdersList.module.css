@@ -2,10 +2,18 @@
   width: 608px;
 }
 
+.section_big {
+  width: 860px;
+}
+
 .scrollArea {
   max-height: calc(100vh - 136px - 88px);
   overflow-y: scroll;
   overflow-x: hidden;
+}
+
+.scrollArea_big {
+  max-height: 100vh;
 }
 
 .scrollArea::-webkit-scrollbar-track {

@@ -1,5 +1,5 @@
 import React from "react";
-//import PropTypes from "prop-types";
+import PropTypes from "prop-types";
 
 import { useSelector } from "react-redux";
 
@@ -9,7 +9,7 @@ import { convertDate } from "../../../utils/dateConverter";
 
 import style from "./OrderCard.module.css";
 
-function OrderCard({ data }) {
+function OrderCard({ data, isProfile }) {
   const { allIngredients } = useSelector((store) => store.allIngredients);
 
   const cardIngredients = data.ingredients.map((el) => {
@@ -29,14 +29,30 @@ function OrderCard({ data }) {
   const convertedDate = convertDate(data.createdAt);
 
   return (
-    <article className={`${style.card} mb-4`}>
+    <article
+      className={`${style.card} ${isProfile ? "mb-6" : "mb-4"} ${
+        isProfile && style.card_big
+      }`}
+    >
       <div className={style.info}>
         <p className="text text_type_digits-default">{`#${data.number}`}</p>
         <p className="text text_type_main-default text_color_inactive">
           {String(convertedDate)}
         </p>
       </div>
-      <p className="text text_type_main-medium mt-6 mb-6">{data.name}</p>
+      <p
+        className={`text text_type_main-medium mt-6 ${
+          isProfile ? "mb-2" : "mb-6"
+        }`}
+      >
+        {data.name}
+      </p>
+      {isProfile && (
+        <p className="text text_type_main-default mb-6">
+          {data.status === "done" ? "Выполнен" : "В процессе"}
+        </p>
+      )}
+
       <div className={style.details}>
         <div className={style.components}>
           {cardIngredients.slice(0, 6).map((el, index) => (
@@ -66,5 +82,18 @@ function OrderCard({ data }) {
     </article>
   );
 }
+
+OrderCard.propTypes = {
+  data: PropTypes.shape({
+    _id: PropTypes.string.isRequired,
+    ingredients: PropTypes.array.isRequired,
+    status: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    createdAt: PropTypes.string.isRequired,
+    updatedAt: PropTypes.string,
+    number: PropTypes.number.isRequired,
+  }).isRequired,
+  isProfile: PropTypes.bool.isRequired,
+};
 
 export default OrderCard;

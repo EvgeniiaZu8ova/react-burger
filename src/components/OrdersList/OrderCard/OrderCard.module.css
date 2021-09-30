@@ -9,6 +9,11 @@
   padding: 24px;
 }
 
+.card_big {
+  width: 844px;
+  height: 246px;
+}
+
 .info {
   height: 24px;
   display: flex;
