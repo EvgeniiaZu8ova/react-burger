@@ -1,0 +1,7 @@
+.profile {
+  min-height: 100vh;
+  padding: 120px 410px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+}

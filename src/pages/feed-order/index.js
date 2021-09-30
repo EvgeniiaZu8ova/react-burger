@@ -1,6 +1,6 @@
 import React from "react";
 
-import OrderInfo from "../components/OrderInfo/OrderInfo";
+import OrderInfo from "../../components/OrderInfo/OrderInfo";
 
 import style from "./feed-order.module.css";
 

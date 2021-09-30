@@ -1,6 +1,6 @@
 import React from "react";
 
-import OrdersList from "../components/OrdersList/OrdersList";
+import OrdersList from "../../components/OrdersList";
 
 import style from "./feed.module.css";
 
