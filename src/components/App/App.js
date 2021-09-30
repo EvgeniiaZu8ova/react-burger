@@ -33,6 +33,7 @@ import ProfilePage from "../../pages/profile";
 import NotFound404Page from "../../pages/not-found-404";
 import IngredientPage from "../../pages/ingredient";
 import FeedPage from "../../pages/feed";
+import FeedOrderPage from "../../pages/feed-order";
 
 import { getCookie } from "../../utils/cookie";
 import { getUserInfo, refreshToken } from "../../services/reducers/auth";
@@ -100,6 +101,9 @@ function AppSwitch() {
         <Route path="/feed" exact={true}>
           <FeedPage />
         </Route>
+        <Route path="/feed/:id">
+          <FeedOrderPage />
+        </Route>
         <Route path="/login" exact={true}>
           <LoginPage />
         </Route>
@@ -123,15 +127,26 @@ function AppSwitch() {
         </Route>
       </Switch>
       {background && (
-        <Route path="/ingredients/:id">
+        <>
+          <Route path="/ingredients/:id">
+            <Modal
+              isModalOpen={isIngredientsModalOpen}
+              title="Детали ингредиента"
+              onClose={closeModal}
+            >
+              {isIngredientsModalOpen && <IngredientDetails />}
+            </Modal>
+          </Route>
+          {/* <Route path="/feed/:id">
           <Modal
             isModalOpen={isIngredientsModalOpen}
-            title="Детали ингредиента"
+            title=""
             onClose={closeModal}
           >
             {isIngredientsModalOpen && <IngredientDetails />}
           </Modal>
-        </Route>
+        </Route> */}
+        </>
       )}
     </div>
   );
