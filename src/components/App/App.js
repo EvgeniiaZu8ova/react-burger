@@ -14,6 +14,16 @@ import {
   handleCurrentIngredient,
 } from "../../services/reducers/ingredientModal";
 
+import {
+  handleOrderCardModal,
+  handleCurrentOrder,
+} from "../../services/reducers/orderCardModal";
+
+import {
+  handleMyOrderCardModal,
+  handleMyCurrentOrder,
+} from "../../services/reducers/myOrderCardModal";
+
 import { getItems } from "../../services/reducers/allIngredients";
 
 import app from "./App.module.css";
@@ -23,7 +33,8 @@ import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 import AppHeader from "../AppHeader/AppHeader";
 import Main from "../Main/Main";
 import Modal from "../Modal/Modal";
-import IngredientDetails from "../Modal/IngredientDetails/IngredientDetails";
+import IngredientDetails from "../Modal/IngredientDetails";
+import OrderInfo from "../OrderInfo/OrderInfo";
 
 import {
   LoginPage,
@@ -67,9 +78,26 @@ function AppSwitch() {
     (store) => store.ingredientModal
   );
 
-  function closeModal() {
+  const { isOrderCardModalOpen } = useSelector((store) => store.orderCardModal);
+  const { isMyOrderCardModalOpen } = useSelector(
+    (store) => store.myOrderCardModal
+  );
+
+  function closeIngredientsModal() {
     dispatch(handleIngredientModal(false));
     dispatch(handleCurrentIngredient({}));
+    history.goBack();
+  }
+
+  function closeOrderCardModal() {
+    dispatch(handleOrderCardModal({ isOpen: false }));
+    dispatch(handleCurrentOrder({}));
+    history.goBack();
+  }
+
+  function closeMyOrderCardModal() {
+    dispatch(handleMyOrderCardModal(false));
+    dispatch(handleMyCurrentOrder({}));
     history.goBack();
   }
 
@@ -91,6 +119,8 @@ function AppSwitch() {
       dispatch(refreshToken(tokenRefresh));
     }
   }, [dispatch, tokenRefresh, isTokenExpired]);
+
+  console.log(isOrderCardModalOpen);
 
   return (
     <div className={app.page}>
@@ -137,26 +167,35 @@ function AppSwitch() {
         </Route>
       </Switch>
       {background && (
-        <>
+        <Switch>
           <Route path="/ingredients/:id">
             <Modal
               isModalOpen={isIngredientsModalOpen}
               title="Детали ингредиента"
-              onClose={closeModal}
+              onClose={closeIngredientsModal}
             >
               {isIngredientsModalOpen && <IngredientDetails />}
             </Modal>
           </Route>
-          {/* <Route path="/feed/:id">
-          <Modal
-            isModalOpen={isIngredientsModalOpen}
-            title=""
-            onClose={closeModal}
-          >
-            {isIngredientsModalOpen && <IngredientDetails />}
-          </Modal>
-        </Route> */}
-        </>
+          <Route path="/feed/:id">
+            <Modal
+              isModalOpen={isOrderCardModalOpen}
+              title="Детали заказа"
+              onClose={closeOrderCardModal}
+            >
+              {isOrderCardModalOpen && <OrderInfo />}
+            </Modal>
+          </Route>
+          <Route path="/profile/orders/:id">
+            <Modal
+              isModalOpen={isMyOrderCardModalOpen}
+              title="Детали заказа"
+              onClose={closeMyOrderCardModal}
+            >
+              {isMyOrderCardModalOpen && <OrderInfo />}
+            </Modal>
+          </Route>
+        </Switch>
       )}
     </div>
   );

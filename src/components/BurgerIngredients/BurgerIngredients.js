@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Link, useLocation, useHistory } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 import {
   handleIngredientModal,
@@ -14,14 +14,11 @@ import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import { handleItemSearch } from "../../utils/findItem";
 
 import IngredientCard from "./IngredientCard/IngredientCard";
-import Modal from "../Modal/Modal";
-import IngredientDetails from "../Modal/IngredientDetails/IngredientDetails";
 
 function BurgerIngredients() {
   const [currentTab, setCurrentTab] = useState("Булки");
 
   const location = useLocation();
-  const history = useHistory();
   const dispatch = useDispatch();
 
   const manageIngredientModal = (isOpen) =>
@@ -36,10 +33,6 @@ function BurgerIngredients() {
   } = useSelector((store) => store.allIngredients);
 
   const { chosenBun, chosenOtherItems } = useSelector((store) => store.order);
-
-  const { isIngredientsModalOpen } = useSelector(
-    (store) => store.ingredientModal
-  );
 
   function handleTabClick(e) {
     setCurrentTab(e);
@@ -67,12 +60,6 @@ function BurgerIngredients() {
       manageIngredientModal(true);
       manageIngredient(item);
     }
-  }
-
-  function closeModal() {
-    manageIngredientModal(false);
-    manageIngredient({});
-    history.push("/");
   }
 
   return (
@@ -210,14 +197,6 @@ function BurgerIngredients() {
           </div>
         </>
       )}
-
-      <Modal
-        isModalOpen={isIngredientsModalOpen}
-        title="Детали ингредиента"
-        onClose={closeModal}
-      >
-        {isIngredientsModalOpen && <IngredientDetails />}
-      </Modal>
     </section>
   );
 }

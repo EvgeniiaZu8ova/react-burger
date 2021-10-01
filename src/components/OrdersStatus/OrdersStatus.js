@@ -10,7 +10,6 @@ const ordersInfo = data.map((el) => {
 
 const ordersDone = ordersInfo.filter((el) => el.status === "done");
 const ordersInProcess = ordersInfo.filter((el) => el.status !== "done");
-console.log(ordersInfo);
 
 function OrdersStatus() {
   return (

@@ -23,9 +23,9 @@ function IngredientInfo({ image, price, name, quantity }) {
 }
 
 IngredientInfo.propTypes = {
-  image: PropTypes.string.isRequired,
-  price: PropTypes.number.isRequired,
-  name: PropTypes.string.isRequired,
+  image: PropTypes.string,
+  price: PropTypes.number,
+  name: PropTypes.string,
   quantity: PropTypes.number,
 };
 
