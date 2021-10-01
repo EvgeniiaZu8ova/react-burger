@@ -7,6 +7,8 @@ import authReducer from "./auth";
 import passwordReducer from "./password";
 import orderCardModalReducer from "./orderCardModal";
 import myOrderCardModalReducer from "./myOrderCardModal";
+import { wsAllOrdersReducer } from "./wsAllOrdersReducer";
+import { wsMyOrdersReducer } from "./wsMyOrdersReducer";
 
 export const rootReducer = combineReducers({
   allIngredients: allIngredientsReducer,
@@ -16,4 +18,6 @@ export const rootReducer = combineReducers({
   password: passwordReducer,
   orderCardModal: orderCardModalReducer,
   myOrderCardModal: myOrderCardModalReducer,
+  allOrders: wsAllOrdersReducer,
+  myOrders: wsMyOrdersReducer,
 });
