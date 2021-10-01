@@ -137,12 +137,15 @@ function AppSwitch() {
         <Route path="/feed/:id">
           <FeedOrderPage />
         </Route>
-        <Route path="/profile/orders" exact={true}>
+        <ProtectedRoute path="/profile" exact={true}>
+          <ProfilePage />
+        </ProtectedRoute>
+        <ProtectedRoute path="/profile/orders" exact={true}>
           <ProfileOrdersPage />
-        </Route>
-        <Route path="/profile/orders/:id">
+        </ProtectedRoute>
+        <ProtectedRoute path="/profile/orders/:id">
           <ProfileOrderInfoPage />
-        </Route>
+        </ProtectedRoute>
         <Route path="/login" exact={true}>
           <LoginPage />
         </Route>
@@ -155,12 +158,6 @@ function AppSwitch() {
         <Route path="/reset-password" exact={true}>
           <ResetPasswordPage />
         </Route>
-        <ProtectedRoute path="/profile" exact={true}>
-          <ProfilePage />
-        </ProtectedRoute>
-        <ProtectedRoute path="/profile/orders" exact={true}>
-          <ProfilePage />
-        </ProtectedRoute>
         <Route>
           <NotFound404Page />
         </Route>
@@ -185,7 +182,7 @@ function AppSwitch() {
               {isOrderCardModalOpen && <OrderInfo />}
             </Modal>
           </Route>
-          <Route path="/profile/orders/:id">
+          <ProtectedRoute path="/profile/orders/:id">
             <Modal
               isModalOpen={isMyOrderCardModalOpen}
               title="Детали заказа"
@@ -193,7 +190,7 @@ function AppSwitch() {
             >
               {isMyOrderCardModalOpen && <OrderInfo />}
             </Modal>
-          </Route>
+          </ProtectedRoute>
         </Switch>
       )}
     </div>
