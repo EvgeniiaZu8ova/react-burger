@@ -15,9 +15,7 @@ function OrdersList({ isProfile }) {
           Лента заказов
         </h1>
       )}
-      <div
-        className={`${style.scrollArea} ${isProfile && style.scrollArea_big}`}
-      >
+      <div className={style.scrollArea}>
         {data.map((el) => (
           <OrderCard key={el._id} data={el} isProfile={isProfile} />
         ))}

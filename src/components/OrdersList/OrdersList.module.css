@@ -7,13 +7,9 @@
 }
 
 .scrollArea {
-  max-height: calc(100vh - 136px - 88px);
+  max-height: 100vh;
   overflow-y: scroll;
   overflow-x: hidden;
-}
-
-.scrollArea_big {
-  max-height: 100vh;
 }
 
 .scrollArea::-webkit-scrollbar-track {

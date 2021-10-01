@@ -7,6 +7,5 @@
   align-items: flex-start;
   box-sizing: border-box;
   padding: 40px 0 52px;
-  max-height: calc(100vh - 88px);
   overflow-y: hidden;
 }
