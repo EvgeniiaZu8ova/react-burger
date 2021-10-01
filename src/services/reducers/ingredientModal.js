@@ -11,7 +11,7 @@ const ingredientModalSlice = createSlice({
       state.currentIngredient = action.payload.ingredient;
     },
     handleIngredientModal(state, action) {
-      state.isIngredientsModalOpen = action.payload;
+      state.isIngredientsModalOpen = action.payload.isOpen;
     },
   },
 });

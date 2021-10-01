@@ -18,7 +18,7 @@ function ProfileOrdersPage() {
   const dispatch = useDispatch();
 
   const manageMyOrderCardModal = (isOpen) =>
-    dispatch(handleMyOrderCardModal(isOpen));
+    dispatch(handleMyOrderCardModal({ isOpen }));
   const manageMyCurrentOrder = (order) =>
     dispatch(handleMyCurrentOrder({ order }));
 

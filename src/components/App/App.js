@@ -64,8 +64,11 @@ export default function App() {
 function AppSwitch() {
   const history = useHistory();
   let location = useLocation();
+  const dispatch = useDispatch();
+
   const token = getCookie("accessToken");
   const tokenRefresh = getCookie("refreshToken");
+
   const isTokenExpired = JSON.parse(localStorage.getItem("isTokenExpired"));
 
   const background =
@@ -73,18 +76,16 @@ function AppSwitch() {
     location.state &&
     location.state.background;
 
-  const dispatch = useDispatch();
   const { isIngredientsModalOpen } = useSelector(
     (store) => store.ingredientModal
   );
-
   const { isOrderCardModalOpen } = useSelector((store) => store.orderCardModal);
   const { isMyOrderCardModalOpen } = useSelector(
     (store) => store.myOrderCardModal
   );
 
   function closeIngredientsModal() {
-    dispatch(handleIngredientModal(false));
+    dispatch(handleIngredientModal({ isOpen: false }));
     dispatch(handleCurrentIngredient({}));
     history.goBack();
   }
@@ -96,7 +97,7 @@ function AppSwitch() {
   }
 
   function closeMyOrderCardModal() {
-    dispatch(handleMyOrderCardModal(false));
+    dispatch(handleMyOrderCardModal({ isOpen: false }));
     dispatch(handleMyCurrentOrder({}));
     history.goBack();
   }
@@ -119,8 +120,6 @@ function AppSwitch() {
       dispatch(refreshToken(tokenRefresh));
     }
   }, [dispatch, tokenRefresh, isTokenExpired]);
-
-  console.log(isOrderCardModalOpen);
 
   return (
     <div className={app.page}>

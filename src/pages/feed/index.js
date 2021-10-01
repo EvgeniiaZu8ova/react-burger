@@ -15,26 +15,26 @@ import data from "../../assets/orders-mock-data.json";
 import style from "./feed.module.css";
 
 function FeedPage() {
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
-  // const manageOrderCardModal = (isOpen) =>
-  //   dispatch(handleOrderCardModal(isOpen));
-  // const manageCurrentOrder = (order) => dispatch(handleCurrentOrder({ order }));
+  const manageOrderCardModal = (isOpen) =>
+    dispatch(handleOrderCardModal({ isOpen }));
+  const manageCurrentOrder = (order) => dispatch(handleCurrentOrder({ order }));
 
-  // function handleOrderCardClick(id) {
-  //   const item = handleItemSearchWithId(data, id);
+  function handleOrderCardClick(id) {
+    const item = handleItemSearchWithId(data, id);
 
-  //   if (item) {
-  //     manageOrderCardModal(true);
-  //     manageCurrentOrder(item);
-  //   }
-  // }
+    if (item) {
+      manageOrderCardModal(true);
+      manageCurrentOrder(item);
+    }
+  }
 
   return (
     <div className={style.content}>
       <OrdersList
         isProfile={false}
-        // onCardClick={handleOrderCardClick}
+        onCardClick={handleOrderCardClick}
         path="/feed/"
       />
       <OrdersStatus />
