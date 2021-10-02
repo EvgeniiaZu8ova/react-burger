@@ -55,22 +55,23 @@ function OrderCard({ data, isProfile }) {
 
       <div className={style.details}>
         <div className={style.components}>
-          {cardIngredients.slice(0, 6).map((el, index) => (
-            <div key={index} className={style.component__box}>
-              <img
-                src={el.image}
-                alt="Ингредиент"
-                className={style.component__image}
-              />
-              {index === 5 && restQuantity > 0 && (
-                <p
-                  className={`${style.component__count} text text_type_main-default`}
-                >
-                  {`+${String(restQuantity)}`}
-                </p>
-              )}
-            </div>
-          ))}
+          {cardIngredients &&
+            cardIngredients.slice(0, 6).map((el, index) => (
+              <div key={index} className={style.component__box}>
+                <img
+                  src={el.image}
+                  alt="Ингредиент"
+                  className={style.component__image}
+                />
+                {index === 5 && restQuantity > 0 && (
+                  <p
+                    className={`${style.component__count} text text_type_main-default`}
+                  >
+                    {`+${String(restQuantity)}`}
+                  </p>
+                )}
+              </div>
+            ))}
         </div>
         <div className={`${style.price} pt-1 pb-1`}>
           <p className="text text_type_digits-default pr-2">
@@ -85,14 +86,14 @@ function OrderCard({ data, isProfile }) {
 
 OrderCard.propTypes = {
   data: PropTypes.shape({
-    _id: PropTypes.string.isRequired,
-    ingredients: PropTypes.array.isRequired,
-    status: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    createdAt: PropTypes.string.isRequired,
+    _id: PropTypes.string,
+    ingredients: PropTypes.array,
+    status: PropTypes.string,
+    name: PropTypes.string,
+    createdAt: PropTypes.string,
     updatedAt: PropTypes.string,
-    number: PropTypes.number.isRequired,
-  }).isRequired,
+    number: PropTypes.number,
+  }),
   isProfile: PropTypes.bool.isRequired,
 };
 

@@ -33,9 +33,7 @@ export const wsAllOrdersReducer = (state = initialState, action) => {
     case WS_GET_ALL_ORDERS:
       return {
         ...state,
-        allOrders: state.allOrders.length
-          ? [...state.allOrders, { ...action.payload }]
-          : [{ ...action.payload }],
+        allOrders: action.payload,
       };
 
     default:

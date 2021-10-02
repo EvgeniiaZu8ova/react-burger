@@ -1,4 +1,6 @@
-export const socketMiddleware = (wsUrl, wsActions) => {
+import { getCookie } from "../../utils/cookie";
+
+export const socketAuthMiddleware = (wsUrl, wsActions) => {
   return (store) => {
     let socket = null;
 
@@ -6,8 +8,9 @@ export const socketMiddleware = (wsUrl, wsActions) => {
       const { dispatch } = store;
       const { type, payload } = action;
       const { wsInit, onOpen, onClose, onError, onData } = wsActions;
-      if (type === wsInit) {
-        socket = new WebSocket(wsUrl);
+      const accessToken = getCookie("accessToken")?.split(" ")[1];
+      if (type === wsInit && accessToken) {
+        socket = new WebSocket(`${wsUrl}?token=${accessToken}`);
       }
       if (socket) {
         socket.onopen = (event) => {

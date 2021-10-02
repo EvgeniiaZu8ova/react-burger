@@ -1,6 +1,5 @@
 import React from "react";
-
-import data from "../../assets/orders-mock-data.json";
+import { useParams } from "react-router-dom";
 
 import { useSelector } from "react-redux";
 
@@ -12,26 +11,60 @@ import IngredientInfo from "./IngredientInfo/IngredientInfo";
 
 import style from "./OrderInfo.module.css";
 import { frequencyCounter } from "../../utils/frequencyCounter";
+import {
+  getAllOrders,
+  getMyOrders,
+} from "../../services/selectors/wsSelectors";
+import { handleItemSearchWithId } from "../../utils/findItem";
 
 function OrderInfo() {
+  const { currentOrder } = useSelector((store) => store.orderCardModal);
+  const { myCurrentOrder } = useSelector((store) => store.myOrderCardModal);
+  const allOrders = useSelector(getAllOrders);
+  const { orders: allExistingOrders } = allOrders;
+  const myOrders = useSelector(getMyOrders);
+  const { orders: myExistingOrders } = myOrders;
   const { allIngredients } = useSelector((store) => store.allIngredients);
-  const { number, name, status, ingredients, createdAt } = data[4];
 
-  const cardIngredients = frequencyCounter(ingredients).map((el) => {
-    const item = allIngredients.find((item) => item._id === el.id);
-    return {
-      image: item && item.image,
-      price: item && item.price,
-      name: item && item.name,
-      quantity: el.quantity,
-    };
-  });
+  const { id } = useParams();
 
-  const finalSum = cardIngredients.reduce((acc, curr) => {
-    return acc + curr.price;
-  }, 0);
+  const item =
+    (allExistingOrders && handleItemSearchWithId(allExistingOrders, id)) || {};
+  const myItem =
+    (myExistingOrders && handleItemSearchWithId(myExistingOrders, id)) || {};
 
-  const convertedDate = convertDate(createdAt);
+  const currentItem =
+    Object.keys(currentOrder).length > 0
+      ? currentOrder
+      : Object.keys(myCurrentOrder).length > 0
+      ? myCurrentOrder
+      : Object.keys(item).length > 0
+      ? item
+      : myItem;
+
+  const { number, name, status, ingredients, createdAt } = currentItem;
+
+  const currentIngredients = ingredients && frequencyCounter(ingredients);
+
+  const cardIngredients =
+    currentIngredients &&
+    currentIngredients.map((el) => {
+      const item = allIngredients.find((item) => item._id === el.id);
+      return {
+        image: item && item.image,
+        price: item && item.price,
+        name: item && item.name,
+        quantity: el.quantity,
+      };
+    });
+
+  const finalSum =
+    cardIngredients &&
+    cardIngredients.reduce((acc, curr) => {
+      return acc + curr.price * curr.quantity;
+    }, 0);
+
+  const convertedDate = createdAt ? convertDate(createdAt) : "";
 
   return (
     <section className={style.container}>
@@ -55,15 +88,16 @@ function OrderInfo() {
         Состав:
       </p>
       <div className={`${style.scrollArea} mb-10`}>
-        {cardIngredients.map((el, index) => (
-          <IngredientInfo
-            key={index}
-            image={el.image}
-            price={el.price}
-            name={el.name}
-            quantity={el.quantity}
-          />
-        ))}
+        {cardIngredients &&
+          cardIngredients.map((el, index) => (
+            <IngredientInfo
+              key={index}
+              image={el.image}
+              price={el.price}
+              name={el.name}
+              quantity={el.quantity}
+            />
+          ))}
       </div>
       <div className={style.bottom}>
         <p className="text text_type_main-default text_color_inactive">

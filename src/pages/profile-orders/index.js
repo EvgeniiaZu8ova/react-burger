@@ -1,5 +1,5 @@
-import React from "react";
-import { useDispatch } from "react-redux";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import OrdersList from "../../components/OrdersList";
 import ProfileNav from "../../components/Profile/ProfileNav";
@@ -10,12 +10,15 @@ import {
   handleMyOrderCardModal,
 } from "../../services/reducers/myOrderCardModal";
 
-import data from "../../assets/orders-mock-data.json";
-
 import style from "./profile-orders.module.css";
+
+import { getMyOrders } from "../../services/selectors/wsSelectors";
+import { WS_CONNECTION_START_MY_ORDERS } from "../../services/action-types/wsMyOrders";
 
 function ProfileOrdersPage() {
   const dispatch = useDispatch();
+  const myOrders = useSelector(getMyOrders);
+  const { orders } = myOrders;
 
   const manageMyOrderCardModal = (isOpen) =>
     dispatch(handleMyOrderCardModal({ isOpen }));
@@ -23,13 +26,17 @@ function ProfileOrdersPage() {
     dispatch(handleMyCurrentOrder({ order }));
 
   function handleMyOrderCardClick(id) {
-    const item = handleItemSearchWithId(data, id);
+    const item = handleItemSearchWithId(orders, id);
 
     if (item) {
       manageMyOrderCardModal(true);
       manageMyCurrentOrder(item);
     }
   }
+
+  useEffect(() => {
+    dispatch({ type: WS_CONNECTION_START_MY_ORDERS });
+  }, [dispatch]);
 
   return (
     <section className={style.profile}>
@@ -38,6 +45,7 @@ function ProfileOrdersPage() {
       </div>
       <OrdersList
         isProfile={true}
+        data={orders}
         onCardClick={handleMyOrderCardClick}
         path="/profile/orders/"
       />

@@ -33,9 +33,7 @@ export const wsMyOrdersReducer = (state = initialState, action) => {
     case WS_GET_MY_ORDERS:
       return {
         ...state,
-        myOrders: state.myOrders.length
-          ? [...state.myOrders, { ...action.payload }]
-          : [{ ...action.payload }],
+        myOrders: action.payload,
       };
 
     default:

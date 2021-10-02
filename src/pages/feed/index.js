@@ -10,8 +10,6 @@ import {
   handleOrderCardModal,
 } from "../../services/reducers/orderCardModal";
 
-import data from "../../assets/orders-mock-data.json";
-
 import style from "./feed.module.css";
 
 import { getAllOrders } from "../../services/selectors/wsSelectors";
@@ -19,15 +17,15 @@ import { WS_CONNECTION_START_ALL_ORDERS } from "../../services/action-types/wsAl
 
 function FeedPage() {
   const dispatch = useDispatch();
-  const orders = useSelector(getAllOrders);
-  console.log(orders);
+  const allOrders = useSelector(getAllOrders);
+  const { orders } = allOrders;
 
   const manageOrderCardModal = (isOpen) =>
     dispatch(handleOrderCardModal({ isOpen }));
   const manageCurrentOrder = (order) => dispatch(handleCurrentOrder({ order }));
 
   function handleOrderCardClick(id) {
-    const item = handleItemSearchWithId(data, id);
+    const item = handleItemSearchWithId(orders, id);
 
     if (item) {
       manageOrderCardModal(true);
@@ -37,12 +35,13 @@ function FeedPage() {
 
   useEffect(() => {
     dispatch({ type: WS_CONNECTION_START_ALL_ORDERS });
-  }, []);
+  }, [dispatch]);
 
   return (
     <div className={style.content}>
       <OrdersList
         isProfile={false}
+        data={orders}
         onCardClick={handleOrderCardClick}
         path="/feed/"
       />
