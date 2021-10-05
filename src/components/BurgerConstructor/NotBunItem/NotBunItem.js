@@ -67,6 +67,7 @@ function NotBunItem({ index, text, price, thumbnail, handleClose, isHover }) {
   return (
     <article
       ref={ref}
+      id="item"
       className={`${style.card}  ${isDragging && style.card_transparent} ${
         isHover && style.card_transparent
       }`}

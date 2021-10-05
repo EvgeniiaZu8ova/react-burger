@@ -21,6 +21,7 @@ function IngredientCard({ image, price, name, quantity = 0 }) {
   return (
     <article
       ref={drag}
+      id="ingredient"
       className={`${style.card} ${isDragging && style.card_transparent}`}
     >
       {quantity > 0 && <Counter count={quantity} size="default" />}
