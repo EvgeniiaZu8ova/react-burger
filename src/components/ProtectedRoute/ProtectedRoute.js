@@ -1,15 +1,13 @@
-import React from "react";
-import { Route, Redirect } from "react-router-dom";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
+import { Route, Redirect } from "react-router-dom";
 import { getCookie } from "../../utils/cookie";
 
 export default function ProtectedRoute({ children, ...rest }) {
-  const { getUserFailed } = useSelector((store) => store.auth);
   const cookie = getCookie("accessToken");
+  const { email } = useSelector((store) => store.auth);
 
-  if (getUserFailed) {
-    return null;
-  }
+  useEffect(() => {}, [email]);
 
   return (
     <Route

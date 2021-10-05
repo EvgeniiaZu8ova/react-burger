@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Redirect } from "react-router-dom";
+import { Redirect, useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { getCookie } from "../utils/cookie";
 
@@ -13,9 +13,16 @@ import {
 import UserEntryForm from "../components/UserEntryForm/UserEntryForm";
 
 function LoginPage() {
+  const history = useHistory();
   const dispatch = useDispatch();
   const { accessToken } = useSelector((store) => store.auth);
   const token = getCookie("accessToken");
+  const from =
+    history &&
+    history.location &&
+    history.location.state &&
+    history.location.state.from &&
+    history.location.state.from.pathname;
 
   const [form, setForm] = useState({
     email: "",
@@ -40,7 +47,7 @@ function LoginPage() {
   useEffect(() => {}, [accessToken]);
 
   if (token) {
-    return <Redirect to={{ pathname: "/" }} />;
+    return <Redirect to={{ pathname: from ? from : "/" }} />;
   }
 
   return (

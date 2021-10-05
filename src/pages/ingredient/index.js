@@ -1,6 +1,6 @@
 import React from "react";
 
-import IngredientDetails from "../components/Modal/IngredientDetails/IngredientDetails";
+import IngredientDetails from "../../components/Modal/IngredientDetails";
 
 import style from "./ingredient.module.css";
 

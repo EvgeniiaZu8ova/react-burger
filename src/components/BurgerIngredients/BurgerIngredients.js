@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Link, useLocation, useHistory } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 import {
   handleIngredientModal,
@@ -11,21 +11,18 @@ import style from "./BurgerIngredients.module.css";
 
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 
-import { handleItemSearch } from "../../utils/findItem";
+import { handleItemSearchWithId } from "../../utils/findItem";
 
 import IngredientCard from "./IngredientCard/IngredientCard";
-import Modal from "../Modal/Modal";
-import IngredientDetails from "../Modal/IngredientDetails/IngredientDetails";
 
 function BurgerIngredients() {
   const [currentTab, setCurrentTab] = useState("Булки");
 
   const location = useLocation();
-  const history = useHistory();
   const dispatch = useDispatch();
 
   const manageIngredientModal = (isOpen) =>
-    dispatch(handleIngredientModal(isOpen));
+    dispatch(handleIngredientModal({ isOpen }));
   const manageIngredient = (ingredient) =>
     dispatch(handleCurrentIngredient({ ingredient }));
 
@@ -36,10 +33,6 @@ function BurgerIngredients() {
   } = useSelector((store) => store.allIngredients);
 
   const { chosenBun, chosenOtherItems } = useSelector((store) => store.order);
-
-  const { isIngredientsModalOpen } = useSelector(
-    (store) => store.ingredientModal
-  );
 
   function handleTabClick(e) {
     setCurrentTab(e);
@@ -56,23 +49,13 @@ function BurgerIngredients() {
     setCurrentTab(closestTitle);
   }
 
-  function handleIngredientClick(e) {
-    const parentElement = e.target.parentElement.querySelector(
-      ".text_type_main-default"
-    );
-    const target = parentElement && parentElement.textContent;
-    const item = handleItemSearch(data, target);
+  function handleIngredientClick(id) {
+    const item = handleItemSearchWithId(data, id);
 
     if (item) {
       manageIngredientModal(true);
       manageIngredient(item);
     }
-  }
-
-  function closeModal() {
-    manageIngredientModal(false);
-    manageIngredient({});
-    history.push("/");
   }
 
   return (
@@ -127,9 +110,9 @@ function BurgerIngredients() {
                   (el, index) =>
                     el.type === "bun" && (
                       <Link
-                        className={style.card}
-                        onClick={handleIngredientClick}
                         key={el._id}
+                        onClick={() => handleIngredientClick(el._id)}
+                        className={style.card}
                         to={{
                           pathname: `/ingredients/${el._id}`,
                           state: { background: location },
@@ -154,9 +137,9 @@ function BurgerIngredients() {
                   (el, index) =>
                     el.type === "sauce" && (
                       <Link
-                        className={style.card}
-                        onClick={handleIngredientClick}
                         key={el._id}
+                        onClick={() => handleIngredientClick(el._id)}
+                        className={style.card}
                         to={{
                           pathname: `/ingredients/${el._id}`,
                           state: { background: location },
@@ -185,9 +168,9 @@ function BurgerIngredients() {
                   (el, index) =>
                     el.type === "main" && (
                       <Link
-                        className={style.card}
-                        onClick={handleIngredientClick}
                         key={el._id}
+                        onClick={() => handleIngredientClick(el._id)}
+                        className={style.card}
                         to={{
                           pathname: `/ingredients/${el._id}`,
                           state: { background: location },
@@ -210,14 +193,6 @@ function BurgerIngredients() {
           </div>
         </>
       )}
-
-      <Modal
-        isModalOpen={isIngredientsModalOpen}
-        title="Детали ингредиента"
-        onClose={closeModal}
-      >
-        {isIngredientsModalOpen && <IngredientDetails />}
-      </Modal>
     </section>
   );
 }

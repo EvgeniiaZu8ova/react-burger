@@ -14,24 +14,41 @@ import {
   handleCurrentIngredient,
 } from "../../services/reducers/ingredientModal";
 
+import {
+  handleOrderCardModal,
+  handleCurrentOrder,
+} from "../../services/reducers/orderCardModal";
+
+import {
+  handleMyOrderCardModal,
+  handleMyCurrentOrder,
+} from "../../services/reducers/myOrderCardModal";
+
 import { getItems } from "../../services/reducers/allIngredients";
 
 import app from "./App.module.css";
 
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
+
 import AppHeader from "../AppHeader/AppHeader";
 import Main from "../Main/Main";
-import LoginPage from "../../pages/login";
-import RegisterPage from "../../pages/register";
-import ForgotPasswordPage from "../../pages/forgot-password";
-import ResetPasswordPage from "../../pages/reset-password";
-import ProfilePage from "../../pages/profile";
-import NotFound404Page from "../../pages/not-found-404";
-import IngredientPage from "../../pages/ingredient";
 import Modal from "../Modal/Modal";
-import IngredientDetails from "../Modal/IngredientDetails/IngredientDetails";
-import { getCookie } from "../../utils/cookie";
-import { getUserInfo, refreshToken } from "../../services/reducers/auth";
+import IngredientDetails from "../Modal/IngredientDetails";
+import OrderInfo from "../OrderInfo/OrderInfo";
+
+import {
+  LoginPage,
+  RegisterPage,
+  ForgotPasswordPage,
+  ResetPasswordPage,
+  ProfilePage,
+  NotFound404Page,
+  IngredientPage,
+  FeedPage,
+  FeedOrderPage,
+  ProfileOrdersPage,
+  ProfileOrderInfoPage,
+} from "../../pages";
 
 export default function App() {
   return (
@@ -44,44 +61,42 @@ export default function App() {
 function AppSwitch() {
   const history = useHistory();
   let location = useLocation();
-  const token = getCookie("accessToken");
-  const tokenRefresh = getCookie("refreshToken");
-  const isTokenExpired = JSON.parse(localStorage.getItem("isTokenExpired"));
+  const dispatch = useDispatch();
 
   const background =
     (history.action === "PUSH" || history.action === "REPLACE") &&
     location.state &&
     location.state.background;
 
-  const dispatch = useDispatch();
   const { isIngredientsModalOpen } = useSelector(
     (store) => store.ingredientModal
   );
+  const { isOrderCardModalOpen } = useSelector((store) => store.orderCardModal);
+  const { isMyOrderCardModalOpen } = useSelector(
+    (store) => store.myOrderCardModal
+  );
 
-  function closeModal() {
-    dispatch(handleIngredientModal(false));
+  function closeIngredientsModal() {
+    dispatch(handleIngredientModal({ isOpen: false }));
     dispatch(handleCurrentIngredient({}));
+    history.goBack();
+  }
+
+  function closeOrderCardModal() {
+    dispatch(handleOrderCardModal({ isOpen: false }));
+    dispatch(handleCurrentOrder({}));
+    history.goBack();
+  }
+
+  function closeMyOrderCardModal() {
+    dispatch(handleMyOrderCardModal({ isOpen: false }));
+    dispatch(handleMyCurrentOrder({}));
     history.goBack();
   }
 
   useEffect(() => {
     dispatch(getItems());
   }, [dispatch]);
-
-  useEffect(() => {
-    const actualToken = getCookie("accessToken");
-    if (isTokenExpired === null) {
-      dispatch(getUserInfo(actualToken));
-    } else {
-      return token;
-    }
-  }, [dispatch, token, tokenRefresh, isTokenExpired]);
-
-  useEffect(() => {
-    if (isTokenExpired) {
-      dispatch(refreshToken(tokenRefresh));
-    }
-  }, [dispatch, tokenRefresh, isTokenExpired]);
 
   return (
     <div className={app.page}>
@@ -93,6 +108,21 @@ function AppSwitch() {
         <Route path="/ingredients/:id">
           <IngredientPage />
         </Route>
+        <Route path="/feed" exact={true}>
+          <FeedPage />
+        </Route>
+        <Route path="/feed/:id">
+          <FeedOrderPage />
+        </Route>
+        <ProtectedRoute path="/profile" exact={true}>
+          <ProfilePage />
+        </ProtectedRoute>
+        <ProtectedRoute path="/profile/orders" exact={true}>
+          <ProfileOrdersPage />
+        </ProtectedRoute>
+        <ProtectedRoute path="/profile/orders/:id">
+          <ProfileOrderInfoPage />
+        </ProtectedRoute>
         <Route path="/login" exact={true}>
           <LoginPage />
         </Route>
@@ -105,26 +135,40 @@ function AppSwitch() {
         <Route path="/reset-password" exact={true}>
           <ResetPasswordPage />
         </Route>
-        <ProtectedRoute path="/profile" exact={true}>
-          <ProfilePage />
-        </ProtectedRoute>
-        <ProtectedRoute path="/profile/orders" exact={true}>
-          <ProfilePage />
-        </ProtectedRoute>
         <Route>
           <NotFound404Page />
         </Route>
       </Switch>
       {background && (
-        <Route path="/ingredients/:id">
-          <Modal
-            isModalOpen={isIngredientsModalOpen}
-            title="Детали ингредиента"
-            onClose={closeModal}
-          >
-            {isIngredientsModalOpen && <IngredientDetails />}
-          </Modal>
-        </Route>
+        <Switch>
+          <Route path="/ingredients/:id">
+            <Modal
+              isModalOpen={isIngredientsModalOpen}
+              title="Детали ингредиента"
+              onClose={closeIngredientsModal}
+            >
+              {isIngredientsModalOpen && <IngredientDetails />}
+            </Modal>
+          </Route>
+          <Route path="/feed/:id">
+            <Modal
+              isModalOpen={isOrderCardModalOpen}
+              title="Детали заказа"
+              onClose={closeOrderCardModal}
+            >
+              {isOrderCardModalOpen && <OrderInfo />}
+            </Modal>
+          </Route>
+          <ProtectedRoute path="/profile/orders/:id">
+            <Modal
+              isModalOpen={isMyOrderCardModalOpen}
+              title="Детали заказа"
+              onClose={closeMyOrderCardModal}
+            >
+              {isMyOrderCardModalOpen && <OrderInfo />}
+            </Modal>
+          </ProtectedRoute>
+        </Switch>
       )}
     </div>
   );

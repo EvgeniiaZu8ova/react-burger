@@ -37,15 +37,13 @@ function AppHeader() {
               </span>
             </Link>
             <Link
-              to="/profile/orders"
+              to="/feed"
               className={`${header.navBar__link} pl-5 pr-5 pb-4 pt-4 ml-2`}
             >
-              <ListIcon
-                type={pathname === "/profile/orders" ? "primary" : "secondary"}
-              />
+              <ListIcon type={pathname === "/feed" ? "primary" : "secondary"} />
               <span
                 className={`${
-                  pathname === "/profile/orders"
+                  pathname === "/feed"
                     ? header.navBar__caption_active
                     : "text_color_inactive"
                 } text text_type_main-default pl-2`}

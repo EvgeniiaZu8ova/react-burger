@@ -70,6 +70,9 @@ const orderSlice = createSlice({
       state.orderRequest = false;
       state.orderFailed = true;
       console.log(action.payload);
+      if (action.payload === "Ошибка 403") {
+        localStorage.setItem("isTokenExpired", true);
+      }
     },
   },
 });
