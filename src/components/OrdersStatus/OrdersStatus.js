@@ -76,13 +76,13 @@ function OrdersStatus() {
       <div>
         <p className="text text_type_main-medium">Выполнено за все время:</p>
         <p className={`${style.digits} text text_type_digits-large mb-15`}>
-          {String(total)}
+          {total && String(total)}
         </p>
       </div>
       <div>
         <p className="text text_type_main-medium">Выполнено за сегодня:</p>
         <p className={`${style.digits} text text_type_digits-large`}>
-          {String(totalToday)}
+          {totalToday && String(totalToday)}
         </p>
       </div>
     </section>

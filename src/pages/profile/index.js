@@ -1,4 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
+
+import { getCookie } from "../../utils/cookie";
+
+import { getUserInfo, refreshToken } from "../../services/reducers/auth";
 
 import ProfileForm from "../../components/Profile/ProfileForm";
 import ProfileNav from "../../components/Profile/ProfileNav";
@@ -6,6 +11,20 @@ import ProfileNav from "../../components/Profile/ProfileNav";
 import style from "./profile.module.css";
 
 function ProfilePage() {
+  const dispatch = useDispatch();
+
+  const token = getCookie("accessToken");
+  const tokenRefresh = getCookie("refreshToken");
+  const isTokenExpired = JSON.parse(localStorage.getItem("isTokenExpired"));
+
+  useEffect(() => {
+    if (token && isTokenExpired === null) {
+      dispatch(getUserInfo(token));
+    } else {
+      dispatch(refreshToken(tokenRefresh));
+    }
+  }, [dispatch, token, tokenRefresh, isTokenExpired]);
+
   return (
     <section className={style.profile}>
       <ProfileNav />

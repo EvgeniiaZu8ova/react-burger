@@ -4,6 +4,7 @@ import { useDrop } from "react-dnd";
 import { useHistory } from "react-router-dom";
 
 import { getCookie } from "../../utils/cookie";
+import { refreshToken } from "../../services/reducers/auth";
 
 import {
   addIngredient,
@@ -32,6 +33,7 @@ function BurgerConstructor() {
 
   const isTokenExpired = JSON.parse(localStorage.getItem("isTokenExpired"));
   const token = getCookie("accessToken");
+  const tokenRefresh = getCookie("refreshToken");
   const { allIngredients: data } = useSelector((store) => store.allIngredients);
 
   const {
@@ -85,7 +87,7 @@ function BurgerConstructor() {
       const myOrder = [...myItems, bun._id, bun._id];
       makeOrder({ accessToken: token, myOrder: myOrder });
     } else {
-      return token;
+      dispatch(refreshToken(tokenRefresh));
     }
   }
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useRouteMatch, useHistory } from "react-router-dom";
+import { Link, useRouteMatch } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { getCookie } from "../../../utils/cookie";
 
@@ -8,14 +8,12 @@ import { signOut } from "../../../services/reducers/auth";
 import style from "./ProfileNav.module.css";
 
 function ProfileNav() {
-  const history = useHistory();
   const { path } = useRouteMatch();
   const dispatch = useDispatch();
   const tokenRefresh = getCookie("refreshToken");
 
   function onSignOut() {
     dispatch(signOut(tokenRefresh));
-    history.push("/login");
   }
 
   return (
@@ -45,14 +43,12 @@ function ProfileNav() {
             </Link>
           </li>
           <li className="pt-6 pb-4">
-            <Link to="/profile" className={style.link}>
-              <p
-                onClick={onSignOut}
-                className={`text text_type_main-medium text_color_inactive`}
-              >
-                Выход
-              </p>
-            </Link>
+            <p
+              onClick={() => onSignOut()}
+              className={`${style.link} text text_type_main-medium text_color_inactive`}
+            >
+              Выход
+            </p>
           </li>
         </ul>
       </nav>

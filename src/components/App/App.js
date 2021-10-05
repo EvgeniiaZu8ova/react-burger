@@ -50,9 +50,6 @@ import {
   ProfileOrderInfoPage,
 } from "../../pages";
 
-import { getCookie } from "../../utils/cookie";
-import { getUserInfo, refreshToken } from "../../services/reducers/auth";
-
 export default function App() {
   return (
     <Router>
@@ -65,11 +62,6 @@ function AppSwitch() {
   const history = useHistory();
   let location = useLocation();
   const dispatch = useDispatch();
-
-  const token = getCookie("accessToken");
-  const tokenRefresh = getCookie("refreshToken");
-
-  const isTokenExpired = JSON.parse(localStorage.getItem("isTokenExpired"));
 
   const background =
     (history.action === "PUSH" || history.action === "REPLACE") &&
@@ -105,21 +97,6 @@ function AppSwitch() {
   useEffect(() => {
     dispatch(getItems());
   }, [dispatch]);
-
-  useEffect(() => {
-    const actualToken = getCookie("accessToken");
-    if (isTokenExpired === null) {
-      dispatch(getUserInfo(actualToken));
-    } else {
-      return token;
-    }
-  }, [dispatch, token, tokenRefresh, isTokenExpired]);
-
-  useEffect(() => {
-    if (isTokenExpired) {
-      dispatch(refreshToken(tokenRefresh));
-    }
-  }, [dispatch, tokenRefresh, isTokenExpired]);
 
   return (
     <div className={app.page}>
