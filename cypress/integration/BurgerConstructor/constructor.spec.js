@@ -7,8 +7,15 @@ describe("service is available", function () {
     cy.contains("Соберите бургер");
   });
 
-  it("ability to pull ingredients is ok", function () {
+  it("should drag ingredient to the order", () => {
     const dataTransfer = new DataTransfer();
-    cy.get("#ingredient").trigger("dragstart", { dataTransfer });
+
+    cy.get("#ingredient").trigger("dragstart", {
+      dataTransfer,
+    });
+
+    cy.get("#constructor").trigger("drop", {
+      dataTransfer,
+    });
   });
 });

@@ -96,7 +96,11 @@ function BurgerConstructor() {
   }
 
   return (
-    <section ref={dropCard} className={`${style.section} pl-4 pr-2 pt-25`}>
+    <section
+      id="constructor"
+      ref={dropCard}
+      className={`${style.section} pl-4 pr-2 pt-25`}
+    >
       <div className={style.mainContent}>
         <div className={`${style.burger__container} pr-2`}>
           {Object.keys(bun).length > 0 && (
