@@ -3,19 +3,19 @@ import { useParams } from "react-router-dom";
 
 import { useSelector } from "react-redux";
 
-import { convertDate } from "../../utils/dateConverter";
+import { convertDate } from "../../utils/dateConverter.ts";
 
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 
 import IngredientInfo from "./IngredientInfo/IngredientInfo";
 
 import style from "./OrderInfo.module.css";
-import { frequencyCounter } from "../../utils/frequencyCounter";
+import { frequencyCounter } from "../../utils/frequencyCounter.ts";
 import {
   getAllOrders,
   getMyOrders,
 } from "../../services/selectors/wsSelectors";
-import { handleItemSearchWithId } from "../../utils/findItem";
+import { handleOrderSearchWithId } from "../../utils/findItem.ts";
 
 function OrderInfo() {
   const { currentOrder } = useSelector((store) => store.orderCardModal);
@@ -29,9 +29,9 @@ function OrderInfo() {
   const { id } = useParams();
 
   const item =
-    (allExistingOrders && handleItemSearchWithId(allExistingOrders, id)) || {};
+    (allExistingOrders && handleOrderSearchWithId(allExistingOrders, id)) || {};
   const myItem =
-    (myExistingOrders && handleItemSearchWithId(myExistingOrders, id)) || {};
+    (myExistingOrders && handleOrderSearchWithId(myExistingOrders, id)) || {};
 
   const currentItem =
     Object.keys(currentOrder).length > 0

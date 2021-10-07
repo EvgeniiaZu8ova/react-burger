@@ -1,6 +1,5 @@
-import React, { useRef } from "react";
+import React, { FC, useRef } from "react";
 import { useDispatch } from "react-redux";
-import PropTypes from "prop-types";
 import { useDrag, useDrop } from "react-dnd";
 
 import style from "./NotBunItem.module.css";
@@ -12,12 +11,28 @@ import {
   ConstructorElement,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
-function NotBunItem({ index, text, price, thumbnail, handleClose, isHover }) {
+interface NotBunItemProps {
+  index: number;
+  text: string;
+  price: number;
+  thumbnail: string;
+  handleClose: () => void;
+  isHover: boolean;
+}
+
+const NotBunItem: FC<NotBunItemProps> = ({
+  index,
+  text,
+  price,
+  thumbnail,
+  handleClose,
+  isHover,
+}) => {
   const dispatch = useDispatch();
-  const moveItems = (dragIndex, hoverIndex) =>
+  const moveItems = (dragIndex: number, hoverIndex: number) =>
     dispatch(moveIngredients({ dragIndex, hoverIndex }));
 
-  const ref = useRef(null);
+  const ref = useRef<HTMLElement>(null);
 
   const [{ isDragging }, dragItem] = useDrag({
     type: "item",
@@ -29,7 +44,7 @@ function NotBunItem({ index, text, price, thumbnail, handleClose, isHover }) {
 
   const [, dropItem] = useDrop({
     accept: "item",
-    hover: (item, monitor) => {
+    hover: (item: any, monitor) => {
       if (!ref.current) {
         return;
       }
@@ -47,13 +62,22 @@ function NotBunItem({ index, text, price, thumbnail, handleClose, isHover }) {
         (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
 
       const clientOffset = monitor.getClientOffset();
-      const hoverClientY = clientOffset.y - hoverBoundingRect.top;
+      const hoverClientY =
+        clientOffset && clientOffset.y - hoverBoundingRect.top;
 
-      if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
+      if (
+        hoverClientY &&
+        dragIndex < hoverIndex &&
+        hoverClientY < hoverMiddleY
+      ) {
         return;
       }
 
-      if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
+      if (
+        hoverClientY &&
+        dragIndex > hoverIndex &&
+        hoverClientY > hoverMiddleY
+      ) {
         return;
       }
 
@@ -80,15 +104,6 @@ function NotBunItem({ index, text, price, thumbnail, handleClose, isHover }) {
       />
     </article>
   );
-}
-
-NotBunItem.propTypes = {
-  index: PropTypes.number.isRequired,
-  text: PropTypes.string.isRequired,
-  price: PropTypes.number.isRequired,
-  thumbnail: PropTypes.string.isRequired,
-  handleClose: PropTypes.func.isRequired,
-  isHover: PropTypes.bool,
 };
 
 export default NotBunItem;

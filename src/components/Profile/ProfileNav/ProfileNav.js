@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, useRouteMatch } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { getCookie } from "../../../utils/cookie";
+import { getCookie } from "../../../utils/cookie.js";
 
 import { signOut } from "../../../services/reducers/auth";
 

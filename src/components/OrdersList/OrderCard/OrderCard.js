@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 
-import { convertDate } from "../../../utils/dateConverter";
+import { convertDate } from "../../../utils/dateConverter.ts";
 
 import style from "./OrderCard.module.css";
 

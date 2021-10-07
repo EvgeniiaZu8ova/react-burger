@@ -1,6 +1,5 @@
-import React, { useEffect } from "react";
+import React, { FC, useEffect, ReactNode } from "react";
 import { createPortal } from "react-dom";
-import PropTypes from "prop-types";
 
 import style from "./Modal.module.css";
 
@@ -8,17 +7,24 @@ import closeIcon from "../../images/close-icon.svg";
 
 import ModalOverlay from "./ModalOverlay/ModalOverlay";
 
-function Modal({ isModalOpen, title, children, onClose }) {
-  const modalRoot = document.getElementById("modals");
+interface ModalProps {
+  isModalOpen: boolean;
+  title: string;
+  children: ReactNode;
+  onClose: () => void;
+}
 
-  function handleCloseOverlay(e) {
+const Modal: FC<ModalProps> = ({ isModalOpen, title, children, onClose }) => {
+  const modalRoot: any = document.getElementById("modals");
+
+  function handleCloseOverlay(e: any) {
     if (e.target.className.includes("Overlay")) {
       onClose();
     }
   }
 
   useEffect(() => {
-    const listenEsc = (e) => {
+    const listenEsc = (e: any) => {
       if (isModalOpen && e.key === "Escape") {
         onClose();
       }
@@ -53,12 +59,6 @@ function Modal({ isModalOpen, title, children, onClose }) {
     </section>,
     modalRoot
   );
-}
-
-Modal.propTypes = {
-  isModalOpen: PropTypes.bool,
-  title: PropTypes.string.isRequired,
-  onClose: PropTypes.func.isRequired,
 };
 
 export default Modal;

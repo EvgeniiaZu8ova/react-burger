@@ -1,5 +1,4 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React, { FC } from "react";
 import { useDrag } from "react-dnd";
 
 import style from "./IngredientCard.module.css";
@@ -9,7 +8,19 @@ import {
   Counter,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
-function IngredientCard({ image, price, name, quantity = 0 }) {
+interface IngredientCardProps {
+  image: string | undefined;
+  price: number;
+  name: string;
+  quantity?: number;
+}
+
+const IngredientCard: FC<IngredientCardProps> = ({
+  image,
+  price,
+  name,
+  quantity = 0,
+}) => {
   const [{ isDragging }, drag] = useDrag({
     type: "card",
     item: { name },
@@ -39,13 +50,6 @@ function IngredientCard({ image, price, name, quantity = 0 }) {
       </p>
     </article>
   );
-}
-
-IngredientCard.propTypes = {
-  image: PropTypes.string.isRequired,
-  price: PropTypes.number.isRequired,
-  name: PropTypes.string.isRequired,
-  quantity: PropTypes.number,
 };
 
 export default IngredientCard;

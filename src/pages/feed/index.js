@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import OrdersList from "../../components/OrdersList";
 import OrdersStatus from "../../components/OrdersStatus";
 
-import { handleItemSearchWithId } from "../../utils/findItem";
+import { handleOrderSearchWithId } from "../../utils/findItem.ts";
 import {
   handleCurrentOrder,
   handleOrderCardModal,
@@ -25,7 +25,7 @@ function FeedPage() {
   const manageCurrentOrder = (order) => dispatch(handleCurrentOrder({ order }));
 
   function handleOrderCardClick(id) {
-    const item = handleItemSearchWithId(orders, id);
+    const item = handleOrderSearchWithId(orders, id);
 
     if (item) {
       manageOrderCardModal(true);

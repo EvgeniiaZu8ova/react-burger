@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { FC, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import {
   BrowserRouter as Router,
@@ -7,7 +7,6 @@ import {
   useLocation,
   useHistory,
 } from "react-router-dom";
-import { useSelector } from "react-redux";
 
 import {
   handleIngredientModal,
@@ -30,9 +29,9 @@ import app from "./App.module.css";
 
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 
-import AppHeader from "../AppHeader/AppHeader";
-import Main from "../Main/Main";
-import Modal from "../Modal/Modal";
+import AppHeader from "../AppHeader";
+import Main from "../Main";
+import Modal from "../Modal";
 import IngredientDetails from "../Modal/IngredientDetails";
 import OrderInfo from "../OrderInfo/OrderInfo";
 
@@ -50,17 +49,20 @@ import {
   ProfileOrderInfoPage,
 } from "../../pages";
 
-export default function App() {
+import { TLocationState } from "../../utils/types";
+import { useSelector } from "../../utils/hooks";
+
+const App: FC = () => {
   return (
     <Router>
       <AppSwitch />
     </Router>
   );
-}
+};
 
-function AppSwitch() {
+const AppSwitch: FC = () => {
   const history = useHistory();
-  let location = useLocation();
+  let location = useLocation<TLocationState>();
   const dispatch = useDispatch();
 
   const background =
@@ -172,4 +174,6 @@ function AppSwitch() {
       )}
     </div>
   );
-}
+};
+
+export default App;

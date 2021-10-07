@@ -1,13 +1,13 @@
-import React from "react";
+import React, { FC } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 
 import main from "./Main.module.css";
 
-import BurgerConstructor from "../BurgerConstructor/BurgerConstructor";
-import BurgerIngredients from "../BurgerIngredients/BurgerIngredients";
+import BurgerConstructor from "../BurgerConstructor";
+import BurgerIngredients from "../BurgerIngredients";
 
-function Main() {
+const Main: FC = () => {
   return (
     <main className={main.content}>
       <DndProvider backend={HTML5Backend}>
@@ -16,6 +16,6 @@ function Main() {
       </DndProvider>
     </main>
   );
-}
+};
 
 export default Main;

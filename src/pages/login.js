@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Redirect, useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { getCookie } from "../utils/cookie";
+import { getCookie } from "../utils/cookie.js";
 
 import { signIn } from "../services/reducers/auth";
 

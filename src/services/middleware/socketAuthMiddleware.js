@@ -1,4 +1,4 @@
-import { getCookie } from "../../utils/cookie";
+import { getCookie } from "../../utils/cookie.js";
 
 export const socketAuthMiddleware = (wsUrl, wsActions) => {
   return (store) => {

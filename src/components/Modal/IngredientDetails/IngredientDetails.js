@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 import style from "./IngredientDetails.module.css";
-import { handleItemSearchWithId } from "../../../utils/findItem";
+import { handleIngredientSearchWithId } from "../../../utils/findItem";
 
 function IngredientDetails() {
   const { currentIngredient } = useSelector((store) => store.ingredientModal);
@@ -12,7 +12,7 @@ function IngredientDetails() {
 
   const { id } = useParams();
 
-  const item = handleItemSearchWithId(allIngredients, id) || {};
+  const item = handleIngredientSearchWithId(allIngredients, id) || {};
 
   const { image, name, calories, proteins, fat, carbohydrates } =
     Object.keys(currentIngredient).length > 0 ? currentIngredient : item;

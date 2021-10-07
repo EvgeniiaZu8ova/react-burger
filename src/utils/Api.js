@@ -1,4 +1,4 @@
-import { normaApiOptions } from "./config";
+import { normaApiOptions } from "./config.ts";
 
 class Api {
   constructor(config) {

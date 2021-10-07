@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Route, Redirect } from "react-router-dom";
-import { getCookie } from "../../utils/cookie";
+import { getCookie } from "../../utils/cookie.js";
 
 export default function ProtectedRoute({ children, ...rest }) {
   const cookie = getCookie("accessToken");

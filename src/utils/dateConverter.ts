@@ -3,7 +3,7 @@ import format from "date-fns/format";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
 import ru from "date-fns/locale/ru";
 
-export function convertDate(date) {
+export function convertDate(date: string): string {
   const parseDate = parseISO(date);
   const time = format(parseDate, "kk:mm", { locale: ru });
   const timeZone = `i-${format(parseDate, "z")}`;

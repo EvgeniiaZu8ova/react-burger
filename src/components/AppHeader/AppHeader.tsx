@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FC } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 import {
@@ -10,7 +10,7 @@ import {
 
 import header from "./AppHeader.module.css";
 
-function AppHeader() {
+const AppHeader: FC = () => {
   const { pathname } = useLocation();
 
   return (
@@ -78,6 +78,6 @@ function AppHeader() {
       </div>
     </header>
   );
-}
+};
 
 export default AppHeader;

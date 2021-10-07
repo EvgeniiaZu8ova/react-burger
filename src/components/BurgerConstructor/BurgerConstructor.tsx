@@ -1,10 +1,12 @@
-import React, { useMemo } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React, { FC, useMemo } from "react";
+import { useDispatch } from "react-redux";
 import { useDrop } from "react-dnd";
 import { useHistory } from "react-router-dom";
 
 import { getCookie } from "../../utils/cookie";
 import { refreshToken } from "../../services/reducers/auth";
+import { useSelector } from "../../utils/hooks";
+import { TIngredient } from "../../utils/types";
 
 import {
   addIngredient,
@@ -13,25 +15,26 @@ import {
   handleOrderModal,
 } from "../../services/reducers/order";
 
-import { handleItemSearch } from "../../utils/findItem";
+import { handleItemSearchWithName } from "../../utils/findItem";
 
 import style from "./BurgerConstructor.module.css";
 
 import bigCurrency from "../../images/big-currency-icon.svg";
 
 import OrderDetails from "../Modal/OrderDetails/OrderDetails";
-import Modal from "../Modal/Modal";
+import Modal from "../Modal";
 
 import {
   ConstructorElement,
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import NotBunItem from "./NotBunItem/NotBunItem";
+import NotBunItem from "./NotBunItem";
 
-function BurgerConstructor() {
+const BurgerConstructor: FC = () => {
   const history = useHistory();
 
-  const isTokenExpired = JSON.parse(localStorage.getItem("isTokenExpired"));
+  const isTokenExpired = localStorage.getItem("isTokenExpired");
+
   const token = getCookie("accessToken");
   const tokenRefresh = getCookie("refreshToken");
   const { allIngredients: data } = useSelector((store) => store.allIngredients);
@@ -46,7 +49,7 @@ function BurgerConstructor() {
   } = useSelector((store) => store.order);
 
   const finalSum = useMemo(() => {
-    const bunPrice = bun.price * 2 || 0;
+    const bunPrice = bun.price * 2;
     const otherItemsPrice = otherItems.reduce(
       (acc, curr) => acc + curr.price,
       0
@@ -55,14 +58,21 @@ function BurgerConstructor() {
   }, [bun, otherItems]);
 
   const dispatch = useDispatch();
-  const addItem = (item) => dispatch(addIngredient({ item }));
-  const removeItem = (item) => dispatch(removeIngredient({ item }));
-  const makeOrder = ({ accessToken, myOrder }) =>
-    dispatch(sendOrder({ accessToken, myOrder }));
-  const manageOrderModal = (isOpen) => dispatch(handleOrderModal(isOpen));
+  const addItem = (item: TIngredient) => dispatch(addIngredient({ item }));
+  const removeItem = (item: TIngredient) =>
+    dispatch(removeIngredient({ item }));
+  const makeOrder = ({
+    accessToken,
+    myOrder,
+  }: {
+    accessToken: string;
+    myOrder: (string | null)[];
+  }) => dispatch(sendOrder({ accessToken, myOrder }));
+  const manageOrderModal = (isOpen: boolean) =>
+    dispatch(handleOrderModal(isOpen));
 
-  function handleAddItem(name) {
-    const item = handleItemSearch(data, name);
+  function handleAddItem(name: string) {
+    const item = handleItemSearchWithName(data, name);
 
     if (item) {
       addItem(item);
@@ -71,7 +81,7 @@ function BurgerConstructor() {
 
   const [{ isHover }, dropCard] = useDrop({
     accept: "card",
-    drop({ name }) {
+    drop({ name }: { name: string }) {
       handleAddItem(name);
     },
     collect: (monitor) => ({
@@ -103,7 +113,7 @@ function BurgerConstructor() {
     >
       <div className={style.mainContent}>
         <div className={`${style.burger__container} pr-2`}>
-          {Object.keys(bun).length > 0 && (
+          {bun.name.length > 0 && (
             <ConstructorElement
               type="top"
               isLocked={true}
@@ -130,7 +140,7 @@ function BurgerConstructor() {
               ))}
           </div>
 
-          {Object.keys(bun).length > 0 && (
+          {bun.name.length > 0 && (
             <ConstructorElement
               type="bottom"
               isLocked={true}
@@ -167,6 +177,6 @@ function BurgerConstructor() {
       </Modal>
     </section>
   );
-}
+};
 
 export default BurgerConstructor;

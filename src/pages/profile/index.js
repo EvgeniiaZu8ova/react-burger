@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
-import { getCookie } from "../../utils/cookie";
+import { getCookie } from "../../utils/cookie.js";
 
 import { getUserInfo, refreshToken } from "../../services/reducers/auth";
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Redirect } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { getCookie } from "../utils/cookie";
+import { getCookie } from "../utils/cookie.js";
 
 import { resetMyPassword } from "../services/reducers/password";
 

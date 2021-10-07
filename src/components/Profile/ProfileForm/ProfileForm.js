@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getCookie } from "../../../utils/cookie";
+import { getCookie } from "../../../utils/cookie.js";
 
 import { updateUserInfo } from "../../../services/reducers/auth";
 

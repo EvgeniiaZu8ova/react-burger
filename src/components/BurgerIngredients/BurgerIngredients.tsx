@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React, { FC, useState } from "react";
+import { useDispatch } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 
 import {
@@ -11,19 +11,21 @@ import style from "./BurgerIngredients.module.css";
 
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 
-import { handleItemSearchWithId } from "../../utils/findItem";
+import { handleIngredientSearchWithId } from "../../utils/findItem";
+import { TIngredient } from "../../utils/types";
+import { useSelector } from "../../utils/hooks";
 
-import IngredientCard from "./IngredientCard/IngredientCard";
+import IngredientCard from "./IngredientCard";
 
-function BurgerIngredients() {
-  const [currentTab, setCurrentTab] = useState("Булки");
+const BurgerIngredients: FC = () => {
+  const [currentTab, setCurrentTab] = useState<string>("Булки");
 
   const location = useLocation();
   const dispatch = useDispatch();
 
-  const manageIngredientModal = (isOpen) =>
+  const manageIngredientModal = (isOpen: boolean) =>
     dispatch(handleIngredientModal({ isOpen }));
-  const manageIngredient = (ingredient) =>
+  const manageIngredient = (ingredient: TIngredient) =>
     dispatch(handleCurrentIngredient({ ingredient }));
 
   const {
@@ -34,23 +36,24 @@ function BurgerIngredients() {
 
   const { chosenBun, chosenOtherItems } = useSelector((store) => store.order);
 
-  function handleTabClick(e) {
+  function handleTabClick(e: React.SetStateAction<string>) {
     setCurrentTab(e);
   }
 
-  function handleScroll(e) {
+  function handleScroll(e: any) {
     const titles = Array.from(e.target.querySelectorAll("h2"));
-    const titlesOnScroll = titles.map((el) => ({
+    const titlesOnScroll = titles.map((el: any) => ({
       title: el.innerText,
       top: Math.abs(el.getBoundingClientRect().top - 203),
     }));
     const minTop = Math.min(...titlesOnScroll.map((el) => el.top));
-    const closestTitle = titlesOnScroll.find((el) => el.top === minTop).title;
+    const closestTab = titlesOnScroll.find((el) => el.top === minTop);
+    const closestTitle = closestTab && closestTab.title;
     setCurrentTab(closestTitle);
   }
 
-  function handleIngredientClick(id) {
-    const item = handleItemSearchWithId(data, id);
+  function handleIngredientClick(id: string | null) {
+    const item = handleIngredientSearchWithId(data, id);
 
     if (item) {
       manageIngredientModal(true);
@@ -195,6 +198,6 @@ function BurgerIngredients() {
       )}
     </section>
   );
-}
+};
 
 export default BurgerIngredients;

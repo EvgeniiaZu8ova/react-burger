@@ -1,6 +1,8 @@
-export function frequencyCounter(arr) {
-  let quantity = {};
-  let resultArr = [];
+export function frequencyCounter(
+  arr: string[]
+): { id: string; quantity: number }[] {
+  let quantity: { [name: string]: number } = {};
+  let resultArr: { id: string; quantity: number }[] = [];
 
   arr.forEach((el) => {
     quantity[el] = (quantity[el] || 0) + 1;
