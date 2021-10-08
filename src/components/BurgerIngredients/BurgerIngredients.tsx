@@ -52,7 +52,7 @@ const BurgerIngredients: FC = () => {
     setCurrentTab(closestTitle);
   }
 
-  function handleIngredientClick(id: string | null) {
+  function handleIngredientClick(id: string | undefined) {
     const item = handleIngredientSearchWithId(data, id);
 
     if (item) {

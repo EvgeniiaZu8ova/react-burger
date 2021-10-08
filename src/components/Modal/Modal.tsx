@@ -5,7 +5,7 @@ import style from "./Modal.module.css";
 
 import closeIcon from "../../images/close-icon.svg";
 
-import ModalOverlay from "./ModalOverlay/ModalOverlay";
+import ModalOverlay from "./ModalOverlay";
 
 interface ModalProps {
   isModalOpen: boolean;

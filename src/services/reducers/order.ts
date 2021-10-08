@@ -8,7 +8,7 @@ import {
 
 interface SendOrderAttributes {
   accessToken: string;
-  myOrder: (string | null)[];
+  myOrder: (string | undefined)[];
 }
 
 export const sendOrder = createAsyncThunk<

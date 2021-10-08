@@ -11,7 +11,7 @@ export function handleItemSearchWithName(
 
 export function handleIngredientSearchWithId(
   arr: Array<TIngredient>,
-  id: string | null
+  id: string | undefined
 ): TIngredient | undefined {
   const item = arr.find((el) => el._id === id);
   const result = item ? item : undefined;
@@ -20,7 +20,7 @@ export function handleIngredientSearchWithId(
 
 export function handleOrderSearchWithId(
   arr: Array<TOrder>,
-  id: string | null
+  id: string | undefined
 ): TOrder | undefined {
   const item = arr.find((el) => el._id === id);
   const result = item ? item : undefined;

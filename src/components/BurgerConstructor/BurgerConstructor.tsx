@@ -21,7 +21,7 @@ import style from "./BurgerConstructor.module.css";
 
 import bigCurrency from "../../images/big-currency-icon.svg";
 
-import OrderDetails from "../Modal/OrderDetails/OrderDetails";
+import OrderDetails from "../Modal/OrderDetails";
 import Modal from "../Modal";
 
 import {
@@ -66,7 +66,7 @@ const BurgerConstructor: FC = () => {
     myOrder,
   }: {
     accessToken: string;
-    myOrder: (string | null)[];
+    myOrder: (string | undefined)[];
   }) => dispatch(sendOrder({ accessToken, myOrder }));
   const manageOrderModal = (isOpen: boolean) =>
     dispatch(handleOrderModal(isOpen));

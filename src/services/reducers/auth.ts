@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../utils/Api";
-import { setCookie, deleteCookie } from "../../utils/cookie.js";
+import { setCookie, deleteCookie } from "../../utils/cookie";
 import {
   TAuthSliceInitialState,
   TCreateUserResponse,
@@ -13,7 +13,7 @@ import {
 interface CreateUserAttributes {
   email: string;
   password: string;
-  name?: string;
+  name?: string | undefined;
 }
 
 interface UpdateUserAttributes {
@@ -71,9 +71,9 @@ export const signOut = createAsyncThunk<
 >("auth/signOut", async (refreshToken, thunkApi) => {
   try {
     const response = await api.logout(refreshToken);
-    deleteCookie("refreshToken");
-    deleteCookie("accessToken");
-    localStorage.removeItem("isTokenExpired");
+    // deleteCookie("refreshToken");
+    // deleteCookie("accessToken");
+    // localStorage.removeItem("isTokenExpired");
     return response;
   } catch (error: any) {
     return thunkApi.rejectWithValue(error);
@@ -213,6 +213,9 @@ const authSlice = createSlice({
       state.refreshToken = "";
       state.name = "";
       state.email = "";
+      deleteCookie("refreshToken");
+      deleteCookie("accessToken");
+      localStorage.removeItem("isTokenExpired");
     });
     builder.addCase(signOut.rejected, (state, action) => {
       state.logoutRequest = false;

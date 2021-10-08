@@ -27,13 +27,13 @@ import { getItems } from "../../services/reducers/allIngredients";
 
 import app from "./App.module.css";
 
-import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
+import ProtectedRoute from "../ProtectedRoute";
 
 import AppHeader from "../AppHeader";
 import Main from "../Main";
 import Modal from "../Modal";
 import IngredientDetails from "../Modal/IngredientDetails";
-import OrderInfo from "../OrderInfo/OrderInfo";
+import OrderInfo from "../OrderInfo";
 
 import {
   LoginPage,

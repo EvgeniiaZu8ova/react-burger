@@ -174,7 +174,6 @@ describe("authSlice", () => {
         logoutFailed: false,
         email: "",
         name: "",
-        password: "",
         accessToken: "",
         refreshToken: "",
       });
