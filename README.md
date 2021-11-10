@@ -1,4 +1,4 @@
-EN     RUS
+EN and RUS description
 
 # Stellar burgers website  
 
