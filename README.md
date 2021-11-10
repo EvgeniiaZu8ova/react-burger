@@ -49,12 +49,12 @@ This app covers such technologies, as: React, Redux, TypeScript, JavaScript, Cyp
 ## Setup  
 
 * Download or clone the repository  
-* Run npm install  
-* Run npm start  
+* Run 'npm install'  
+* Run 'npm start'  
 
 ## Status  
 
-It is important to know, that this app does not have mobile layout at the moment, that is why it will be shown cortectly only on desktop. 
+It is important to know, that this app does not have mobile layout at the moment, that is why it will be shown correctly only on desktop. 
 
 
 # Сайт космической бургерной Stellar burgers  
@@ -90,9 +90,9 @@ It is important to know, that this app does not have mobile layout at the moment
 
 ![Авторизация](./screenshots/login-page2.JPG "Вы можете зарегистрироваться или обновить пароль")  
 
-Если вы авторизованы, вы можете воёти в личный кабинет, кликнув на соответствующую иконку в правом верхнем углу. В личном кабинете вы можете изменить своё имя пользователя, а также просмотреть все свои заказы.
+Если вы авторизованы, вы можете войти в личный кабинет, кликнув на соответствующую иконку в правом верхнем углу. В личном кабинете вы можете изменить своё имя пользователя, а также просмотреть все свои заказы.
 
-![Личный кабинет](./screenshots/user-profile2.JPG "Личный кабинет")  
+![Личный кабинет](./screenshots/user-profile2.jpg "Личный кабинет")  
 
 Вы можете просмотреть все заказы и их статус, кликнув на кнопку "Лента заказов".
 
@@ -105,8 +105,8 @@ It is important to know, that this app does not have mobile layout at the moment
 ## Установка  
 
 * Скачайте или клонируйте репозиторий  
-* Запустите команду npm install  
-* Запустите команду npm start  
+* Запустите команду 'npm install'  
+* Запустите команду 'npm start'  
 
 ## Текущий статус  
 
