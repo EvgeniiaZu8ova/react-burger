@@ -1,6 +1,6 @@
 EN and RUS description
 
-# Stellar burgers website  
+# Stellar burgers website :rocket:  
 
 Welcome to the Stellar burgers website! Stella burgers is space burgers restaurant, open for all foodies!
 
@@ -49,15 +49,15 @@ This app covers such technologies, as: React, Redux, TypeScript, JavaScript, Cyp
 ## Setup  
 
 * Download or clone the repository  
-* Run 'npm install'  
-* Run 'npm start'  
+* Run ```npm install```  
+* Run ```npm start```  
 
 ## Status  
 
 It is important to know, that this app does not have mobile layout at the moment, that is why it will be shown correctly only on desktop. 
 
 
-# Сайт космической бургерной Stellar burgers  
+# Сайт космической бургерной Stellar burgers :rocket:  
 
 Добро пожаловать на страницу Stellar Burgers! Stella burgers - это космическая бургерная, двери которой открыты для всех любителей вкусно поесть!
 
@@ -105,8 +105,8 @@ It is important to know, that this app does not have mobile layout at the moment
 ## Установка  
 
 * Скачайте или клонируйте репозиторий  
-* Запустите команду 'npm install'  
-* Запустите команду 'npm start'  
+* Запустите команду ```npm install```  
+* Запустите команду ```npm start```  
 
 ## Текущий статус  
 
