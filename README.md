@@ -1,4 +1,4 @@
-<span background-color:green>EN</span> <span background-color:blue>RUS</span>  
+EN     RUS
 
 # Stellar burgers website  
 
