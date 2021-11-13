@@ -19,6 +19,8 @@ You can visit the app at https://react-burger-f9d9ibv6g-evgeniiazu8ova.vercel.ap
 
 This app is available in Russian language only at the moment, because API data is available only in Russian.  
 
+![Screencast](./screenshots/screencast.gif "Screencast")  
+
 First of all, you will get on homepage, where you can see the list of available burgers ingredients (buns, sauces and fillings).  
 
 ![Ingredients](./screenshots/ingredients.PNG "Ingredients")  
